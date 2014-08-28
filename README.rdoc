@@ -1,27 +1,24 @@
 == README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+You'll need Mongo to handle this shit
 
-Things you may want to cover:
+= HOW TO USE
 
-* Ruby version
+- Add a user
+curl -H "Accept: application/json" -H "Content-Type: application/json" -d '{"user":{"name":"greg", "mail":"jujii"}}' http://localhost:3000/users
 
-* System dependencies
+- Add a w000t
+curl -H "Accept: application/json" -H "Content-Type: application/json" -d '{"w000t":{"long_url":"http://aniboo.fr"},"user_id":"53ab60f5626f6f1e1c000000"}' http://localhost:3000/w000ts
 
-* Configuration
+- Get redirected
+curl http://localhost:3000/4e78a1e1a6
 
-* Database creation
+- List users
+curl http://localhost:3000/users
 
-* Database initialization
+- List w000ts
+curl http://localhost:3000/w000ts
 
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
 
 
 Please feel free to use a different markup language if you do not plan to run

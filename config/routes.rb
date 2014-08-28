@@ -1,9 +1,15 @@
 Rails.application.routes.draw do
+  resources :users
+
+  resources :w000ts, param: :short_url
+
+  get '/:short_url' => 'w000ts#redirect'
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
   # You can have the root of your site routed with "root"
-  # root 'welcome#index'
+  # root 'w000ts#new'
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
