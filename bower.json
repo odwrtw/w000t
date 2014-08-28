@@ -1,0 +1,19 @@
+{
+  "name": "w000t",
+  "version": "0.0.0",
+  "authors": [
+    "Lucas BEE <pouulet@gmail.com>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "vendor/assets/components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "~3.2.0"
+  }
+}
