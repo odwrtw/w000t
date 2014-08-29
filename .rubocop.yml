@@ -1,0 +1,7 @@
+AllCops:
+  Include:
+    - 'db/seeds.rb'
+  Exclude:
+    - 'vendor/**/*'
+    - 'db/**/*'
+    - 'bin/*'

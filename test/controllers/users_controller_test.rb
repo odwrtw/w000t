@@ -1,6 +1,6 @@
-# usersController tests
 require 'test_helper'
 
+# UsersController tests
 class UsersControllerTest < ActionController::TestCase
   setup do
     User.all.destroy
@@ -10,7 +10,10 @@ class UsersControllerTest < ActionController::TestCase
   end
 
   test 'should get create as json' do
-    post :create, user: { name: 'Tutu', email: 'tutu@example.com' }, format: :json
+    post :create, user: {
+      name: 'Tutu',
+      email: 'tutu@example.com'
+    }, format: :json
     assert_response :success
   end
 
@@ -21,6 +24,11 @@ class UsersControllerTest < ActionController::TestCase
 
   test 'should get index' do
     get :index
+    assert_response :success
+  end
+
+  test 'should get new' do
+    get :new
     assert_response :success
   end
 

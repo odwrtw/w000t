@@ -1,6 +1,6 @@
-# w000tsController tests
 require 'test_helper'
 
+# w000tsController tests
 class W000tsControllerTest < ActionController::TestCase
   setup do
     User.all.destroy
@@ -28,6 +28,11 @@ class W000tsControllerTest < ActionController::TestCase
 
   test 'should get show' do
     get :show, short_url: @w000t.short_url
+    assert_response :success
+  end
+
+  test 'should get new' do
+    get :new
     assert_response :success
   end
 
