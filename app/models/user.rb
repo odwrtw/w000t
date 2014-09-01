@@ -6,6 +6,8 @@ class User
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
 
+  has_many :w000ts
+
   ## Database authenticatable
   field :pseudo,             type: String, default: ''
   field :email,              type: String, default: ''

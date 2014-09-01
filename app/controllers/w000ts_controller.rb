@@ -45,15 +45,13 @@ class W000tsController < ApplicationController
     respond_to do |format|
       if @w000t.update(w000t_params)
         format.html do
-          redirect_to @w000t,
-                      notice: 'W000t was successfully updated.'
+          redirect_to @w000t, notice: 'W000t was successfully updated.'
         end
         format.json { render :show, status: :ok, location: @w000t }
       else
         format.html { render :edit }
         format.json do
-          render json: @w000t.errors,
-                 status: :unprocessable_entity
+          render json: @w000t.errors, status: :internal_server_error
         end
       end
     end
@@ -83,7 +81,7 @@ class W000tsController < ApplicationController
       return
     end
 
-    @w000ts = W000t.where(user_id: current_user.id)
+    @w000ts = current_user.w000ts
   end
 
   private

@@ -6,24 +6,18 @@
       <th>Long url</th>
       <th>Short url</th>
       <th>Number of click</th>
-      <th colspan="3"></th>
+      <th>User</th>
+      <th colspan="2"></th>
     </tr>
   </thead>
 
   <tbody>
     <% @w000ts.each do |w000t| %>
-      <tr>
-        <td><%= w000t.long_url %></td>
-        <td><%= w000t.short_url %></td>
-        <td><%= w000t.number_of_click %></td>
-        <td><%= link_to 'Show', w000t %></td>
-        <td><%= link_to 'Edit', edit_w000t_path(w000t) %></td>
-        <td><%= link_to 'Destroy', w000t, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
+      <%= render partial: 'w000ts/w000t', locals: { w000t: w000t } %>
     <% end %>
   </tbody>
 </table>
 
 <br>
 
-<%= link_to 'New W000t', new_w000t_path %>
+<%= link_to 'New w000t', new_w000t_path %>

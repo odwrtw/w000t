@@ -12,6 +12,8 @@ class W000t
 
   belongs_to :user
 
+  delegate :pseudo, :email, to: :user, prefix: true
+
   # field :_id, type: String, default: ->{ short_url }
   def to_param
     short_url
