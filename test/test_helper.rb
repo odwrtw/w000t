@@ -10,6 +10,9 @@ module ActiveSupport
   end
 end
 
-class ActionController::TestCase
+module ActionController
+  # Devise helper for tests
+  class TestCase
     include Devise::TestHelpers
+  end
 end
