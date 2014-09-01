@@ -5,6 +5,7 @@
     <tr>
       <th>Long url</th>
       <th>Short url</th>
+      <th>Number of click</th>
       <th colspan="3"></th>
     </tr>
   </thead>
@@ -14,6 +15,7 @@
       <tr>
         <td><%= w000t.long_url %></td>
         <td><%= w000t.short_url %></td>
+        <td><%= w000t.number_of_click %></td>
         <td><%= link_to 'Show', w000t %></td>
         <td><%= link_to 'Edit', edit_w000t_path(w000t) %></td>
         <td><%= link_to 'Destroy', w000t, method: :delete, data: { confirm: 'Are you sure?' } %></td>

@@ -73,6 +73,7 @@ class W000tsController < ApplicationController
   end
 
   def redirect
+    @w000t.inc(number_of_click: 1)
     redirect_to @w000t.long_url
   end
 

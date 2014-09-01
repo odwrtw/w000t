@@ -8,6 +8,7 @@ class W000t
   field :long_url
   field :short_url
   field :user_id, type: Integer
+  field :number_of_click, type: Integer, default: 0
 
   belongs_to :user
 
