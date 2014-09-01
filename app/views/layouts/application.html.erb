@@ -38,13 +38,10 @@
     </div>
 
     <div class="container">
-
+      <%= render partial: 'shared/custom_notices', locals: { notice: notice, alert: alert } %>
       <div class="content-fluid">
-        <p class="notice"><%= notice %></p>
-        <p class="alert"><%= alert %></p>
         <%= yield %>
       </div>
-
     </div>
   </body>
 </html>
