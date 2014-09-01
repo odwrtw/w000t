@@ -77,6 +77,15 @@ class W000tsController < ApplicationController
     redirect_to @w000t.long_url
   end
 
+  def my_index
+    unless user_signed_in?
+      redirect_to new_user_session_path
+      return
+    end
+
+    @w000ts = W000t.where(user_id: current_user.id)
+  end
+
   private
 
   # Use callbacks to share common setup or constraints between actions.

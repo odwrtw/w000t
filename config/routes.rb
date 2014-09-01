@@ -1,8 +1,13 @@
 Rails.application.routes.draw do
   devise_for :users
 
+  # Personnal w000ts
+  get '/w000ts/me' => 'w000ts#my_index'
+
+  # w000s CRUD
   resources :w000ts, param: :short_url
 
+  # w000ts redirections
   get '/:short_url' => 'w000ts#redirect'
 
   # The priority is based upon order of creation: first created -> highest
