@@ -31,4 +31,9 @@ class W000t
     # And we keep only the 10 first characters
     self.short_url = truncate(short_url, length: 10, omission: '')
   end
+
+  # Takes the base url and return the full shortened path
+  def full_shortened_url(base)
+    base + '/' + short_url
+  end
 end

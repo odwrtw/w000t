@@ -33,9 +33,20 @@ class W000tsController < ApplicationController
     if @w000t.save
       # If it's a success, we return directly the new shortened url for
       # easy parsing
-      render json: request.base_url + '/' + @w000t.short_url, status: :created
+      respond_to do |format|
+        format.json do
+          render json: @w000t.full_shortened_url(request.base_url),
+                 status: :created
+        end
+        format.js { @w000t }
+      end
     else
-      render json: @w000t.errors, status: :unprocessable_entity
+      respond_to do |format|
+        format.json do
+          render json: @w000t.errors, status: :unprocessable_entity
+        end
+        format.js { @w000t }
+      end
     end
   end
 
@@ -100,6 +111,13 @@ class W000tsController < ApplicationController
   #
   def check_w000t
     w000t = W000t.find_by(long_url: w000t_params[:long_url])
-    render json: request.base_url + '/' + w000t.short_url if w000t
+    return unless w000t
+    respond_to do |format|
+      format.json do
+        render json: w000t.full_shortened_url(request.base_url),
+               status: :created
+      end
+      format.js { render w000t }
+    end
   end
 end

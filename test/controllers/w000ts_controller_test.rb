@@ -13,7 +13,7 @@ class W000tsControllerTest < ActionController::TestCase
   test 'should create a w000t' do
     assert_difference('W000t.count') do
       post :create, w000t: { long_url: 'http://google.fr' },
-                    user_id: @user.id
+                    user_id: @user.id, format: :json
     end
     assert_response :success
   end
@@ -21,7 +21,7 @@ class W000tsControllerTest < ActionController::TestCase
   test 'should create an existing w000t' do
     assert_difference('W000t.count', 0) do
       post :create, w000t: { long_url: @w000t.long_url },
-                    user_id: @user.id
+                    user_id: @user.id, format: :json
     end
     assert_response :success
   end
