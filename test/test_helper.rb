@@ -9,3 +9,7 @@ module ActiveSupport
     Mongoid.load!('./config/mongoid.yml')
   end
 end
+
+class ActionController::TestCase
+    include Devise::TestHelpers
+end

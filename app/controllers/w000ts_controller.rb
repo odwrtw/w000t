@@ -26,13 +26,8 @@ class W000tsController < ApplicationController
   # POST /w000ts
   # POST /w000ts.json
   def create
-    # if @user
-    #   @w000t = @user.w000ts.build(w000t_params)
-    # else
-    #   @w000t = W000t.new(w000t_params)
-    # end
     @w000t = W000t.new(w000t_params)
-
+    @w000t.user = current_user if user_signed_in?
     @w000t.shorten_url(w000t_params[:long_url])
 
     if @w000t.save
