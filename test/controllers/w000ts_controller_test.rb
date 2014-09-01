@@ -10,7 +10,7 @@ class W000tsControllerTest < ActionController::TestCase
     @w000t = FactoryGirl.create(:w000t)
   end
 
-  test 'should create a w000t' do
+  test 'should create a w000t as json' do
     assert_difference('W000t.count') do
       post :create, w000t: { long_url: 'http://google.fr' },
                     user_id: @user.id, format: :json
@@ -18,10 +18,26 @@ class W000tsControllerTest < ActionController::TestCase
     assert_response :success
   end
 
-  test 'should create an existing w000t' do
+  test 'should create a w000t as json as js' do
+    assert_difference('W000t.count') do
+      post :create, w000t: { long_url: 'http://google.fr' },
+                    user_id: @user.id, format: :js
+    end
+    assert_response :success
+  end
+
+  test 'should create an existing w000t as json' do
     assert_difference('W000t.count', 0) do
       post :create, w000t: { long_url: @w000t.long_url },
                     user_id: @user.id, format: :json
+    end
+    assert_response :success
+  end
+
+  test 'should create an existing w000t as js' do
+    assert_difference('W000t.count', 0) do
+      post :create, w000t: { long_url: @w000t.long_url },
+                    user_id: @user.id, format: :js
     end
     assert_response :success
   end
