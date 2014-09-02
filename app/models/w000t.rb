@@ -25,20 +25,25 @@ class W000t
     # Don't redefine the short_url
     return if short_url
 
+    # Hash the long_url by default
     to_hash = long_url
 
     # Custom hash if the user is logged in
     to_hash = user.pseudo + 'pw3t' + long_url if user_id
 
-    # We hash the long_url
-    short_url = Digest::SHA1.hexdigest to_hash
-
     # And we keep only the 10 first characters
-    self.short_url = truncate(short_url, length: 10, omission: '')
+    self.short_url = hash_and_truncate(to_hash)
+  end
+
+  # TODO move this function to the lib folder so it can be used in the tests
+  # too
+  def hash_and_truncate(input_string)
+    truncate(Digest::SHA1.hexdigest(input_string), length: 10, omission: '')
   end
 
   # Takes the base url and return the full shortened path
   def full_shortened_url(base)
     base + '/' + short_url
   end
+
 end
