@@ -1,6 +1,6 @@
 # w000ts Controller
 class W000tsController < ApplicationController
-  before_action :set_w000t, only: [:show, :edit, :update, :destroy, :redirect]
+  before_action :set_w000t, only: [:show, :edit, :destroy, :redirect]
   before_action :check_w000t, only: [:create]
 
   # GET /w000ts
@@ -17,10 +17,6 @@ class W000tsController < ApplicationController
   # GET /w000ts/new
   def new
     @w000t = W000t.new
-  end
-
-  # GET /w000ts/1/edit
-  def edit
   end
 
   # POST /w000ts
@@ -50,27 +46,25 @@ class W000tsController < ApplicationController
     end
   end
 
-  # PATCH/PUT /w000ts/1
-  # PATCH/PUT /w000ts/1.json
-  def update
-    respond_to do |format|
-      if @w000t.update(w000t_params)
-        format.html do
-          redirect_to @w000t, notice: 'W000t was successfully updated.'
-        end
-        format.json { render :show, status: :ok, location: @w000t }
-      else
-        format.html { render :edit }
-        format.json do
-          render json: @w000t.errors, status: :internal_server_error
-        end
-      end
-    end
-  end
-
   # DELETE /w000ts/1
   # DELETE /w000ts/1.json
+  # Only the w000t creator can delete is own w000t, for public w000ts, no
+  # deletion for now
   def destroy
+    # Only allow signed in users
+    unless user_signed_in?
+      redirect_to new_user_session_url,
+                  notice: 'You must login fisrt'
+      return
+    end
+
+    # Check user right
+    unless @w000t.user_id == current_user.id
+      redirect_to w000ts_url,
+                  error: 'You can not delete this w000t, only the owner can'
+      return
+    end
+
     @w000t.destroy
     respond_to do |format|
       format.html do

@@ -5,7 +5,7 @@ Rails.application.routes.draw do
   get '/w000ts/me' => 'w000ts#my_index'
 
   # w000s CRUD
-  resources :w000ts, param: :short_url
+  resources :w000ts, param: :short_url, except: [:update]
 
   # w000ts redirections
   get '/:short_url' => 'w000ts#redirect'

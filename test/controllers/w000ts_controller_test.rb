@@ -18,7 +18,7 @@ class W000tsControllerTest < ActionController::TestCase
     assert_response :success
   end
 
-  test 'should create a w000t as json as js' do
+  test 'should create a w000t as js' do
     assert_difference('W000t.count') do
       post :create, w000t: { long_url: 'http://google.fr' },
                     user_id: @user.id, format: :js
@@ -52,12 +52,28 @@ class W000tsControllerTest < ActionController::TestCase
     assert_response :success
   end
 
-  test 'should destroy' do
+  test 'should destroy as a logged in user' do
+    sign_in @user
+    @user_w000t = W000t.create!(
+      user: @user,
+      short_url: 'raafefesfa'
+    )
     assert_difference('W000t.count', -1) do
-      post :destroy, short_url: @w000t.short_url, format: :json
+      post :destroy, short_url: @user_w000t.short_url, format: :json
     end
     assert_response :success
   end
+
+  test 'should not destroy as anonymous user' do
+    assert_difference('W000t.count', 0) do
+      post :destroy, short_url: @w000t.short_url, format: :json
+    end
+    assert_redirected_to new_user_session_url
+  end
+
+  # TODO
+  # test 'should not destroy as the wrong user' do
+  # end
 
   test 'should get index' do
     get :index
