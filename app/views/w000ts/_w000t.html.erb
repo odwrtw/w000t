@@ -3,6 +3,12 @@
   <td><%= w000t.short_url %></td>
   <td><%= w000t.number_of_click %></td>
   <td><%= w000t.user_pseudo if w000t.user %></td>
-  <td><%= link_to 'Destroy', w000t, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-  <td><%= link_to 'Redirect', redirect_path(w000t), method: :get  %></td>
+  <td>
+    <%= link_to w000t, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-default' do %>
+      <i class="fa fa-trash"></i>
+    <% end %>
+    <%= link_to redirect_path(w000t), method: :get, class: 'btn btn-default' do  %>
+      <i class="fa fa-external-link"></i>
+    <% end %>
+  </td>
 </tr>
