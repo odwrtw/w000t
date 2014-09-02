@@ -60,9 +60,9 @@ class W000tsController < ApplicationController
 
     # Check user right
     unless @w000t.user_id == current_user.id
-      redirect_to w000ts_url,
-                  error: 'You can not delete this w000t, only the owner can'
-      return
+      return redirect_to w000ts_url, flash: {
+        alert: 'You can not delete this w000t, only the owner can'
+      }
     end
 
     @w000t.destroy
@@ -82,8 +82,7 @@ class W000tsController < ApplicationController
 
   def my_index
     unless user_signed_in?
-      redirect_to new_user_session_path
-      return
+      return redirect_to new_user_session_path
     end
 
     @w000ts = current_user.w000ts
