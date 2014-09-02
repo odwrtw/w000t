@@ -33,7 +33,7 @@ class W000tsController < ApplicationController
           render json: @w000t.full_shortened_url(request.base_url),
                  status: :created
         end
-        format.js { @w000t }
+        format.js { render :create, locals: { w000t: @w000t } }
       end
     else
       respond_to do |format|
@@ -105,7 +105,7 @@ class W000tsController < ApplicationController
         render json: w000t.full_shortened_url(request.base_url),
                status: :created
       end
-      format.js { render w000t }
+      format.js { render :create, locals: { w000t: w000t } }
     end
   end
 end
