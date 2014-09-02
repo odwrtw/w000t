@@ -5,7 +5,8 @@ class W000t
   include ActionView::Helpers::TextHelper
   require 'digest/sha1'
 
-  # Callback
+  # Callbacks
+  after_validation :http_prefix
   before_save :create_short_url
 
   # DB fields
@@ -26,6 +27,12 @@ class W000t
     short_url
   end
 
+  # Force http prefix if not defined
+  def http_prefix
+    self.long_url = 'http://' + long_url.to_s unless long_url =~ /^http/
+  end
+
+  # Create short url on save if not yet defined
   def create_short_url
     # Don't redefine the short_url
     return if short_url

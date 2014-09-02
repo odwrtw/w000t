@@ -31,7 +31,7 @@ class W000tTest < ActiveSupport::TestCase
 
   test 'should not have an empty long_url' do
     @w000t = W000t.new
-    assert @w000t.invalid?
+    assert @w000t.invalid?, 'An empty w000t should not be valid'
     assert @w000t.errors[:long_url].any?
   end
 
