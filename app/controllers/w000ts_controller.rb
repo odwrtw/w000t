@@ -52,13 +52,12 @@ class W000tsController < ApplicationController
   def destroy
     # Only allow signed in users
     unless user_signed_in?
-      redirect_to new_user_session_url,
-                  notice: 'You must login fisrt'
-      return
+      return redirect_to new_user_session_url,
+                         notice: 'You must login fisrt'
     end
 
     # Check user right
-    unless @w000t.user_id == current_user.id
+    unless current_user.w000ts.find_by(short_url: @w000t.short_url)
       return redirect_to w000ts_url, flash: {
         alert: 'You can not delete this w000t, only the owner can'
       }
@@ -80,10 +79,7 @@ class W000tsController < ApplicationController
   end
 
   def my_index
-    unless user_signed_in?
-      return redirect_to new_user_session_path
-    end
-
+    return redirect_to new_user_session_path unless user_signed_in?
     @w000ts = current_user.w000ts
   end
 

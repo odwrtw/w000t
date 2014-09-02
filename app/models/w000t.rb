@@ -5,18 +5,23 @@ class W000t
   include ActionView::Helpers::TextHelper
   require 'digest/sha1'
 
+  # Callback
   before_save :create_short_url
 
+  # DB fields
   field :long_url
   field :short_url
   field :user_id, type: Integer
   field :number_of_click, type: Integer, default: 0
 
-  belongs_to :user
+  # Model validation
+  validates :long_url, presence: true
 
+  # Association
+  belongs_to :user
   delegate :pseudo, :email, to: :user, prefix: true
 
-  # field :_id, type: String, default: ->{ short_url }
+  # Define the short_url as the id of the model
   def to_param
     short_url
   end
@@ -35,8 +40,6 @@ class W000t
     self.short_url = hash_and_truncate(to_hash)
   end
 
-  # TODO move this function to the lib folder so it can be used in the tests
-  # too
   def hash_and_truncate(input_string)
     truncate(Digest::SHA1.hexdigest(input_string), length: 10, omission: '')
   end
@@ -45,5 +48,4 @@ class W000t
   def full_shortened_url(base)
     base + '/' + short_url
   end
-
 end
