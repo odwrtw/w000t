@@ -1,7 +1,7 @@
 # w000ts Controller
 class W000tsController < ApplicationController
   before_action :set_w000t, only: [:show, :edit, :destroy, :redirect]
-  before_action :check_w000t, only: [:create]
+  before_action :check_http_prefix, :check_w000t, only: [:create]
 
   # GET /w000ts
   # GET /w000ts.json
@@ -96,7 +96,15 @@ class W000tsController < ApplicationController
     params.require(:w000t).permit(:long_url)
   end
 
-  #
+  # Add http prefix if needed
+  def check_http_prefix
+    return if w000t_params[:long_url] =~ /^http/
+
+    # Add prefix
+    params[:w000t][:long_url] = 'http://' + w000t_params[:long_url]
+  end
+
+  # If there is already an existing w000t, return it
   def check_w000t
     w000t = W000t.find_by(long_url: w000t_params[:long_url])
     return unless w000t

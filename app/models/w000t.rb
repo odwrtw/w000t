@@ -6,7 +6,6 @@ class W000t
   require 'digest/sha1'
 
   # Callbacks
-  after_validation :http_prefix
   before_save :create_short_url
 
   # DB fields
@@ -17,6 +16,7 @@ class W000t
 
   # Model validation
   validates :long_url, presence: true
+  validates :long_url, format: { with: /\Ahttp/ }
 
   # Association
   belongs_to :user
@@ -25,11 +25,6 @@ class W000t
   # Define the short_url as the id of the model
   def to_param
     short_url
-  end
-
-  # Force http prefix if not defined
-  def http_prefix
-    self.long_url = 'http://' + long_url.to_s unless long_url =~ /^http/
   end
 
   # Create short url on save if not yet defined

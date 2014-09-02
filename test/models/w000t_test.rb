@@ -39,4 +39,10 @@ class W000tTest < ActiveSupport::TestCase
     @w000t = W000t.new(long_url: @long_url)
     assert @w000t.valid?
   end
+
+  test 'should be invalid whitout http prefix' do
+    @w000t = W000t.new(long_url: 'google.com')
+    assert @w000t.invalid?
+    assert @w000t.errors[:long_url].any?
+  end
 end

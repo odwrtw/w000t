@@ -18,6 +18,14 @@ class W000tsControllerTest < ActionController::TestCase
     assert_response :success
   end
 
+  test 'should create a w000t as json with no http prefix' do
+    assert_difference('W000t.count') do
+      post :create, w000t: { long_url: 'google.fr' },
+                    user_id: @user.id, format: :json
+    end
+    assert_response :success
+  end
+
   test 'should create a w000t as js' do
     assert_difference('W000t.count') do
       post :create, w000t: { long_url: 'http://google.fr' },
