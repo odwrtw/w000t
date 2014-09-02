@@ -56,7 +56,7 @@ class W000tsControllerTest < ActionController::TestCase
     sign_in @user
     @user_w000t = W000t.create!(
       user: @user,
-      short_url: 'raafefesfa'
+      long_url: 'http://destroy_logged_in.com'
     )
     assert_difference('W000t.count', -1) do
       post :destroy, short_url: @user_w000t.short_url, format: :json
@@ -71,9 +71,17 @@ class W000tsControllerTest < ActionController::TestCase
     assert_redirected_to new_user_session_url
   end
 
-  # TODO
-  # test 'should not destroy as the wrong user' do
-  # end
+  test 'should not destroy as the wrong user' do
+    joe = FactoryGirl.create(:user, pseudo: 'Joe', email: 'joe@plop.com')
+    w000t_by_joe = W000t.create(
+      long_url: 'http://superjoe.com',
+      user: joe
+    )
+    sign_in @user
+    assert_difference('W000t.count', 0) do
+      post :destroy, short_url: w000t_by_joe.short_url, format: :json
+    end
+  end
 
   test 'should get index' do
     get :index

@@ -24,7 +24,6 @@ class W000tsController < ApplicationController
   def create
     @w000t = W000t.new(w000t_params)
     @w000t.user = current_user if user_signed_in?
-    @w000t.shorten_url(w000t_params[:long_url])
 
     if @w000t.save
       # If it's a success, we return directly the new shortened url for

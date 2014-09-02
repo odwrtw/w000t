@@ -5,6 +5,8 @@ class W000t
   include ActionView::Helpers::TextHelper
   require 'digest/sha1'
 
+  before_save :create_short_url
+
   field :long_url
   field :short_url
   field :user_id, type: Integer
@@ -19,7 +21,10 @@ class W000t
     short_url
   end
 
-  def shorten_url(long_url)
+  def create_short_url
+    # Don't redefine the short_url
+    return if short_url
+
     to_hash = long_url
 
     # Custom hash if the user is logged in
