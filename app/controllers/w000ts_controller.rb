@@ -106,7 +106,11 @@ class W000tsController < ApplicationController
 
   # If there is already an existing w000t, return it
   def check_w000t
-    w000t = W000t.find_by(long_url: w000t_params[:long_url])
+    user_id = current_user ? current_user.id : nil
+    w000t = W000t.find_by(
+      long_url: w000t_params[:long_url],
+      user_id: user_id
+    )
     return unless w000t
     respond_to do |format|
       format.json do
