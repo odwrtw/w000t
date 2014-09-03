@@ -31,6 +31,7 @@
             <%= nav_link 'w000ts', w000ts_path %>
             <% if user_signed_in? %>
               <%= nav_link 'my w000ts', w000ts_me_path %>
+              <%= nav_link 'Tokens', user_authentication_tokens_path(current_user) %>
             <% end %>
           </ul>
           <ul class="nav navbar-nav navbar-right">

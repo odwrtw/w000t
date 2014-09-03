@@ -1,0 +1,29 @@
+<h1>Listing authentication_tokens</h1>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Token</th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @authentication_tokens.each do |authentication_token| %>
+      <tr>
+        <td><%= authentication_token.name %></td>
+        <td><%= authentication_token.token %></td>
+        <td>
+          <%= link_to user_authentication_token_path(@user, authentication_token), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-default'  do %>
+            <i class="fa fa-trash"></i>
+          <% end %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Authentication token', new_user_authentication_token_path(@user) %>

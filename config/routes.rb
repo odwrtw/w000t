@@ -1,10 +1,15 @@
 Rails.application.routes.draw do
+
   devise_for :users
+
+  resources :users, only: [] do
+    resources :authentication_tokens, except: [:edit, :update], path: :tokens
+  end
 
   # Personnal w000ts
   get '/w000ts/me' => 'w000ts#my_index'
 
-  # w000s CRUD
+  # w000ts and tokens
   resources :w000ts, param: :short_url, except: [:edit, :update]
 
   # w000ts redirections

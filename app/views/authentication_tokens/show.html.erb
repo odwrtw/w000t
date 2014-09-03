@@ -1,0 +1,18 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @authentication_token.name %>
+</p>
+
+<p>
+  <strong>Token:</strong>
+  <%= @authentication_token.token %>
+</p>
+
+<p>
+  <strong>User:</strong>
+  <%= @authentication_token.user %>
+</p>
+
+<%= link_to 'Back', authentication_tokens_path %>
