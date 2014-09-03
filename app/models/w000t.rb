@@ -15,8 +15,7 @@ class W000t
   field :number_of_click, type: Integer, default: 0
 
   # Model validation
-  validates :long_url, presence: true
-  validates :long_url, format: { with: /\Ahttp/ }
+  validates :long_url, presence: true, format: { with: %r{\Ahttps?:\/\/.+\Z} }
 
   # Association
   belongs_to :user

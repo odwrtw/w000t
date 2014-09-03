@@ -1,7 +1,7 @@
 # w000ts Controller
 class W000tsController < ApplicationController
   before_action :set_w000t, only: [:show, :edit, :destroy, :redirect]
-  before_action :check_http_prefix, :check_w000t, only: [:create]
+  before_action :check_http_prefix, :check_token, :check_w000t, only: [:create]
 
   # GET /w000ts
   # GET /w000ts.json
@@ -24,6 +24,7 @@ class W000tsController < ApplicationController
   def create
     @w000t = W000t.new(w000t_params)
     @w000t.user = current_user if user_signed_in?
+    @w000t.user = @token_user if @token_user
 
     if @w000t.save
       # If it's a success, we return directly the new shortened url for
@@ -119,5 +120,12 @@ class W000tsController < ApplicationController
       end
       format.js { render :create, locals: { w000t: w000t } }
     end
+  end
+
+  # Allow auth by token
+  def check_token
+    token = AuthenticationToken.find_by(token: params[:token])
+    return unless token
+    @token_user = token.user
   end
 end
