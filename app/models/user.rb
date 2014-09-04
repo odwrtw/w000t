@@ -7,6 +7,7 @@ class User
          :recoverable, :rememberable, :trackable, :validatable
 
   has_many :w000ts
+  has_many :authentication_tokens
 
   ## Database authenticatable
   field :pseudo,             type: String, default: ''

@@ -7,7 +7,10 @@ class AuthenticationTokensController < ApplicationController
   # GET /authentication_tokens
   # GET /authentication_tokens.json
   def index
-    @authentication_tokens = AuthenticationToken.all
+    user = current_user if user_signed_in?
+    user = @token_user if @token_user
+    return redirect_to new_user_session unless user
+    @authentication_tokens = user.authentication_tokens
   end
 
   # GET /authentication_tokens/1
