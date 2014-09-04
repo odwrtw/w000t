@@ -1,7 +1,11 @@
 # w000ts Controller
 class W000tsController < ApplicationController
   before_action :set_w000t, only: [:show, :edit, :destroy, :redirect]
-  before_action :check_http_prefix, :check_token, :check_w000t, only: [:create]
+  before_action :check_http_prefix,
+                :prevent_w000tception,
+                :check_token,
+                :check_w000t,
+                only: [:create]
 
   # GET /w000ts
   # GET /w000ts.json
@@ -103,6 +107,20 @@ class W000tsController < ApplicationController
 
     # Add prefix
     params[:w000t][:long_url] = 'http://' + w000t_params[:long_url]
+  end
+
+  def prevent_w000tception
+    match = /\A#{request.base_url}\/(\w{10})\Z/.match(w000t_params[:long_url])
+    return unless match
+    w000t = W000t.find_by(short_url: match[1])
+    return unless w000t
+    respond_to do |format|
+      format.json do
+        render json: w000t.full_shortened_url(request.base_url),
+               status: :created
+      end
+      format.js { render :create, locals: { w000t: w000t } }
+    end
   end
 
   # If there is already an existing w000t, return it
