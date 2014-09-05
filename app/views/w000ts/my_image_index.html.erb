@@ -1,0 +1,14 @@
+<div id="grid-gallery" class="grid-gallery">
+  <section class="grid-wrap">
+    <ul class="grid">
+      <% @w000ts.each do |w000t| %>
+        <li>
+          <figure>
+            <%= link_to( image_tag(w000t.long_url), redirect_path(w000t) ) %>
+          </figure>
+        </li>
+      <% end %>
+    </ul>
+  </section>
+</div>
+<br>

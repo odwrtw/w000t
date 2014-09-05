@@ -88,6 +88,11 @@ class W000tsController < ApplicationController
     @w000ts = current_user.w000ts
   end
 
+  def my_image_index
+    return redirect_to new_user_session_path unless user_signed_in?
+    @w000ts = current_user.w000ts.where(long_url: /(gif|png|jpg|jpeg)$/)
+  end
+
   private
 
   # Use callbacks to share common setup or constraints between actions.
