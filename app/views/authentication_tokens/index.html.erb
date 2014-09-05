@@ -1,4 +1,4 @@
-<h1>Listing authentication_tokens</h1>
+<h1>API Tokens</h1>
 
 <table class="table">
   <thead>
@@ -26,4 +26,6 @@
 
 <br>
 
-<%= link_to 'New Authentication token', new_user_authentication_token_path(@user) %>
+<%= link_to new_user_authentication_token_path(@user), class: 'btn btn-default pull-right' do %>
+  <i class="fa fa-plus-square"></i> Create token
+<% end %>
