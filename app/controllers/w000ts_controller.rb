@@ -10,7 +10,7 @@ class W000tsController < ApplicationController
   # GET /w000ts
   # GET /w000ts.json
   def index
-    @w000ts = W000t.all
+    @w000ts = W000t.where(user: nil)
   end
 
   # GET /w000ts/1
