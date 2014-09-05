@@ -8,6 +8,7 @@ Rails.application.routes.draw do
 
   # Personnal w000ts
   get '/w000ts/me' => 'w000ts#my_index'
+  get '/w000ts/meme' => 'w000ts#my_image_index'
 
   # w000ts and tokens
   resources :w000ts, param: :short_url, except: [:edit, :update]
