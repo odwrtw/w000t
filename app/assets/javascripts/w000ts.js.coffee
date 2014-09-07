@@ -15,15 +15,18 @@ $.fn.selectText = ->
     selection.addRange(range)
 
 $(".w000ts.my_image_index").ready ->
+  # masonry options
   masonry_options =
     itemSelector: '.item'
 
-  # Load masonry on page ready
-  $container = $("div#w000t-wall-container").masonry(masonry_options)
+  # Image container
+  $container = $("div#w000t-wall-container")
+  imgLoad = imagesLoaded($container)
 
-  # layout Masonry again after all images have loaded
-  $container.imagesLoaded ->
-    console.log 'Image loaded'
-    $container.masonry(masonry_options)
-    return
+  # Update layout on each image load
+  imgLoad.on 'progress', -> $container.masonry masonry_options
+
+  # Update layout when all the images are loaded
+  imgLoad.on 'always', -> $container.masonry masonry_options
+  return
 
