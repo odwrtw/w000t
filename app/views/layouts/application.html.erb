@@ -28,9 +28,10 @@
         </div>
         <div class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
-            <%= nav_link 'Public w000ts', w000ts_path %>
+            <%= nav_link 'Public list', w000ts_path %>
             <% if user_signed_in? %>
-              <%= nav_link 'My w000ts', w000ts_me_path %>
+              <%= nav_link 'My list', w000ts_me_path %>
+              <%= nav_link 'Wall', w000ts_meme_path %>
             <% end %>
           </ul>
           <ul class="nav navbar-nav navbar-right">
