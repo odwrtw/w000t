@@ -149,6 +149,9 @@ class W000tsController < ApplicationController
   def check_token
     token = AuthenticationToken.find_by(token: params[:token])
     return unless token
+    # Count token usage
+    token.inc(number_of_use: 1)
+    # Get user
     @token_user = token.user
   end
 end

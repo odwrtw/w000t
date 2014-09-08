@@ -5,6 +5,8 @@
     <tr>
       <th>Name</th>
       <th>Token</th>
+      <th>Usage</th>
+      <th>Last time used</th>
       <th></th>
     </tr>
   </thead>
@@ -14,6 +16,13 @@
       <tr>
         <td><%= authentication_token.name %></td>
         <td><%= authentication_token.token %></td>
+        <% if authentication_token.number_of_use == 0 %>
+          <td><span class="label label-default">Never used</span></td>
+          <td><span class="label label-default">Never used</span></td>
+        <% else %>
+          <td><%= authentication_token.number_of_use %></td>
+          <td><%= authentication_token.updated_at %></td>
+        <% end %>
         <td>
           <%= link_to user_authentication_token_path(@user, authentication_token), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-default'  do %>
             <i class="fa fa-trash"></i>
