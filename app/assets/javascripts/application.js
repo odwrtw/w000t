@@ -11,6 +11,7 @@
 // about supported directives.
 //
 //= require jquery
+//= require jquery.turbolinks
 //= require jquery_ujs
 //= require bootstrap/dist/js/bootstrap
 //= require imagesloaded/imagesloaded.pkgd
