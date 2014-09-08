@@ -44,3 +44,6 @@ gem 'bson_ext'
 gem 'factory_girl_rails'
 
 gem 'devise', '~> 3.3.0'
+
+gem 'kaminari'
+gem 'mongoid_rails_migrations'

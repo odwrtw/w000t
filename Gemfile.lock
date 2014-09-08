@@ -75,11 +75,19 @@ GEM
       railties (>= 3.1.0)
       turbolinks
     json (1.8.1)
+    kaminari (0.15.1)
+      actionpack (>= 3.0.0)
+      activesupport (>= 3.0.0)
     mail (2.5.4)
       mime-types (~> 1.16)
       treetop (~> 1.4.8)
     mime-types (1.25.1)
     minitest (5.4.0)
+    mongoid_rails_migrations (1.0.1)
+      activesupport (>= 3.2.0)
+      bundler (>= 1.0.0)
+      rails (>= 3.2.0)
+      railties (>= 3.2.0)
     moped (2.0.0)
       bson (~> 2.2)
       connection_pool (~> 2.0)
@@ -156,7 +164,9 @@ DEPENDENCIES
   jbuilder (~> 2.0)
   jquery-rails
   jquery-turbolinks
+  kaminari
   mongoid (~> 4)!
+  mongoid_rails_migrations
   rails (= 4.1.2)
   sass-rails (~> 4.0.3)
   sdoc (~> 0.4.0)

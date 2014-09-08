@@ -16,5 +16,6 @@
 //= require bootstrap/dist/js/bootstrap
 //= require imagesloaded/imagesloaded.pkgd
 //= require masonry/dist/masonry.pkgd
+//= require jquery-infinite-scroll/jquery.infinitescroll
 //= require turbolinks
 //= require_tree .
