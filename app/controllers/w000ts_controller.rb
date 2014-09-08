@@ -10,7 +10,7 @@ class W000tsController < ApplicationController
   # GET /w000ts
   # GET /w000ts.json
   def index
-    @w000ts = W000t.where(user: nil)
+    @w000ts = W000t.where(user: nil).order_by(created_at: :desc).page(params[:page]).per(25)
   end
 
   # GET /w000ts/1
@@ -85,12 +85,14 @@ class W000tsController < ApplicationController
 
   def my_index
     return redirect_to new_user_session_path unless user_signed_in?
-    @w000ts = current_user.w000ts
+    @w000ts = current_user.w000ts.order_by(created_at: :desc).page(params[:page]).per(25)
   end
 
+  # GET /meme
+  # GET /meme.json
   def my_image_index
     return redirect_to new_user_session_path unless user_signed_in?
-    @w000ts = current_user.w000ts.where(long_url: /(gif|png|jpg|jpeg)$/)
+    @w000ts = current_user.w000ts.where(long_url: /(gif|png|jpg|jpeg)$/).page(params[:page]).per(25)
   end
 
   private

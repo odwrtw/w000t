@@ -2,8 +2,26 @@
 require 'json'
 
 result = {}
+users = {}
 
-file = File.open('beautiful_w000t.json')
+puts 'Creating the users...'
+# Create the users
+%w(PouuleT Greg Julien Louis).each do |username|
+  user = User.create(
+    pseudo: username,
+    email: "#{username}@w000t.me",
+    password: 'testtest'
+  )
+  puts user.inspect
+  users[username.downcase] = { id: user.id }
+  puts users[username]
+end
+
+puts 'Done'
+
+puts 'Parsing the file...'
+# Parse the file
+file = File.open('./db/beautiful_w000t.json')
 contents = ''
 file.each do |line|
   contents << line
@@ -12,10 +30,13 @@ end
 redis_data = JSON.parse(contents)
 redis_data = redis_data[0]
 
+puts 'Done'
+
+puts 'Add the w000ts'
+# Add the w000ts for each users
 redis_data['user_id_to_user_name'].each do |id, user|
-  puts "================== #{user}"
+  puts "Treating #{user}"
   result[user] = []
-  next unless user == 'pouulet'
   redis_data["user:#{id}:w000t_list"].each do |long_url|
     redis_data['short_to_url_id'].each do |short_url, id_long|
       plop = redis_data["url:#{id_long}"]
@@ -35,15 +56,12 @@ redis_data['user_id_to_user_name'].each do |id, user|
           long_url: long_url,
           short_url: short_url,
           number_of_click: nb,
-          user_id: '5404f759626f6f58db010000'
+          user_id: users[user][:id]
         )
         break
       end
     end
   end
+  puts "#{user} => #{result[user].length}"
 end
-
-puts result['louis'].length
-puts result['greg'].length
-puts result['pouulet'].length
-puts result['julien'].length
+puts 'Down'
