@@ -1,5 +1,8 @@
 // We fillUp the #w000t element and show it
 $("#w000t").html("<%= escape_javascript w000t.full_shortened_url(request.base_url) %>").removeClass('hide');
 
+// Empty the input
+$("input#w000t_long_url").val('');
+
 // Then we select its text
 $("#w000t").selectText();
