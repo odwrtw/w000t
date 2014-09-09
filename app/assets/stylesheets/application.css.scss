@@ -34,6 +34,9 @@ $colHighlight   : #ecf0f1;
 .navbar-default {
   background-color: $bgDefault;
   border-color: $bgHighlight;
+  opacity: 0.9; /* opacity [0-1] */
+  -moz-opacity: 0.9; /* opacity [0-1] */
+  -webkit-opacity: 0.9; /* opacity [0-1] */
   .navbar-brand {
     color: $colDefault;
     &:hover, &:focus {
