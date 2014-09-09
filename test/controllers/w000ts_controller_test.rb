@@ -8,6 +8,7 @@ class W000tsControllerTest < ActionController::TestCase
 
     @user = FactoryGirl.create(:user)
     @w000t = FactoryGirl.create(:w000t)
+    @authentication_token = FactoryGirl.create(:authentication_token)
   end
 
   test 'should create a w000t as json' do
@@ -98,6 +99,20 @@ class W000tsControllerTest < ActionController::TestCase
     assert_difference('W000t.count', 0) do
       post :destroy, short_url: w000t_by_joe.short_url, format: :json
     end
+  end
+
+  test 'should create a w000t with a token' do
+    @authentication_token.user = @user
+    @authentication_token.save
+    assert_difference('W000t.count') do
+      post :create, w000t: { long_url: 'google.fr' },
+                    token: @authentication_token.token,
+                    format: :json
+    end
+    assert_response :success
+    created_w000t = W000t.find_by(long_url: 'http://google.fr')
+    assert_not_nil created_w000t
+    assert_equal created_w000t.user_id, @user.id
   end
 
   test 'should get index' do
