@@ -18,6 +18,7 @@
     "fontawesome": "~4.2.0",
     "masonry": "~3.1.5",
     "imagesloaded": "~3.1.8",
-    "jquery-infinite-scroll": "~2.0.2"
+    "jquery-infinite-scroll": "~2.0.2",
+    "jquery-readyselector": "~0.1.0"
   }
 }
