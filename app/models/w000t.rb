@@ -13,13 +13,18 @@ class W000t
   field :short_url
   field :user_id, type: Integer
   field :number_of_click, type: Integer, default: 0
+  field :archive, type: Integer, default: 0
 
   # Model validation
   validates :long_url, presence: true, format: { with: %r{\Ahttps?:\/\/.+\Z} }
 
   # Association
+  has_one :url_info, foreign_key: 'url', primary_key: 'long_url',
+                     inverse_of: :w000t
   belongs_to :user
   delegate :pseudo, :email, to: :user, prefix: true
+  delegate :url, :http_code, :number_of_checks,
+           :last_check, to: :url_info, prefix: true
 
   # Define the short_url as the id of the model
   def to_param
@@ -48,5 +53,10 @@ class W000t
   # Takes the base url and return the full shortened path
   def full_shortened_url(base)
     base + '/' + short_url
+  end
+
+  def archive!
+    self.archive = 1
+    save
   end
 end

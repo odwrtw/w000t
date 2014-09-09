@@ -36,7 +36,8 @@ gem 'spring',        group: :development
 # gem 'capistrano-rails', group: :development
 
 # Use debugger
-# gem 'debugger', group: [:development, :test]
+gem 'debugger', group: [:development, :test]
+gem 'pry', group: [:development, :test]
 
 gem 'mongoid', '~> 4', github: 'mongoid/mongoid'
 gem 'bson_ext'
@@ -47,3 +48,14 @@ gem 'devise', '~> 3.3.0'
 
 gem 'kaminari'
 gem 'mongoid_rails_migrations'
+
+gem 'sidekiq'
+gem 'sinatra', require: false
+gem 'slim'
+
+# Restart proccess if the code change
+# Ex for sidekiq
+# bundle exec rerun --background --dir app,db,lib --pattern '{**/*.rb}' -- bundle exec sidekiq --verbose
+# Or for reloading rais server on config change
+# rerun --dir config rails s
+gem 'rerun', group: :development

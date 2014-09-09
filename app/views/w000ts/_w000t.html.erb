@@ -3,6 +3,16 @@
   <td><%= w000t.short_url %></td>
   <td><%= w000t.number_of_click %></td>
   <td>
+    <% if w000t.url_info %>
+      <%= w000t.url_info_http_code %>
+    <%else%>
+      Not Checked
+    <%end%>
+  </td>
+  <td>
+    <%= w000t.archive %>
+  </td>
+  <td>
     <%= link_to w000t, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-default' do %>
       <i class="fa fa-trash"></i>
     <% end %>
