@@ -52,9 +52,9 @@ $(".w000ts.my_image_index").ready ->
       speed: 'fast'
       start: undefined
     , (newElements) ->
-      $newElems = $( newElements ).css({ opacity: 0 });
+      $newElems = $( newElements ).css({ opacity: 0 })
       $newElems.imagesLoaded ->
-        $newElems.animate({ opacity: 1 });
+        $newElems.animate({ opacity: 1 })
         $container.masonry "appended", $newElems
         return
   )

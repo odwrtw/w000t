@@ -133,6 +133,7 @@ class W000tsController < ApplicationController
   # If there is already an existing w000t, return it
   def check_w000t
     user_id = current_user ? current_user.id : nil
+    user_id = @token_user.id if @token_user
     w000t = W000t.find_by(
       long_url: w000t_params[:long_url],
       user_id: user_id
