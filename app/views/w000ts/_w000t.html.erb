@@ -3,11 +3,7 @@
   <td><%= w000t.short_url %></td>
   <td><%= w000t.number_of_click %></td>
   <td>
-    <% if w000t.url_info %>
-      <%= w000t.url_info_http_code %>
-    <%else%>
-      Not Checked
-    <%end%>
+    <%= pretty_http_status(w000t.url_info) %>
   </td>
   <td>
     <%= w000t.archive %>
