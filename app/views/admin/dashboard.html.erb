@@ -1,0 +1,50 @@
+<h1>Admin dashboard</h1>
+<div class="row">
+  <div class="col-md-4">
+    <div class="panel panel-primary">
+      <div class="panel-heading">
+        <h5>
+          w000ts
+          <span class="badge pull-right"><%= W000t.all.count %><span>
+        </h5>
+      </div>
+      <div class="panel-body">
+        <dl class="dl-horizontal">
+            <% User.all.each do |user| %>
+              <dt><%= user.pseudo %></dt>
+              <dd><%= user.w000ts.count %></dd>
+            <% end %>
+            <hr>
+        </dl>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-4">
+    <div class="panel panel-primary">
+      <div class="panel-heading">
+        <h5>
+          Users
+          <span class="badge pull-right"><%= User.all.count %><span>
+        </h5>
+      </div>
+      <div class="panel-body">
+        <p>Some stuff here</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-4">
+    <div class="panel panel-primary">
+      <div class="panel-heading">
+        <h5>
+          URLs
+          <span class="badge pull-right"><%= User.all.count %><span>
+        </h5>
+      </div>
+      <div class="panel-body">
+        <p>Some stuff here</p>
+      </div>
+    </div>
+  </div>
+</div>

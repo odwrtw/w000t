@@ -1,8 +1,10 @@
 Rails.application.routes.draw do
   require 'sidekiq/web'
 
+  # Admin sections
   authenticate :user, lambda { |u| u.admin? } do
     mount Sidekiq::Web, at: '/sidekiq'
+    get 'admin/dashboard'
   end
 
   devise_for :users
