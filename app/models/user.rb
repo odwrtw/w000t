@@ -10,7 +10,11 @@ class User
   has_many :w000ts
   has_many :authentication_tokens
 
+  # Model validation
+  validates :pseudo, uniqueness: true
+
   ## Database authenticatable
+  field :admin,              type: Boolean, default: false
   field :pseudo,             type: String, default: ''
   field :email,              type: String, default: ''
   field :encrypted_password, type: String, default: ''
@@ -41,4 +45,5 @@ class User
   # field :unlock_token,    type: String # Only if unlock strategy is :email or
   # :both
   # field :locked_at,       type: Time
+  #
 end
