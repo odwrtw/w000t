@@ -5,7 +5,7 @@ module UrlInfoHelper
       css_class = url_info.active? ? 'success' : 'danger'
       icon_class = url_info.active? ? 'chain' : 'chain-broken'
       content_tag :span, class: "label label-#{css_class}" do
-         content_tag :i, url_info.http_code, class: "fa fa-#{icon_class}"
+         content_tag :i, " #{url_info.http_code}", class: "fa fa-#{icon_class}"
       end
     else
       content_tag :span, 'Not Checked', class: 'label label-default'

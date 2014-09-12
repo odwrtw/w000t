@@ -9,24 +9,34 @@ class UrlLifeChecker
     url = UrlInfo.find_by(url: long_url)
     url = UrlInfo.create(url: long_url) unless url
 
-    uri = URI.parse(long_url)
-    puts "======= #{uri} ========"
     begin
-      Net::HTTP.start(uri.host, uri.port) do |http|
-        response = http.head(uri.path.size > 0 ? uri.path : '/')
-        puts response.inspect
-        puts "Response code #{response.code}"
-        url.http_code = response.code
+      uri = URI.parse(long_url)
+      puts "======= #{uri} ========"
+      begin
+        Net::HTTP.start(uri.host, uri.port) do |http|
+          http.read_timeout = 10
+          response = http.head(uri.path.size > 0 ? uri.path : '/')
+          puts response.inspect
+          puts "Response code #{response.code}"
+          url.http_code = response.code
+        end
+      rescue => e
+        puts 'Shiiiiit'
+        puts e
+        url.http_code = 500
       end
-    rescue => e
-      puts 'Shiiiiit'
-      puts e
+    rescue URI::Error => e
+      puts 'Shiiiiit, bad URI'
       url.http_code = 500
     end
 
     url.inc(number_of_checks: 1)
     url.touch(:last_check)
-    url.save
+    if url.save!
+      puts "UrlInfo saved"
+    else
+      puts "Problem when saving the UrlInfo!"
+    end
 
     # Archive the unwanted w000ts
     if url.active?
