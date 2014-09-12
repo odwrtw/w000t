@@ -5,6 +5,7 @@ Rails.application.routes.draw do
   authenticate :user, lambda { |u| u.admin? } do
     mount Sidekiq::Web, at: '/sidekiq'
     get 'admin/dashboard'
+    get 'admin/check_all_w000ts'
   end
 
   devise_for :users

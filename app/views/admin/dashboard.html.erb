@@ -1,4 +1,9 @@
-<h1>Admin dashboard</h1>
+<h1>
+  Admin dashboard
+  <%= link_to sidekiq_web_path, method: :get, class: 'btn btn-default pull-right' do  %>
+    <i class="fa fa-area-chart"> Sidekiq</i>
+  <% end %>
+</h1>
 <div class="row">
   <div class="col-md-4">
     <div class="panel panel-primary">
@@ -29,7 +34,23 @@
         </h5>
       </div>
       <div class="panel-body">
-        <p>Some stuff here</p>
+
+        <table class="table">
+          <thead>
+            <th>Pseudo</th>
+            <th>Connections</th>
+            <th>Last seen</th>
+          </thead>
+          <tbody>
+            <% User.all.each do |user| %>
+            <tr>
+              <td><%= user.pseudo %></td>
+              <td><%= user.sign_in_count %></td>
+              <td><%= user.last_sign_in_at %></td>
+            </tr>
+          <% end %>
+          </tbody>
+        </table>
       </div>
     </div>
   </div>
@@ -39,11 +60,11 @@
       <div class="panel-heading">
         <h5>
           URLs
-          <span class="badge pull-right"><%= User.all.count %><span>
+          <span class="badge pull-right"><%= UrlInfo.all.count %><span>
         </h5>
       </div>
       <div class="panel-body">
-        <p>Some stuff here</p>
+        <%= button_to "Check w000ts", {:controller => :admin, :action => :check_all_w000ts}, {:remote => true, :method => :get} %>
       </div>
     </div>
   </div>
