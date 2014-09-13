@@ -10,16 +10,15 @@
       <div class="panel-heading">
         <h5>
           w000ts
-          <span class="badge pull-right"><%= W000t.all.count %><span>
+          <span class="badge pull-right"><%= @total_w000t_number %><span>
         </h5>
       </div>
       <div class="panel-body">
         <dl class="dl-horizontal">
-            <% User.all.each do |user| %>
-              <dt><%= user.pseudo %></dt>
-              <dd><%= user.w000ts.count %></dd>
+            <% @user_data.each do |pseudo, data| %>
+              <dt><%= pseudo %></dt>
+              <dd><%= data[:w000t_counts] %></dd>
             <% end %>
-            <hr>
         </dl>
       </div>
     </div>
@@ -30,7 +29,7 @@
       <div class="panel-heading">
         <h5>
           Users
-          <span class="badge pull-right"><%= User.all.count %><span>
+          <span class="badge pull-right"><%= @total_user_number %><span>
         </h5>
       </div>
       <div class="panel-body">
@@ -42,11 +41,11 @@
             <th>Last seen</th>
           </thead>
           <tbody>
-            <% User.all.each do |user| %>
+            <% @user_data.each do |pseudo, data| %>
             <tr>
-              <td><%= user.pseudo %></td>
-              <td><%= user.sign_in_count %></td>
-              <td><%= user.last_sign_in_at %></td>
+              <td><%= pseudo %></td>
+              <td><%= data[:sign_in_count] %></td>
+              <td><%= data[:last_sign_in_at] %></td>
             </tr>
           <% end %>
           </tbody>
@@ -60,11 +59,13 @@
       <div class="panel-heading">
         <h5>
           URLs
-          <span class="badge pull-right"><%= UrlInfo.all.count %><span>
+          <span class="badge pull-right"><%= @total_url_number %><span>
         </h5>
       </div>
       <div class="panel-body">
-        <%= button_to "Check w000ts", {:controller => :admin, :action => :check_all_w000ts}, {:remote => true, :method => :get} %>
+        <%= link_to admin_check_all_w000ts_path, data: { confirm: 'Sure ?' }, remote: true, method: :post, class: 'btn btn-default' do  %>
+          <i class="fa fa-database"> Check all w000ts</i>
+        <% end %>
       </div>
     </div>
   </div>
