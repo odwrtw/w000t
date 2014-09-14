@@ -1,6 +1,7 @@
 # AdminController
 class AdminController < ApplicationController
   before_action :authenticate_user!, :check_admin
+  before_action :check_sidekiq_params, only: [:reset_sidekiq_stat]
 
   def dashboard
     @total_w000t_number = W000t.all.count
@@ -27,6 +28,11 @@ class AdminController < ApplicationController
     render json: { status: 'ok' }
   end
 
+  def reset_sidekiq_stat
+    Sidekiq.redis { |c| c.del("stat:#{@reset_param}") }
+    render json: { status: 'ok' }
+  end
+
   private
 
   def check_admin
@@ -35,5 +41,16 @@ class AdminController < ApplicationController
 
   def admin_params
     params.require(:admin).permit(:long_url)
+  end
+
+  def sidekiq_params
+    params.require(:sidekiq).permit(:reset_param)
+  end
+
+  def check_sidekiq_params
+    allowed_params = %w( processed failed )
+    @reset_param = sidekiq_params[:reset_param]
+    return if allowed_params.include? @reset_param
+    fail ArgumentError, 'Unauthorized argument'
   end
 end

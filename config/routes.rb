@@ -7,6 +7,7 @@ Rails.application.routes.draw do
     get 'admin/dashboard'
     post 'admin/check_all_w000ts'
     post 'admin/check_url'
+    post 'admin/reset_sidekiq_stat'
   end
 
   devise_for :users

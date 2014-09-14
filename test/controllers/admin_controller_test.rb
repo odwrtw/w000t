@@ -66,4 +66,25 @@ class AdminControllerTest < ActionController::TestCase
                        format: :json
     end
   end
+
+  test 'should reset sidekiq stats' do
+    sign_in @admin_user
+    allowed_params = %w( processed failed )
+    allowed_params.each do |p|
+      post :reset_sidekiq_stat, sidekiq: { reset_param: p },
+                                format: :json
+      assert_response :success
+    end
+  end
+
+  test 'should not reset sidekiq stats with wrong params' do
+    sign_in @admin_user
+    wrong_params = %w( yo mama plop )
+    wrong_params.each do |p|
+      assert_raise ArgumentError do
+        post :reset_sidekiq_stat, sidekiq: { reset_param: p },
+                                  format: :json
+      end
+    end
+  end
 end
