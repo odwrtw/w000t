@@ -1,5 +1,8 @@
 <%# add navigation links to this file %>
 <% if user_signed_in? %>
+  <% if current_user.admin? %>
+    <%= nav_link 'Admin dashboard', admin_dashboard_path %>
+  <% end %>
   <%= nav_link 'Tokens', user_authentication_tokens_path(current_user) %>
   <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown">

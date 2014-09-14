@@ -6,7 +6,15 @@ class W000tsControllerTest < ActionController::TestCase
     User.all.destroy
     W000t.all.destroy
 
+    request.env['HTTP_REFERER'] = 'previous_page'
+
     @user = FactoryGirl.create(:user)
+    @admin_user = FactoryGirl.create(
+      :user,
+      pseudo: 'admin',
+      email: 'email@admin.com',
+      admin: true
+    )
     @w000t = FactoryGirl.create(:w000t)
     @authentication_token = FactoryGirl.create(:authentication_token)
   end
@@ -77,14 +85,15 @@ class W000tsControllerTest < ActionController::TestCase
       long_url: 'http://destroy_logged_in.com'
     )
     assert_difference('W000t.count', -1) do
-      post :destroy, short_url: @user_w000t.short_url, format: :json
+      post :destroy, short_url: @user_w000t.short_url
     end
-    assert_response :success
+    assert_redirected_to 'previous_page'
+    assert_equal 'W000t was successfully destroyed.', flash[:notice]
   end
 
   test 'should not destroy as anonymous user' do
     assert_difference('W000t.count', 0) do
-      post :destroy, short_url: @w000t.short_url, format: :json
+      post :destroy, short_url: @w000t.short_url
     end
     assert_redirected_to new_user_session_url
   end
@@ -99,6 +108,8 @@ class W000tsControllerTest < ActionController::TestCase
     assert_difference('W000t.count', 0) do
       post :destroy, short_url: w000t_by_joe.short_url, format: :json
     end
+    assert_equal 'You can not delete this w000t, only the owner can',
+                 flash[:alert]
   end
 
   test 'should create a w000t with a token' do
@@ -115,9 +126,24 @@ class W000tsControllerTest < ActionController::TestCase
     assert_equal created_w000t.user_id, @user.id
   end
 
-  test 'should get index' do
+  test 'should get index as anonymous user' do
     get :index
     assert_response :success
+    assert_select 'li', 3
+  end
+
+  test 'should get index as a non admin user' do
+    sign_in @user
+    get :index
+    assert_response :success
+    assert_select 'li', 5
+  end
+
+  test 'should get index as an admin user' do
+    sign_in @admin_user
+    get :index
+    assert_response :success
+    assert_select 'li', 6
   end
 
   test 'should be redirected' do

@@ -59,4 +59,9 @@ class W000t
     self.archive = 1
     save
   end
+
+  def restore!
+    self.archive = 0
+    save
+  end
 end

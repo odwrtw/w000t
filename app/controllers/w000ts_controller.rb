@@ -1,6 +1,7 @@
 # w000ts Controller
 class W000tsController < ApplicationController
   before_action :set_w000t, only: [:show, :edit, :destroy, :redirect]
+  before_action :authenticate_user!, only: [:destroy]
   before_action :check_http_prefix,
                 :prevent_w000tception,
                 :check_token,
@@ -57,15 +58,9 @@ class W000tsController < ApplicationController
   # Only the w000t creator can delete is own w000t, for public w000ts, no
   # deletion for now
   def destroy
-    # Only allow signed in users
-    unless user_signed_in?
-      return redirect_to new_user_session_url,
-                         notice: 'You must login fisrt'
-    end
-
     # Check user right
     unless current_user.w000ts.find_by(short_url: @w000t.short_url)
-      return redirect_to w000ts_url, flash: {
+      return redirect_to :back, flash: {
         alert: 'You can not delete this w000t, only the owner can'
       }
     end
@@ -73,10 +68,9 @@ class W000tsController < ApplicationController
     @w000t.destroy
     respond_to do |format|
       format.html do
-        redirect_to w000ts_url,
+        redirect_to :back,
                     notice: 'W000t was successfully destroyed.'
       end
-      format.json { head :no_content }
     end
   end
 
