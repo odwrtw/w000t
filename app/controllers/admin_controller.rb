@@ -25,7 +25,7 @@ class AdminController < ApplicationController
     url = admin_params[:long_url]
     return render json: { error: 'No url to check' } unless url
     UrlLifeChecker.perform_async(url)
-    render json: { status: 'ok' }
+    redirect_to :back, notice: 'Task created'
   end
 
   def reset_sidekiq_stat

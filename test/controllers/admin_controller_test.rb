@@ -9,6 +9,8 @@ class AdminControllerTest < ActionController::TestCase
     W000t.all.destroy
     Sidekiq::Worker.clear_all
 
+    request.env['HTTP_REFERER'] = 'previous_page'
+
     @user = FactoryGirl.create(:user)
     @admin_user = FactoryGirl.create(
       :user,
@@ -53,7 +55,7 @@ class AdminControllerTest < ActionController::TestCase
       post :check_url, admin: { long_url: 'http://google.com' },
                        format: :json
     end
-    assert_response :success
+    assert_redirected_to 'previous_page'
   end
 
   test 'should not create task to check url if none given' do

@@ -60,7 +60,7 @@ class W000tsController < ApplicationController
   def destroy
     # Check user right
     unless current_user.w000ts.find_by(short_url: @w000t.short_url)
-      return redirect_to w000ts_url, flash: {
+      return redirect_to :back, flash: {
         alert: 'You can not delete this w000t, only the owner can'
       }
     end
@@ -68,10 +68,9 @@ class W000tsController < ApplicationController
     @w000t.destroy
     respond_to do |format|
       format.html do
-        redirect_to w000ts_url,
+        redirect_to :back,
                     notice: 'W000t was successfully destroyed.'
       end
-      format.json { head :no_content }
     end
   end
 

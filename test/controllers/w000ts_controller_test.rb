@@ -6,6 +6,8 @@ class W000tsControllerTest < ActionController::TestCase
     User.all.destroy
     W000t.all.destroy
 
+    request.env['HTTP_REFERER'] = 'previous_page'
+
     @user = FactoryGirl.create(:user)
     @w000t = FactoryGirl.create(:w000t)
     @authentication_token = FactoryGirl.create(:authentication_token)
@@ -77,14 +79,14 @@ class W000tsControllerTest < ActionController::TestCase
       long_url: 'http://destroy_logged_in.com'
     )
     assert_difference('W000t.count', -1) do
-      post :destroy, short_url: @user_w000t.short_url, format: :json
+      post :destroy, short_url: @user_w000t.short_url
     end
-    assert_response :success
+    assert_redirected_to 'previous_page'
   end
 
   test 'should not destroy as anonymous user' do
     assert_difference('W000t.count', 0) do
-      post :destroy, short_url: @w000t.short_url, format: :json
+      post :destroy, short_url: @w000t.short_url
     end
     assert_redirected_to new_user_session_url
   end
