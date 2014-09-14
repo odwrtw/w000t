@@ -60,7 +60,7 @@
         </h5>
       </div>
       <div class="panel-body">
-        <%= link_to admin_check_all_w000ts_path, data: { confirm: 'Sure ?' }, remote: true, method: :post, class: 'btn btn-default' do  %>
+        <%= link_to admin_check_all_w000ts_path, data: { confirm: 'Sure ?' }, method: :post, class: 'btn btn-default' do  %>
           <i class="fa fa-database"> Check all w000ts</i>
         <% end %>
       </div>
@@ -76,11 +76,11 @@
       </div>
       <div class="panel-body">
         <%= link_to admin_reset_sidekiq_stat_path(sidekiq: { reset_param: 'failed'}),
-                    data: { confirm: 'Sure ?' }, remote: true, method: :post, class: 'btn btn-default btn-sm' do  %>
+                    data: { confirm: 'Sure ?' }, method: :post, class: 'btn btn-default btn-sm' do  %>
           <i class="fa fa-line-chart"> Reset failed</i>
         <% end %>
         <%= link_to admin_reset_sidekiq_stat_path(sidekiq: { reset_param: 'processed'}),
-                    data: { confirm: 'Sure ?' }, remote: true, method: :post, class: 'btn btn-default btn-sm' do  %>
+                    data: { confirm: 'Sure ?' }, method: :post, class: 'btn btn-default btn-sm' do  %>
           <i class="fa fa-line-chart"> Reset processed</i>
         <% end %>
         <%= link_to sidekiq_web_path, method: :get, class: 'btn btn-default btn-sm' do  %>

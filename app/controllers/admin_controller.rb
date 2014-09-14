@@ -18,19 +18,19 @@ class AdminController < ApplicationController
 
   def check_all_w000ts
     W000t.all.each { |w| UrlLifeChecker.perform_async(w.long_url) }
-    render json: { status: 'ok' }
+    redirect_to :back, notice: 'All w000t will be checked soon'
   end
 
   def check_url
     url = admin_params[:long_url]
-    return render json: { error: 'No url to check' } unless url
+    return redirect_to :back, flash: { alert: 'Missing URL' } unless url
     UrlLifeChecker.perform_async(url)
     redirect_to :back, notice: 'Task created'
   end
 
   def reset_sidekiq_stat
     Sidekiq.redis { |c| c.del("stat:#{@reset_param}") }
-    render json: { status: 'ok' }
+    redirect_to :back, notice: "Sidekiq #{@reset_param} stat resetted"
   end
 
   private
