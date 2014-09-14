@@ -67,3 +67,7 @@ group :development, :test do
   # OS X specific gem to listen to file change
   gem 'rb-fsevent'
 end
+
+gem 'mina'
+gem 'mina-sidekiq'
+gem 'rb-readline'
