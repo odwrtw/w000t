@@ -47,6 +47,7 @@ class AdminControllerTest < ActionController::TestCase
       post :check_all_w000ts
     end
     assert_redirected_to 'previous_page'
+    assert_equal 'All w000t will be checked soon', flash[:notice]
   end
 
   test 'should check one url' do
@@ -55,6 +56,7 @@ class AdminControllerTest < ActionController::TestCase
       post :check_url, admin: { long_url: 'http://google.com' }
     end
     assert_redirected_to 'previous_page'
+    assert_equal 'Task created', flash[:notice]
   end
 
   test 'should not create task to check url if none given' do
@@ -73,6 +75,7 @@ class AdminControllerTest < ActionController::TestCase
     allowed_params.each do |p|
       post :reset_sidekiq_stat, sidekiq: { reset_param: p }
       assert_redirected_to 'previous_page'
+      assert_equal "Sidekiq #{p} stat resetted", flash[:notice]
     end
   end
 
