@@ -19,55 +19,7 @@
         </dl>
       </div>
     </div>
-  </div>
 
-  <div class="col-md-4">
-    <div class="panel panel-primary">
-      <div class="panel-heading">
-        <h5>
-          Users
-          <span class="badge pull-right"><%= @total_user_number %><span>
-        </h5>
-      </div>
-      <div class="panel-body">
-
-        <table class="table">
-          <thead>
-            <th>Pseudo</th>
-            <th>Connections</th>
-            <th>Last seen</th>
-          </thead>
-          <tbody>
-            <% @user_data.each do |pseudo, data| %>
-            <tr>
-              <td><%= pseudo %></td>
-              <td><%= data[:sign_in_count] %></td>
-              <td><%= data[:last_sign_in_at] %></td>
-            </tr>
-          <% end %>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-
-  <div class="col-md-4">
-    <div class="panel panel-primary">
-      <div class="panel-heading">
-        <h5>
-          URLs
-          <span class="badge pull-right"><%= @total_url_number %><span>
-        </h5>
-      </div>
-      <div class="panel-body">
-        <%= link_to admin_check_all_w000ts_path, data: { confirm: 'Sure ?' }, method: :post, class: 'btn btn-default' do  %>
-          <i class="fa fa-database"> Check all w000ts</i>
-        <% end %>
-      </div>
-    </div>
-  </div>
-
-  <div class="col-md-4">
     <div class="panel panel-primary">
       <div class="panel-heading">
         <h5>
@@ -85,6 +37,66 @@
         <% end %>
         <%= link_to sidekiq_web_path, method: :get, class: 'btn btn-default btn-sm' do  %>
           <i class="fa fa-external-link"> Open web UI</i>
+        <% end %>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-4">
+    <div class="panel panel-primary">
+      <div class="panel-heading">
+        <h5>
+          Users
+          <span class="badge pull-right"><%= @total_user_number %><span>
+        </h5>
+      </div>
+      <div class="panel-body">
+
+        <table class="table">
+          <thead>
+            <th class="text-center">Pseudo</th>
+            <th class="text-center">Connections</th>
+            <th class="text-center">Last seen</th>
+          </thead>
+          <tbody>
+            <% @user_data.each do |pseudo, data| %>
+            <tr>
+              <td><%= pseudo %></td>
+              <td><%= data[:sign_in_count] %></td>
+              <td><%= data[:last_sign_in_at] %></td>
+            </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-4">
+    <div class="panel panel-primary">
+      <div class="panel-heading">
+        <h5>
+          URLs
+          <span class="badge pull-right"><%= @total_url_number %><span>
+        </h5>
+      </div>
+      <div class="panel-body">
+        <table class="table">
+          <thead>
+            <th class="text-center">Code</th>
+            <th class="text-center">Number</th>
+          </thead>
+          <tbody>
+            <% @url_info_count_by_codes.each do |u| %>
+            <tr class="text-center">
+              <td><%= u['_id'] %></td>
+              <td><%= u['count']%></td>
+            </tr>
+            <% end %>
+          </tbody>
+        </table>
+        <%= link_to admin_check_all_w000ts_path, data: { confirm: 'Sure ?' }, method: :post, class: 'btn btn-default' do  %>
+          <i class="fa fa-database"> Check all w000ts</i>
         <% end %>
       </div>
     </div>

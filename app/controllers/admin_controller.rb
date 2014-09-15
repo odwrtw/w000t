@@ -14,6 +14,13 @@ class AdminController < ApplicationController
       @user_data[user.pseudo] = user.attributes
       @user_data[user.pseudo][:w000t_counts] = user.w000ts.count
     end
+
+    @url_info_count_by_codes = UrlInfo.collection.aggregate(
+      '$group' => {
+        '_id' => '$http_code',
+        count: { '$sum' => 1 }
+      }
+    )
   end
 
   def check_all_w000ts
