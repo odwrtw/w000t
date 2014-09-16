@@ -1,8 +1,9 @@
 source 'https://rubygems.org'
 
-
-# Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
+# ROR
+ruby '2.1.2'
 gem 'rails', '4.1.2'
+
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 4.0.3'
 # Use Uglifier as compressor for JavaScript assets
@@ -23,39 +24,46 @@ gem 'jbuilder', '~> 2.0'
 # bundle exec rake doc:rails generates the API under doc/api.
 gem 'sdoc', '~> 0.4.0',          group: :doc
 
-# Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
-gem 'spring',        group: :development
-
-# Use ActiveModel has_secure_password
-# gem 'bcrypt', '~> 3.1.7'
-
-# Use unicorn as the app server
-# gem 'unicorn'
-
-# Use Capistrano for deployment
-# gem 'capistrano-rails', group: :development
-
-# Use debugger
-# gem 'debugger', group: [:development, :test]
-gem 'pry', group: [:development, :test]
-
+# MongoDB
 gem 'mongoid', '~> 4', github: 'mongoid/mongoid'
+gem 'mongoid_rails_migrations'
 gem 'bson_ext'
 
-gem 'factory_girl_rails'
-
+# Authentication helper
 gem 'devise', '~> 3.3.0'
 
+# Pagination helper
 gem 'kaminari'
-gem 'mongoid_rails_migrations'
 
+
+# Sidekiq + Web UI
 gem 'sidekiq'
 gem 'sinatra', require: false
 gem 'slim'
 
-# Restart proccess if the code change
-# Ex for sidekiq
-# bundle exec rerun --background --dir app,db,lib --pattern '{**/*.rb}' -- bundle exec sidekiq --verbose
-# Or for reloading rais server on config change
-# rerun --dir config rails s
-gem 'rerun', group: :development
+group :development, :test do
+  # Spring speeds up development by keeping your application running in the
+  # background. Read more: https://github.com/rails/spring
+  gem 'spring'
+
+  gem 'pry'
+
+  # Replace fixtures
+  gem 'factory_girl_rails'
+
+  # Better stack straces
+  gem "better_errors"
+
+  # Use debugger
+  # gem 'debugger', group: [:development, :test]
+
+  # Restart proccess if the code change
+  # Ex for sidekiq
+  # bundle exec rerun --background --dir app,db,lib --pattern '{**/*.rb}' -- bundle exec sidekiq --verbose
+  # Or for reloading rais server on config change
+  # rerun --dir config rails s
+  gem 'rerun'
+
+  # OS X specific gem to listen to file change
+  gem 'rb-fsevent'
+end
