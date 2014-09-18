@@ -20,8 +20,10 @@ end
 case server
 when 'staging'
   set :domain, 'staging.w000t.me'
+  set :branch, 'staging'
 when 'production'
   set :domain, 'w000t.me'
+  set :branch, 'master'
 else
   print_error 'Invalid server.'
   exit
@@ -29,7 +31,6 @@ end
 
 set :deploy_to, '/home/deploy/w000t'
 set :repository, 'ssh://git@gitlab.quimbo.fr:5022/PouuleT/w000t.git'
-set :branch, 'master'
 # set :identity_file, '/home/pouulet/id_rsa_w000t'
 
 # Manually create these paths in shared/ (eg: shared/config/database.yml) in
