@@ -16,6 +16,18 @@
  *= require_self
  */
 
+// Get the right asset path
+@font-face {
+    font-family: 'FontAwesome';
+    src: asset-url('fontawesome/fonts/fontawesome-webfont.eot?v=4.2.0');
+    src: asset-url('fontawesome/fonts/fontawesome-webfont.eot?#iefix&v=4.2.0') format('embedded-opentype'),
+    asset-url('fontawesome/fonts/fontawesome-webfont.woff?v=4.2.0') format('woff'),
+    asset-url('fontawesome/fonts/fontawesome-webfont.ttf?v=4.2.0') format('truetype'),
+    asset-url('fontawesome/fonts/fontawesome-webfont.svg?v=4.2.0#fontawesomeregular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
 body {
   padding-top: 70px;
 }

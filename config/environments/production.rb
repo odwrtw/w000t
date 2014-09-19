@@ -21,8 +21,19 @@ Rails.application.configure do
   # nginx, varnish or squid.
   # config.action_dispatch.rack_cache = true
 
+  # TODO : check this shit
   # Disable Rails's static asset server (Apache or nginx will already do this).
   config.serve_static_assets = false
+  config.assets.enabled = true
+
+  # Explicitly register the extensions we are interested in compiling
+  config.assets.precompile.push(proc do |path|
+    File.extname(path).in? [
+      '.html', '.erb', '.haml',                 # Templates
+      '.png',  '.gif', '.jpg', '.jpeg', '.svg', # Images
+      '.eot',  '.otf', '.svc', '.woff', '.ttf', # Fonts
+    ]
+  end)
 
   # Compress JavaScripts and CSS.
   config.assets.js_compressor = :uglifier
