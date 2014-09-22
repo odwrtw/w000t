@@ -1,7 +1,7 @@
 require 'rushover'
 
 APPLICATION_KEY = 'aQStcsBai8cpQqm661EarmkhTEojQG'
-USER_KEY = 'uYWtrQ4zcpDU38Kcz5X5pvxNvu7b15'
+USER_KEY = 'gDJi7GN3q9koHiTxSnMqcUCr1BPb8y'
 
 namespace :pushover do
 
