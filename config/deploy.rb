@@ -78,7 +78,9 @@ end
 
 desc 'Notify after installation'
 task :notify do
+  queue %(echo "-----> Notifying the awesome devs")
   queue "bundle exec rake pushover:notify['Deployed to #{server}']"
+  queue "bundle exec rake 'flowdock:nofify_deploy[#{server}]'"
 end
 
 desc 'Deploys the current version to the server.'

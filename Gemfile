@@ -42,6 +42,7 @@ gem 'slim'
 
 # Notifications
 gem 'rushover'
+gem 'flowdock'
 
 group :development, :test do
   # Spring speeds up development by keeping your application running in the
