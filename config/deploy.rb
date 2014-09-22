@@ -76,6 +76,11 @@ task setup: :environment do
   queue! %(mkdir -p "#{deploy_to}/shared/log/")
 end
 
+desc 'Notify after installation'
+task :notify do
+  queue "bundle exec rake pushover:notify['Deployed to #{server}']"
+end
+
 desc 'Deploys the current version to the server.'
 task deploy: :environment do
   deploy do
@@ -90,6 +95,7 @@ task deploy: :environment do
     invoke :'bower'
     invoke :'rails:db_migrate'
     invoke :'rails:assets_precompile'
+    invoke :notify
 
     to :launch do
       queue "touch #{deploy_to}/tmp/restart.txt"

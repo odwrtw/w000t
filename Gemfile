@@ -35,11 +35,13 @@ gem 'devise', '~> 3.3.0'
 # Pagination helper
 gem 'kaminari'
 
-
 # Sidekiq + Web UI
 gem 'sidekiq'
 gem 'sinatra', require: false
 gem 'slim'
+
+# Notifications
+gem 'rushover'
 
 group :development, :test do
   # Spring speeds up development by keeping your application running in the
