@@ -3,7 +3,6 @@ require 'mina/rails'
 require 'mina/git'
 require 'mina/rbenv'  # for rbenv support. (http://rbenv.org)
 require 'mina_sidekiq/tasks'
-# require 'mina/rvm'    # for rvm support. (http://rvm.io)
 
 # Basic settings:
 #   domain       - The hostname to SSH to.
@@ -33,7 +32,6 @@ end
 
 set :deploy_to, '/home/deploy/w000t'
 set :repository, 'ssh://git@gitlab.quimbo.fr:5022/PouuleT/w000t.git'
-# set :identity_file, '/home/pouulet/id_rsa_w000t'
 
 # Manually create these paths in shared/ (eg: shared/config/database.yml) in
 # your server.
@@ -41,7 +39,6 @@ set :repository, 'ssh://git@gitlab.quimbo.fr:5022/PouuleT/w000t.git'
 set :shared_paths, ['log']
 
 # Optional settings:
-#   set :user, 'foobar'    # Username in the server to SSH to.
 set :port, '2277'     # SSH port number.
 set :user, 'deploy'
 set :ssh_options, '-A'
@@ -54,9 +51,6 @@ task :environment do
   invoke :'rbenv:load'
   # Load env variables
   queue '. ~/.profile'
-
-  # For those using RVM, use this to load an RVM version@gemset.
-  # invoke :'rvm:use[ruby-1.9.3-p125@default]'
 end
 
 task :bower do
@@ -105,10 +99,3 @@ task deploy: :environment do
     end
   end
 end
-
-# For help in making your deploy script, see the Mina documentation:
-#
-#  - http://nadarei.co/mina
-#  - http://nadarei.co/mina/tasks
-#  - http://nadarei.co/mina/settings
-#  - http://nadarei.co/mina/helpers
