@@ -88,10 +88,13 @@ class W000tsController < ApplicationController
   # GET /meme
   # GET /meme.json
   def my_image_index
-    return redirect_to new_user_session_path unless user_signed_in?
-    @w000ts = current_user.w000ts.where(long_url: /(gif|png|jpg|jpeg)$/)
+    params[:seed] ||= Random.new_seed
+    srand params[:seed].to_i
+    @w000ts = Kaminari.paginate_array(
+      current_user.w000ts.where(long_url: /(gif|png|jpg|jpeg)$/)
                           .and(archive: 0)
-                          .page(params[:page]).per(20)
+                          .shuffle
+    ).page(params[:page]).per(20)
   end
 
   private

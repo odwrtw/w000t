@@ -12,3 +12,10 @@
   display: block;
   margin: 0 auto;
 }
+
+.truncate {
+  max-width: 100px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
