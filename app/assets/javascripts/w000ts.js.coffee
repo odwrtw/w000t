@@ -21,9 +21,24 @@ $(".w000ts.my_image_index").ready ->
 
   # Image container
   $container = $("div#w000t-wall-container")
+  $container.masonry(masonry_options)
 
-  imgLoad = $container.imagesLoaded ->
-    $container.masonry(masonry_options)
+  imgLoad = imagesLoaded($container)
+
+  # Update layout on each image load
+  count = 0
+  imgLoad.on 'progress', ->
+    count++
+    if ((count % 8) == 0)
+      $container.masonry masonry_options
+
+  # Update layout when all the images are loaded
+  imgLoad.on 'always', ->
+    $container.masonry masonry_options
+
+  imagesLoad.on( 'layoutComplete', ( msnryInstance, laidOutItems ) ->
+    console.log('Masonry layout completed on ' + laidOutItems.length + ' items')
+  )
 
   $container.infinitescroll(
     # selector for the paged navigation (it will be hidden)

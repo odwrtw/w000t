@@ -94,7 +94,8 @@ task deploy: :environment do
     invoke :notify
 
     to :launch do
-      queue "touch #{deploy_to}/tmp/restart.txt"
+      queue %(echo "-----> Restarting the server and the sidekiq workers")
+      queue "touch #{deploy_to}/current/tmp/restart.txt"
       invoke :'sidekiq:restart'
     end
   end
