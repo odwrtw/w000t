@@ -36,10 +36,6 @@ $(".w000ts.my_image_index").ready ->
   imgLoad.on 'always', ->
     $container.masonry masonry_options
 
-  imagesLoad.on( 'layoutComplete', ( msnryInstance, laidOutItems ) ->
-    console.log('Masonry layout completed on ' + laidOutItems.length + ' items')
-  )
-
   $container.infinitescroll(
     # selector for the paged navigation (it will be hidden)
     navSelector  : "nav.pagination"
