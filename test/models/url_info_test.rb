@@ -12,7 +12,9 @@ class UrlInfoTest < ActiveSupport::TestCase
       image: 'http://test/yo.jpg',
       pdf: 'http://test/yo.pdf',
       soundcloud: 'https://soundcloud.com/l-c-a-w/andreas-moe-ocean',
-      github: 'https://github.com/gregdel'
+      github: 'https://github.com/gregdel',
+      stack_overflow: 'http://stackoverflow.com/questions/948135',
+      hackernews: 'https://news.ycombinator.com/'
     }
     types_and_urls.each do |type, url|
       @url_info = FactoryGirl.create(:url_info, url: url)

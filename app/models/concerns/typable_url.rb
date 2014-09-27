@@ -2,7 +2,10 @@
 module TypableUrl
   extend ActiveSupport::Concern
 
-  TYPES = [:image, :pdf, :github, :soundcloud, :youtube]
+  TYPES = [
+    :image, :pdf, :github, :soundcloud,
+    :youtube, :stack_overflow, :hackernews
+  ]
 
   included do
     before_save :find_type
@@ -29,14 +32,22 @@ module TypableUrl
   end
 
   def github
-    %r{\Ahttps://github\.com/.+\Z} =~ url
+    %r{\Ahttps://github\.com} =~ url
   end
 
   def soundcloud
-    %r{\Ahttps://soundcloud\.com/.+} =~ url
+    %r{\Ahttps://soundcloud\.com} =~ url
   end
 
   def youtube
-    %r{\Ahttps?://www\.youtube\.com/watch\?v=.+} =~ url
+    %r{\Ahttps?://www\.youtube\.com} =~ url
+  end
+
+  def stack_overflow
+    %r{\Ahttp://stackoverflow\.com} =~ url
+  end
+
+  def hackernews
+    %r{\Ahttps://news\.ycombinator\.com} =~ url
   end
 end
