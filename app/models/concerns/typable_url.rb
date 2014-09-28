@@ -2,10 +2,9 @@
 module TypableUrl
   extend ActiveSupport::Concern
 
-  TYPES = [
-    :image, :pdf, :github, :soundcloud,
-    :youtube, :stack_overflow, :hackernews
-  ]
+  TYPES = %i(
+    image pdf github soundcloud youtube stack_overflow hackernews
+  )
 
   included do
     before_save :find_type

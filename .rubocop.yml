@@ -1,4 +1,5 @@
 AllCops:
+  RunRailsCops: true
   Include:
     - 'db/seeds.rb'
   Exclude:
