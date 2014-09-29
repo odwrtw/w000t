@@ -31,11 +31,11 @@ module TypableUrl
   end
 
   def github
-    %r{\Ahttps://github\.com} =~ url
+    %r{\Ahttps?://github\.com} =~ url
   end
 
   def soundcloud
-    %r{\Ahttps://soundcloud\.com} =~ url
+    %r{\Ahttps?://soundcloud\.com} =~ url
   end
 
   def youtube
@@ -43,10 +43,10 @@ module TypableUrl
   end
 
   def stack_overflow
-    %r{\Ahttp://stackoverflow\.com} =~ url
+    %r{\Ahttps?://stackoverflow\.com} =~ url
   end
 
   def hackernews
-    %r{\Ahttps://news\.ycombinator\.com} =~ url
+    %r{\Ahttps?://news\.ycombinator\.com} =~ url
   end
 end
