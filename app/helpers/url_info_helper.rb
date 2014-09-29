@@ -24,11 +24,8 @@ module UrlInfoHelper
 
   def url_type_link(url_info)
     icon_class = 'external-link'
-    return icon_class unless url_info
-    TYPE_ICON_CLASS.each do |type, css_class|
-      next unless type.to_s == url_info.type
-      icon_class = css_class
-      break
+    if url_info && url_info.type && TYPE_ICON_CLASS.key?(url_info.type.to_sym)
+      icon_class = TYPE_ICON_CLASS[url_info.type.to_sym]
     end
     content_tag :i, '', class: "fa fa-#{icon_class}"
   end
