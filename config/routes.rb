@@ -2,7 +2,7 @@ Rails.application.routes.draw do
   require 'sidekiq/web'
 
   # Admin sections
-  authenticate :user, lambda { |u| u.admin? } do
+  authenticate :user, ->(u) { u.admin? } do
     mount Sidekiq::Web, at: '/sidekiq'
     get 'admin/dashboard'
     post 'admin/check_all_w000ts'

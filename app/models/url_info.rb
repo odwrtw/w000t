@@ -2,11 +2,13 @@
 class UrlInfo
   include Mongoid::Document
   include Mongoid::Timestamps
+  include TypableUrl
 
   field :url, type: String
   field :http_code, type: Integer
   field :number_of_checks, type: Integer, default: 0
   field :last_check, type: Time
+  field :type, type: String
 
   # Model validation
   validates :url, presence: true, format: { with: %r{\Ahttps?:\/\/.+\Z} }
@@ -56,7 +58,6 @@ class UrlInfo
   def head_request(uri)
     response = nil
     http = Net::HTTP.new(uri.host, uri.port)
-    puts "http #{http.inspect}"
     http.use_ssl = (uri.scheme == 'https')
     http.verify_mode = OpenSSL::SSL::VERIFY_NONE
     http.read_timeout = 10

@@ -6,9 +6,10 @@ class W000t
   require 'digest/sha1'
 
   # Callbacks
-  before_save :create_short_url
+  before_save :create_short_url, :set_id
 
   # DB fields
+  field :_id
   field :long_url
   field :short_url
   field :user_id, type: Integer
@@ -44,6 +45,11 @@ class W000t
 
     # And we keep only the 10 first characters
     self.short_url = hash_and_truncate(to_hash)
+  end
+
+  # HACK : to remove a soon as all the short_url have been removed
+  def set_id
+    self._id = short_url
   end
 
   def hash_and_truncate(input_string)

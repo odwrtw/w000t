@@ -53,9 +53,9 @@ class W000tsControllerTest < ActionController::TestCase
 
   test 'should return the same w000t as given' do
     assert_difference('W000t.count', 0) do
-      post :create, w000t: {
-        long_url: @w000t.full_shortened_url(request.base_url)
-      }, format: :json
+      post :create,
+           w000t: { long_url: @w000t.full_shortened_url(request.base_url) },
+           format: :json
     end
     assert_response :success
   end
