@@ -9,9 +9,8 @@ class W000t
   before_save :create_short_url, :set_id
 
   # DB fields
-  field :_id
+  field :_id, as: :short_url
   field :long_url
-  field :short_url
   field :user_id, type: Integer
   field :number_of_click, type: Integer, default: 0
   field :archive, type: Integer, default: 0
