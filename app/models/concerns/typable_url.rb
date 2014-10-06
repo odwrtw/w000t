@@ -7,6 +7,8 @@ module TypableUrl
   )
 
   included do
+    field :type, type: String
+
     before_save :find_type
   end
 

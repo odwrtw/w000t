@@ -8,7 +8,6 @@ class UrlInfo
   field :http_code, type: Integer
   field :number_of_checks, type: Integer, default: 0
   field :last_check, type: Time
-  field :type, type: String
 
   # Model validation
   validates :url, presence: true, format: { with: %r{\Ahttps?:\/\/.+\Z} }

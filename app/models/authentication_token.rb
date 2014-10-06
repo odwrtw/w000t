@@ -4,7 +4,6 @@ class AuthenticationToken
   include Mongoid::Timestamps
   include Tokenable
   field :name, type: String
-  field :token, type: String
   field :number_of_use, type: Integer, default: 0
 
   # Association

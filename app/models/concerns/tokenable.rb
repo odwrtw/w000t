@@ -3,6 +3,8 @@ module Tokenable
   extend ActiveSupport::Concern
 
   included do
+    field :token, type: String
+
     before_create :generate_token
   end
 
