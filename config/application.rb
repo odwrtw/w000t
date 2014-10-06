@@ -14,7 +14,12 @@ require 'rails/test_unit/railtie'
 Bundler.require(*Rails.groups)
 
 module W000tMe
+  # Application
   class Application < Rails::Application
+    ActionView::Base.field_error_proc = proc do |html_tag, _instance|
+      "<span class='has-error'>#{html_tag}</span>".html_safe
+    end
+
     # Settings in config/environments/* take precedence over those specified
     # here.
     # Application configuration should go into files in config/initializers

@@ -38,6 +38,22 @@ input.w000tNewBtn {
   border-color: $w000tNewBtnColor;
 }
 
+// Custom error colors
+$error_color: #c0392b;
+.panel-danger > .panel-heading {
+  color: white;
+  background-color: $error_color;
+  border-color: $error_color;
+}
+
+.panel-danger > .panel-body {
+  border-color: $error_color;
+}
+
+.has-error .form-control {
+  border-color: $error_color;
+}
+
 // Custom navbar
 $bgDefault      : #34495e;
 $bgHighlight    : #2c3e50;
