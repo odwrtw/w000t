@@ -38,9 +38,10 @@ $(".w000ts.my_image_index").ready ->
 
   $container.infinitescroll(
     # selector for the paged navigation (it will be hidden)
-    navSelector  : "nav.pagination"
+    navSelector  : "ul.pagination"
     # selector for the NEXT link (to page 2)
-    nextSelector : "nav.pagination span.next a[rel='next']"
+    nextSelector : "ul.pagination li a[rel='next']"
+
     # selector for all items you'll retrieve
     itemSelector : "#w000t-wall-container .item"
     extraScrollPx:200
