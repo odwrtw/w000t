@@ -120,6 +120,7 @@ GEM
     multi_json (1.10.1)
     multi_xml (0.5.5)
     netrc (0.7.7)
+    newrelic_rpm (3.9.5.251)
     open4 (1.3.4)
     optionable (0.2.0)
     origin (2.1.1)
@@ -237,6 +238,7 @@ DEPENDENCIES
   mina-sidekiq
   mongoid (~> 4)!
   mongoid_rails_migrations
+  newrelic_rpm
   pry
   rails (= 4.1.2)
   rb-fsevent
