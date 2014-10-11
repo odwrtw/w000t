@@ -19,3 +19,14 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+.current {
+  border: none;
+  background: #CCCCCC !important;
+  color: #f0f0f0 !important;
+}
+
+.pagination a {
+  border: #333;
+  color: #333 !important;
+}
