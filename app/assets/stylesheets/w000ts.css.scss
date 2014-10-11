@@ -2,8 +2,16 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
+// 4 images for large screens
 .item {
   width: 25%;
+}
+
+// 2 images for small screens
+@media only screen and ( max-width: 500px ) {
+  .item {
+    width: 50%;
+  }
 }
 
 .w000t-wat {

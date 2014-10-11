@@ -17,7 +17,7 @@ $.fn.selectText = ->
 $(".w000ts.my_image_index").ready ->
   # masonry options
   masonry_options =
-    itemSelector: '.item'
+    itemSelector: ".item"
 
   # Image container
   $container = $("div#w000t-wall-container")
@@ -44,7 +44,7 @@ $(".w000ts.my_image_index").ready ->
 
     # selector for all items you'll retrieve
     itemSelector : "#w000t-wall-container .item"
-    extraScrollPx:200
+    extraScrollPx:10
     loading:
       finished: undefined
       finishedMsg: "<em>Congratulations, you've reached the end of the internet.</em>", img: null
