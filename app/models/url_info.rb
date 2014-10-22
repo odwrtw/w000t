@@ -4,10 +4,15 @@ class UrlInfo
   include TypableUrl
 
   after_save :create_task
+  before_validation :check_http_prefix
 
   field :http_code, type: Integer
   field :number_of_checks, type: Integer, default: 0
   field :last_check, type: Time
+  field :url
+
+  # Model validation
+  validates :url, presence: true, format: { with: %r{\Ahttps?:\/\/.+\Z} }
 
   # Association
   embedded_in :w000t
@@ -45,14 +50,10 @@ class UrlInfo
     end
   end
 
-  def url
-    w000t.long_url
-  end
-
   private
 
   def parse_uri
-    URI.parse(w000t.long_url)
+    URI.parse(url)
     rescue URI::Error
       nil
   end
@@ -67,5 +68,14 @@ class UrlInfo
     response.code
   rescue
     nil
+  end
+
+  # Add http prefix if needed
+  def check_http_prefix
+    return unless url
+    return if /\Ahttp/ =~ url
+
+    # Add prefix
+    self.url = 'http://' + url
   end
 end

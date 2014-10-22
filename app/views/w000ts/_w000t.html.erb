@@ -1,5 +1,5 @@
 <tr>
-  <td class="truncate"><%= w000t.long_url %></td>
+  <td class="truncate"><%= w000t.url_info_url %></td>
   <td><%= w000t.number_of_click %></td>
   <td>
     <%= pretty_http_status(w000t.url_info) %>
@@ -12,7 +12,7 @@
       <i class="fa fa-trash"></i>
     <% end %>
     <% if current_user && current_user.admin? %>
-      <%= link_to admin_check_url_path(admin: { long_url: w000t.long_url }),
+      <%= link_to admin_check_url_path(admin: { long_url: w000t.url_info_url }),
           method: :post, class: 'btn btn-default' do  %>
         <i class="fa fa-link"></i>
       <% end %>

@@ -2,8 +2,7 @@
 class W000tsController < ApplicationController
   before_action :set_w000t, only: [:show, :edit, :destroy, :redirect]
   before_action :authenticate_user!, only: [:destroy]
-  before_action :check_http_prefix,
-                :prevent_w000tception,
+  before_action :prevent_w000tception,
                 :check_token,
                 :check_w000t,
                 only: [:create]
@@ -75,7 +74,7 @@ class W000tsController < ApplicationController
 
   def redirect
     @w000t.inc(number_of_click: 1)
-    redirect_to @w000t.long_url
+    redirect_to @w000t.url_info_url
   end
 
   def my_index
@@ -90,7 +89,7 @@ class W000tsController < ApplicationController
     params[:seed] ||= Random.new_seed
     srand params[:seed].to_i
     @w000ts = Kaminari.paginate_array(
-      current_user.w000ts.where(long_url: /(gif|png|jpg|jpeg)$/)
+      current_user.w000ts.where('url_info.type' => 'image')
                           .and(archive: 0)
                           .shuffle
     ).page(params[:page]).per(20)
@@ -107,14 +106,6 @@ class W000tsController < ApplicationController
   # through.
   def w000t_params
     params.require(:w000t).permit(:long_url)
-  end
-
-  # Add http prefix if needed
-  def check_http_prefix
-    return if w000t_params[:long_url] =~ /^http/
-
-    # Add prefix
-    params[:w000t][:long_url] = 'http://' + w000t_params[:long_url]
   end
 
   def prevent_w000tception
@@ -136,8 +127,8 @@ class W000tsController < ApplicationController
     user_id = current_user ? current_user.id : nil
     user_id = @token_user.id if @token_user
     w000t = W000t.find_by(
-      long_url: w000t_params[:long_url],
-      user_id: user_id
+      user_id: user_id,
+      'url_info.url' => w000t_params[:long_url]
     )
     return unless w000t
     respond_to do |format|

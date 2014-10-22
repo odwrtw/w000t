@@ -1,7 +1,7 @@
 <div id="w000t-wall-container">
   <% @w000ts.each do |w000t| %>
     <div class="item">
-      <%= link_to( image_tag(w000t.long_url, class:"img-thumbnail img-responsive"), redirect_path(w000t) ) %>
+      <%= link_to( image_tag(w000t.url_info_url, class:"img-thumbnail img-responsive"), redirect_path(w000t) ) %>
     </div>
   <% end %>
 </div>

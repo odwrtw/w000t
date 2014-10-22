@@ -121,7 +121,7 @@ class W000tsControllerTest < ActionController::TestCase
                     format: :json
     end
     assert_response :success
-    created_w000t = W000t.find_by(long_url: 'http://google.fr')
+    created_w000t = W000t.find_by('url_info.url' => 'http://google.fr')
     assert_not_nil created_w000t
     assert_equal created_w000t.user_id, @user.id
   end

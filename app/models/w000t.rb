@@ -7,17 +7,15 @@ class W000t
 
   # Callbacks
   before_save :create_short_url
-  after_initialize :build_embedded_url
+
+  attr_accessor :long_url
 
   # DB fields
   field :_id, as: :short_url
-  field :long_url
   field :user_id, type: Integer
   field :number_of_click, type: Integer, default: 0
   field :archive, type: Integer, default: 0
-
-  # Model validation
-  validates :long_url, presence: true, format: { with: %r{\Ahttps?:\/\/.+\Z} }
+  field :long_url, as: :old_long_url, type: String
 
   # Association
   # FIX: type should be set on w000t.create
@@ -52,6 +50,11 @@ class W000t
     save
   end
 
+  def initialize(attributes = {})
+    super
+    build_url_info(url: long_url)
+  end
+
   private
 
   # Create short url on save if not yet defined
@@ -59,7 +62,7 @@ class W000t
     # Don't redefine the short_url
     return if short_url
 
-    # Hash the long_url by default
+    # Hash the long url by default
     to_hash = long_url
 
     # Custom hash if the user is logged in
@@ -67,9 +70,5 @@ class W000t
 
     # And we keep only the 10 first characters
     self._id = hash_and_truncate(to_hash)
-  end
-
-  def build_embedded_url
-    build_url_info
   end
 end
