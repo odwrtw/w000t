@@ -24,7 +24,7 @@ class AdminController < ApplicationController
   end
 
   def check_all_w000ts
-    W000t.all.each { |w| UrlLifeChecker.perform_async(w.long_url) }
+    W000t.all.each { |w| w.url_info.create_task }
     redirect_to :back, notice: 'All w000t will be checked soon'
   end
 

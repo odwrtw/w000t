@@ -6,7 +6,8 @@ class W000t
   require 'digest/sha1'
 
   # Callbacks
-  before_save :create_short_url, :set_id
+  before_save :create_short_url
+  after_initialize :build_embedded_url
 
   # DB fields
   field :_id, as: :short_url
@@ -19,8 +20,9 @@ class W000t
   validates :long_url, presence: true, format: { with: %r{\Ahttps?:\/\/.+\Z} }
 
   # Association
-  has_one :url_info, foreign_key: 'url', primary_key: 'long_url',
-                     inverse_of: :w000t
+  # FIX: type should be set on w000t.create
+  embeds_one :url_info, cascade_callbacks: true
+
   belongs_to :user
   delegate :pseudo, :email, to: :user, prefix: true
   delegate :url, :http_code, :number_of_checks,
@@ -29,26 +31,6 @@ class W000t
   # Define the short_url as the id of the model
   def to_param
     short_url
-  end
-
-  # Create short url on save if not yet defined
-  def create_short_url
-    # Don't redefine the short_url
-    return if short_url
-
-    # Hash the long_url by default
-    to_hash = long_url
-
-    # Custom hash if the user is logged in
-    to_hash = user.pseudo + 'pw3t' + long_url if user_id
-
-    # And we keep only the 10 first characters
-    self.short_url = hash_and_truncate(to_hash)
-  end
-
-  # HACK : to remove a soon as all the short_url have been removed
-  def set_id
-    self._id = short_url
   end
 
   def hash_and_truncate(input_string)
@@ -68,5 +50,26 @@ class W000t
   def restore!
     self.archive = 0
     save
+  end
+
+  private
+
+  # Create short url on save if not yet defined
+  def create_short_url
+    # Don't redefine the short_url
+    return if short_url
+
+    # Hash the long_url by default
+    to_hash = long_url
+
+    # Custom hash if the user is logged in
+    to_hash = user.pseudo + 'pw3t' + long_url if user_id
+
+    # And we keep only the 10 first characters
+    self._id = hash_and_truncate(to_hash)
+  end
+
+  def build_embedded_url
+    build_url_info
   end
 end

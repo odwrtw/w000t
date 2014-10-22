@@ -35,7 +35,6 @@ class W000tsController < ApplicationController
     if @w000t.save
       # If it's a success, we return directly the new shortened url for
       # easy parsing
-      UrlLifeChecker.perform_async(@w000t.long_url)
       respond_to do |format|
         format.json do
           render json: @w000t.full_shortened_url(request.base_url),
