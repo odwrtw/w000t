@@ -89,9 +89,9 @@ class W000tsController < ApplicationController
     params[:seed] ||= Random.new_seed
     srand params[:seed].to_i
     @w000ts = Kaminari.paginate_array(
-      current_user.w000ts.where('url_info.type' => 'image')
-                          .and(archive: 0)
-                          .shuffle
+      current_user.w000ts.by_type('image')
+                         .and(archive: 0)
+                         .shuffle
     ).page(params[:page]).per(20)
   end
 
@@ -111,7 +111,7 @@ class W000tsController < ApplicationController
   def prevent_w000tception
     match = /\A#{request.base_url}\/(\w{10})\Z/.match(w000t_params[:long_url])
     return unless match
-    w000t = W000t.find_by(short_url: match[1])
+    w000t = W000t.find_by(_id: match[1])
     return unless w000t
     respond_to do |format|
       format.json do
@@ -126,9 +126,10 @@ class W000tsController < ApplicationController
   def check_w000t
     user_id = current_user ? current_user.id : nil
     user_id = @token_user.id if @token_user
+    url = UrlInfo.prefixed_url(w000t_params[:long_url])
     w000t = W000t.find_by(
       user_id: user_id,
-      'url_info.url' => w000t_params[:long_url]
+      'url_info.url' => url
     )
     return unless w000t
     respond_to do |format|

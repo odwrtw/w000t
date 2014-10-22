@@ -3,7 +3,7 @@ class UrlInfo
   include Mongoid::Document
   include TypableUrl
 
-  after_save :create_task
+  after_create :create_task
   before_validation :check_http_prefix
 
   field :http_code, type: Integer
@@ -50,6 +50,14 @@ class UrlInfo
     end
   end
 
+  # Add http prefix if needed
+  def self.prefixed_url(url)
+    return url if /\Ahttp/ =~ url
+
+    # Add prefix
+    'http://' + url
+  end
+
   private
 
   def parse_uri
@@ -76,6 +84,6 @@ class UrlInfo
     return if /\Ahttp/ =~ url
 
     # Add prefix
-    self.url = 'http://' + url
+    self.url = UrlInfo.prefixed_url(url)
   end
 end

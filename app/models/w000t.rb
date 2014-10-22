@@ -18,13 +18,14 @@ class W000t
   field :long_url, as: :old_long_url, type: String
 
   # Association
-  # FIX: type should be set on w000t.create
   embeds_one :url_info, cascade_callbacks: true
 
   belongs_to :user
   delegate :pseudo, :email, to: :user, prefix: true
   delegate :url, :http_code, :number_of_checks,
            :last_check, to: :url_info, prefix: true
+
+  scope :by_type, ->(type) { where('url_info.type' => type) }
 
   # Define the short_url as the id of the model
   def to_param

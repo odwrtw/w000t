@@ -53,7 +53,7 @@ class AdminControllerTest < ActionController::TestCase
   test 'should check one url' do
     sign_in @admin_user
     assert_difference 'UrlLifeChecker.jobs.size' do
-      post :check_url, admin: { long_url: 'http://google.com' }
+      post :check_url, admin: { short_url: @w000t.short_url }
     end
     assert_redirected_to 'previous_page'
     assert_equal 'Task created', flash[:notice]

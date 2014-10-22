@@ -1,7 +1,7 @@
 # UrlInfo helper
 module UrlInfoHelper
   def pretty_http_status(url_info)
-    if url_info
+    if url_info.http_code
       css_class = url_info.active? ? 'success' : 'danger'
       icon_class = url_info.active? ? 'chain' : 'chain-broken'
       content_tag :span, class: "label label-#{css_class}" do

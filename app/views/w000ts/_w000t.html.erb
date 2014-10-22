@@ -12,7 +12,7 @@
       <i class="fa fa-trash"></i>
     <% end %>
     <% if current_user && current_user.admin? %>
-      <%= link_to admin_check_url_path(admin: { long_url: w000t.url_info_url }),
+      <%= link_to admin_check_url_path(admin: { short_url: w000t.short_url }),
           method: :post, class: 'btn btn-default' do  %>
         <i class="fa fa-link"></i>
       <% end %>

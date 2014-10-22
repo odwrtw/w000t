@@ -29,9 +29,11 @@ class AdminController < ApplicationController
   end
 
   def check_url
-    url = admin_params[:long_url]
-    return redirect_to :back, flash: { alert: 'Missing URL' } unless url
-    UrlLifeChecker.perform_async(url)
+    short_url = admin_params[:short_url]
+    return redirect_to :back,
+                       flash: { alert: 'Missing short url' } unless short_url
+    # TODO : search by w000t and use create_task
+    UrlLifeChecker.perform_async(short_url)
     redirect_to :back, notice: 'Task created'
   end
 
@@ -47,7 +49,7 @@ class AdminController < ApplicationController
   end
 
   def admin_params
-    params.require(:admin).permit(:long_url)
+    params.require(:admin).permit(:short_url)
   end
 
   def sidekiq_params
