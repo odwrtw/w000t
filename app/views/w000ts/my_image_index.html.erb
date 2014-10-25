@@ -1,8 +1,33 @@
-<div id="w000t-wall-container">
+<div id="w000t-wall-container" class="grid">
   <% @w000ts.each do |w000t| %>
-    <div class="item">
+    <figure class="item col-lg-3 col-md-4 col-xs-6">
+      <div class="text-center shared">
+        <%= w000t.full_shortened_url(request.base_url) %>
+      </div>
       <%= link_to( image_tag(w000t.url_info_url, class:"img-thumbnail img-responsive"), redirect_path(w000t) ) %>
-    </div>
+      <div class="effect">
+        <table class="table">
+          <thead>
+            <tr>
+              <td class="text-center" style="border-right: solid 1px">
+                <a class="to_share">
+                  <div class="share">
+                    Share
+                  </div>
+                </a>
+              </td>
+              <td class="text-center">
+                <%= link_to w000t, method: :delete, data: { confirm: 'Are you sure?' } do %>
+                  <div>
+                    Destroy
+                  </div>
+                <% end %>
+              </td>
+            </tr>
+          </thead>
+        </table>
+      </div>
+    </figure>
   <% end %>
 </div>
 

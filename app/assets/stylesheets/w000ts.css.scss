@@ -4,7 +4,9 @@
 
 // 4 images for large screens
 .item {
-  width: 25%;
+  padding-left: 0;
+  padding-right: 0;
+  position: relative;
 }
 
 // 2 images for small screens
@@ -37,4 +39,43 @@
 .pagination a {
   border: #333;
   color: #333 !important;
+}
+
+div.effect {
+  position: absolute;
+  bottom: -35px;
+  min-height: 35px;
+  width: 100%;
+  visibility:hidden;
+  opacity: 0;
+  background-color: #34495e;
+  transition:visibility 0s linear 0.2s,opacity 0.2s linear, bottom 0.2s ease-in-out;
+}
+
+.effect td, a {
+  color: white;
+  cursor: pointer;
+}
+
+.effect table {
+  margin-bottom: 0;
+}
+
+.shared {
+  position: absolute;
+  top: 20px;
+  line-height: 40px;
+  vertical-align: middle;
+  width: 100%;
+  display:none;
+  background-color: #46637f;
+  color: white;
+  opacity: 0.8;
+}
+
+figure:hover div.effect{
+  bottom: 0px;
+  visibility:visible;
+  opacity: 0.9;
+  transition-delay:0s;
 }
