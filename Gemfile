@@ -59,6 +59,7 @@ group :development, :test do
 
   # Better stack straces
   gem "better_errors"
+  gem "binding_of_caller"
 
   # Use debugger
   # gem 'debugger', group: [:development, :test]
