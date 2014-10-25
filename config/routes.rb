@@ -17,6 +17,7 @@ Rails.application.routes.draw do
   end
 
   # Personnal w000ts
+  get '/w000ts/me/:type' => 'w000ts#my_index'
   get '/w000ts/me' => 'w000ts#my_index'
   get '/w000ts/meme' => 'w000ts#my_image_index'
 

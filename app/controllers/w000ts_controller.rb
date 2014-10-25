@@ -79,8 +79,17 @@ class W000tsController < ApplicationController
 
   def my_index
     return redirect_to new_user_session_path unless user_signed_in?
-    @w000ts = current_user.w000ts.order_by(created_at: :desc)
-                                 .page(params[:page]).per(25)
+    if params[:type]
+      unless TypableUrl::TYPES.include? params[:type].to_sym
+        return redirect_to w000ts_me_path, flash: { alert: 'Invalid filter' }
+      end
+      @w000ts = current_user.w000ts.by_type(params[:type])
+                                   .order_by(created_at: :desc)
+                                   .page(params[:page]).per(25)
+    else
+      @w000ts = current_user.w000ts.order_by(created_at: :desc)
+                                   .page(params[:page]).per(25)
+    end
   end
 
   # GET /meme

@@ -22,11 +22,27 @@ module UrlInfoHelper
     hackernews: 'hacker-news'
   }
 
+  def type_icon(type)
+    icon_class = 'external-link'
+    if TYPE_ICON_CLASS.key?(type.to_sym)
+      icon_class = TYPE_ICON_CLASS[type.to_sym]
+    end
+  end
+
   def url_type_link(url_info)
     icon_class = 'external-link'
-    if url_info && url_info.type && TYPE_ICON_CLASS.key?(url_info.type.to_sym)
-      icon_class = TYPE_ICON_CLASS[url_info.type.to_sym]
+    if url_info && url_info.type
+      icon_class = type_icon(url_info.type)
     end
     content_tag :i, '', class: "fa fa-#{icon_class}"
+  end
+
+  def url_type_span(type)
+      icon_class = type_icon(type)
+      content_tag :span do
+        name = type.to_s.capitalize.gsub("_"," ")
+        icon = content_tag :i, '', class: "fa fa-#{icon_class}"
+        icon + ' ' + name
+      end
   end
 end

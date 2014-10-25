@@ -1,5 +1,21 @@
 <h1>My w000ts</h1>
 
+<div class="btn-group btn-lg pull-right">
+  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+    Filter <span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu" role="menu">
+    <% UrlInfo::TYPES.each do |type| %>
+      <li>
+      <a href="#"></a>
+      <%= link_to w000ts_me_path(type: type) do  %>
+            <%= url_type_span(type) %>
+      <% end %>
+      </li>
+    <% end %>
+  </ul>
+</div>
+
 <table class="table table-responsive">
   <thead>
     <tr>

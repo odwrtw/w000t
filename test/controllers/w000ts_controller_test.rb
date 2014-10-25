@@ -126,6 +126,27 @@ class W000tsControllerTest < ActionController::TestCase
     assert_equal created_w000t.user_id, @user.id
   end
 
+  test 'should get user index' do
+    sign_in @user
+    get :my_index
+    assert_response :success
+  end
+
+  test 'should get user index filtered by type' do
+    sign_in @user
+    TypableUrl::TYPES.each do |type|
+      get :my_index, type: type.to_s
+      assert_response :success
+    end
+  end
+
+  test 'should get user index with a filter error' do
+    sign_in @user
+    get :my_index, type: 'some shit'
+    assert_redirected_to w000ts_me_url
+    assert_equal 'Invalid filter', flash[:alert]
+  end
+
   test 'should get index as anonymous user' do
     get :index
     assert_response :success
