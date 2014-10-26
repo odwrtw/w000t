@@ -35,6 +35,9 @@ gem 'devise', '~> 3.3.0'
 # Pagination helper
 gem 'kaminari'
 
+# Tags
+gem 'mongoid_taggable'
+
 # Sidekiq + Web UI
 gem 'sidekiq'
 gem 'sinatra', require: false

@@ -2,6 +2,16 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
+td.w000t-long-url {
+  border-bottom: none;
+  padding-bottom: 0px;
+}
+
+td.w000t-tags {
+  border-top: none;
+  padding-top: 0px;
+}
+
 // 4 images for large screens
 .item {
   padding-left: 0;

@@ -2,6 +2,7 @@
 class W000t
   include Mongoid::Document
   include Mongoid::Timestamps
+  include Mongoid::Taggable
   include ActionView::Helpers::TextHelper
   require 'digest/sha1'
 
