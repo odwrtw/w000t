@@ -17,15 +17,16 @@ Rails.application.routes.draw do
   end
 
   # Personnal w000ts
-  get '/w000ts/me/:type' => 'w000ts#my_index'
   get '/w000ts/me' => 'w000ts#my_index'
+  get '/w000ts/me/:type' => 'w000ts#my_index'
   get '/w000ts/meme' => 'w000ts#my_image_index'
 
   # w000ts and tokens
   resources :w000ts, param: :short_url, except: [:edit, :update]
 
   # w000ts redirections
-  get '/:short_url' => 'w000ts#redirect'
+  get '/:short_url/click' => 'w000ts#click', as: :w000t_click
+  get '/:short_url' => 'w000ts#redirect', as: :w000t_redirect
 
   # The priority is based upon order of creation: first created -> highest
   # priority.

@@ -5,9 +5,7 @@
     <%= pretty_http_status(w000t.url_info) %>
   </td>
   <td>
-    <%= link_to redirect_path(w000t), method: :get, class: 'btn btn-default' do  %>
-      <% url_type_link(w000t.url_info) %>
-    <% end %>
+    <%= link_to get_w000t_link(w000t) %>
     <%= link_to w000t, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-default' do %>
       <i class="fa fa-trash"></i>
     <% end %>

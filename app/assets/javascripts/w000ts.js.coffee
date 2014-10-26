@@ -14,12 +14,15 @@ $.fn.selectText = ->
     selection.removeAllRanges()
     selection.addRange(range)
 
+$(".w000ts").ready ->
+  $("a.type-youtube").click (event)->
+    $('#w000t-preview-modal').modal()
+
 $(".w000ts.my_image_index").ready ->
 
   # When we click on the share button, we show a div with the w000ted url and
   # select the text
   $("div.container").delegate "a.to_share", "click", ->
-    console.log("show")
     $el = $(this).closest("div").siblings(".shared")
     $el.show()
     $el.selectText()
@@ -27,7 +30,6 @@ $(".w000ts.my_image_index").ready ->
   # When we leave the figure, we need to hide the w000ted url that was shown by
   # clicking on the share button
   $("figure").mouseleave ->
-    console.log("leave")
     $(this).children(".shared").hide()
 
   # Masonry options

@@ -29,6 +29,14 @@ module UrlInfoHelper
     end
   end
 
+  def type_class(type)
+    icon_class = ''
+    return unless type
+    if TYPE_ICON_CLASS.key?(type.to_sym)
+      icon_class = "type-#{type}"
+    end
+  end
+
   def url_type_link(url_info)
     icon_class = 'external-link'
     if url_info && url_info.type

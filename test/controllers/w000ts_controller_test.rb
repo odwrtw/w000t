@@ -168,7 +168,20 @@ class W000tsControllerTest < ActionController::TestCase
   end
 
   test 'should be redirected' do
+    before_redirect = @w000t.number_of_click
     get :redirect, short_url: @w000t.short_url
+    # We should check the info from db because the inc method runs an update on
+    # the w000t directly in db
+    after_redirect = W000t.find(@w000t.id).number_of_click
+    assert_equal before_redirect + 1, after_redirect, 'Wrong number of click'
     assert_redirected_to @w000t.long_url
+  end
+
+  test 'should be have one more click' do
+    before_redirect = @w000t.number_of_click
+    get :click, format: :js,  short_url: @w000t.short_url
+    after_redirect = W000t.find(@w000t.id).number_of_click
+    assert_equal before_redirect + 1, after_redirect, 'Wrong number of click'
+    assert_response :success
   end
 end

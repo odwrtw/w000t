@@ -1,6 +1,6 @@
 # w000ts Controller
 class W000tsController < ApplicationController
-  before_action :set_w000t, only: [:show, :edit, :destroy, :redirect]
+  before_action :set_w000t, only: [:show, :edit, :destroy, :redirect, :click]
   before_action :authenticate_user!, only: [:destroy]
   before_action :prevent_w000tception,
                 :check_token,
@@ -75,6 +75,14 @@ class W000tsController < ApplicationController
   def redirect
     @w000t.inc(number_of_click: 1)
     redirect_to @w000t.url_info_url
+  end
+
+  # Add a click to the count but do not redirect
+  def click
+    @w000t.inc(number_of_click: 1)
+    respond_to do |format|
+      format.js { @w000t }
+    end
   end
 
   def my_index

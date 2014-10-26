@@ -22,6 +22,14 @@ module TypableUrl
     end
   end
 
+  # TODO : find a better solution to handle all the cases
+  def youtube_id
+    return unless type.eql? 'youtube'
+    match = /watch\?v=(?<id>[^&]+)/.match(url)
+    return unless match
+    match[:id]
+  end
+
   protected
 
   def image

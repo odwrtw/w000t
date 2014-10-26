@@ -7,7 +7,6 @@
   <ul class="dropdown-menu" role="menu">
     <% UrlInfo::TYPES.each do |type| %>
       <li>
-      <a href="#"></a>
       <%= link_to w000ts_me_path(type: type) do  %>
             <%= url_type_span(type) %>
       <% end %>
@@ -40,3 +39,5 @@
 <%= link_to new_w000t_path, class: 'btn btn-default pull-right' do %>
   <i class="fa fa-plus-square"></i> New w000t
 <% end %>
+
+<%= render 'layouts/w000t_preview_modal' %>
