@@ -29,7 +29,7 @@ $(".w000ts.my_image_index").ready ->
 
   # When we leave the figure, we need to hide the w000ted url that was shown by
   # clicking on the share button
-  $("figure").mouseleave ->
+  $("div.container").delegate "figure", "mouseleave", ->
     $(this).children(".shared").hide()
 
   # Masonry options
