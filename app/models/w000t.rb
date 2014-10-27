@@ -22,7 +22,7 @@ class W000t
 
   belongs_to :user
   delegate :pseudo, :email, to: :user, prefix: true
-  delegate :url, :http_code, :number_of_checks,
+  delegate :url, :http_code, :number_of_checks, :type,
            :last_check, to: :url_info, prefix: true
 
   scope :by_type, ->(type) { where('url_info.type' => type) }
