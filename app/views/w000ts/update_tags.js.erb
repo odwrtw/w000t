@@ -1,0 +1,3 @@
+// We fill the td with the new tags and hide the form
+$("#w000t-<%= escape_javascript w000t.short_url %>-form").hide()
+$("#w000t-<%= escape_javascript w000t.short_url %>-td").html("<%= escape_javascript pretty_tags(w000t) %>").show();

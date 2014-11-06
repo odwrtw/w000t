@@ -2,12 +2,12 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
-td.w000t-long-url {
+tbody tr td.w000t-long-url {
   border-bottom: none;
   padding-bottom: 0px;
 }
 
-td.w000t-tags {
+tbody tr td.w000t-tags, tbody tr td.w000t-form {
   border-top: none;
   padding-top: 0px;
 }

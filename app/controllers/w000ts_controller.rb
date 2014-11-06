@@ -1,6 +1,7 @@
 # w000ts Controller
 class W000tsController < ApplicationController
-  before_action :set_w000t, only: [:show, :edit, :destroy, :redirect, :click]
+  before_action :set_w000t, only:
+                  [:show, :edit, :update, :destroy, :redirect, :click]
   before_action :authenticate_user!, only: [:destroy]
   before_action :prevent_w000tception,
                 :check_token,
@@ -22,6 +23,14 @@ class W000tsController < ApplicationController
   # GET /w000ts/new
   def new
     @w000t = W000t.new
+  end
+
+  # GET /w000ts/new
+  def update
+    respond_to do |format|
+      format.js { @w000t } unless @w000t.update(w000t_params)
+      format.js { render :update_tags, locals: { w000t: @w000t } }
+    end
   end
 
   # POST /w000ts
@@ -87,16 +96,21 @@ class W000tsController < ApplicationController
 
   def my_index
     return redirect_to new_user_session_path unless user_signed_in?
+    @w000ts = current_user.w000ts
+    unless params[:tags].blank?
+      @w000ts = @w000ts.tagged_with_all(params[:tags].split(',').map{ |l| l.strip })
+      @tags = params[:tags]
+    end
     if params[:type]
       unless TypableUrl::TYPES.include? params[:type].to_sym
         return redirect_to w000ts_me_path, flash: { alert: 'Invalid filter' }
       end
-      @w000ts = current_user.w000ts.by_type(params[:type])
-                                   .order_by(created_at: :desc)
-                                   .page(params[:page]).per(25)
+      @w000ts = @w000ts.by_type(params[:type])
+                       .order_by(created_at: :desc)
+                       .page(params[:page]).per(25)
     else
-      @w000ts = current_user.w000ts.order_by(created_at: :desc)
-                                   .page(params[:page]).per(25)
+      @w000ts = @w000ts.order_by(created_at: :desc)
+                       .page(params[:page]).per(25)
     end
   end
 
@@ -122,7 +136,7 @@ class W000tsController < ApplicationController
   # Never trust parameters from the scary internet, only allow the white list
   # through.
   def w000t_params
-    params.require(:w000t).permit(:long_url)
+    params.require(:w000t).permit(:long_url, :tags)
   end
 
   def prevent_w000tception

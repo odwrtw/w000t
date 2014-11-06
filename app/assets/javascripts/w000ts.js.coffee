@@ -18,6 +18,14 @@ $(".w000ts").ready ->
   $("a.type-youtube").click (event)->
     $('#w000t-preview-modal').modal()
 
+$(".w000ts.my_index").ready ->
+  $('.tags-search').tokenfield()
+  $('.w000t-tags-form').tokenfield()
+  $("div.container").delegate ".w000t-tags", "click", ->
+    $el = $(this).closest("td").siblings(".w000t-form")
+    $el.show()
+    $(this).hide()
+
 $(".w000ts.my_image_index").ready ->
 
   # When we click on the share button, we show a div with the w000ted url and

@@ -19,8 +19,10 @@ module W000tHelper
   end
 
   def pretty_tags(w000t)
+    return content_tag :span, 'No tags',
+                       class: 'label label-default' if w000t.tags_array.empty?
     w000t.tags_array.each.map do |tag|
-      content_tag :span, tag, class: "label label-primary"
+      content_tag :span, tag, class: 'label label-primary'
     end.join(' ').html_safe
   end
 end

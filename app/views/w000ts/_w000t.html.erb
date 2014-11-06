@@ -18,5 +18,13 @@
   </td>
 </tr>
 <tr>
-  <td class="w000t-tags"><%= pretty_tags(w000t) %></td>
+  <td class="w000t-tags" id="w000t-<%=w000t.short_url%>-td">
+    <%= pretty_tags(w000t) %>
+  </td>
+  <td class="w000t-form" id="w000t-<%=w000t.short_url%>-form" style="display: none;">
+    <%= form_for (w000t), remote: true do |f| %>
+      <%= f.text_field :tags, class: "form-control w000t-tags-form input-sm", placeholder: "Enter tags" %>
+      <%= f.submit 'Update', class: "hidden" %>
+    <% end %>
+  </td>
 </tr>
