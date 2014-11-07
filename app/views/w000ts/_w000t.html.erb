@@ -1,10 +1,10 @@
 <tr>
-  <td class="truncate"><%= w000t.url_info_url %></td>
-  <td><%= w000t.number_of_click %></td>
-  <td>
+  <td class="truncate w000t-long-url"><%= w000t.url_info_url %></td>
+  <td rowspan="2"><%= w000t.number_of_click %></td>
+  <td rowspan="2">
     <%= pretty_http_status(w000t.url_info) %>
   </td>
-  <td>
+  <td rowspan="2">
     <%= get_w000t_link(w000t) %>
     <%= link_to w000t, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-default' do %>
       <i class="fa fa-trash"></i>
@@ -14,6 +14,17 @@
           method: :post, class: 'btn btn-default' do  %>
         <i class="fa fa-link"></i>
       <% end %>
+    <% end %>
+  </td>
+</tr>
+<tr>
+  <td class="w000t-tags" id="w000t-<%=w000t.short_url%>-td">
+    <%= pretty_tags(w000t) %>
+  </td>
+  <td class="w000t-form" id="w000t-<%=w000t.short_url%>-form" style="display: none;">
+    <%= form_for (w000t), remote: true do |f| %>
+      <%= f.text_field :tags, class: "form-control w000t-tags-form input-sm", placeholder: "Enter tags" %>
+      <%= f.submit 'Update', class: "hidden" %>
     <% end %>
   </td>
 </tr>

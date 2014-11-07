@@ -1,0 +1,17 @@
+<tr>
+  <td class="truncate w000t-long-url"><%= w000t.url_info_url %></td>
+  <td><%= w000t.number_of_click %></td>
+  <td><%= pretty_http_status(w000t.url_info) %></td>
+  <td>
+    <%= get_w000t_link(w000t) %>
+    <% if current_user && current_user.admin? %>
+      <%= link_to w000t, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-default' do %>
+        <i class="fa fa-trash"></i>
+      <% end %>
+      <%= link_to admin_check_url_path(admin: { short_url: w000t.short_url }),
+          method: :post, class: 'btn btn-default' do  %>
+        <i class="fa fa-link"></i>
+      <% end %>
+    <% end %>
+  </td>
+</tr>

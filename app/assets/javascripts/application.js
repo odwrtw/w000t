@@ -19,4 +19,5 @@
 //= require jquery-infinite-scroll/jquery.infinitescroll
 //= require turbolinks
 //= require jquery-readyselector/jquery.readyselector
+//= require bootstrap-tokenfield/dist/bootstrap-tokenfield
 //= require_tree .

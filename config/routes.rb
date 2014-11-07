@@ -18,12 +18,11 @@ Rails.application.routes.draw do
 
   # Personnal w000ts
   get '/w000ts/me' => 'w000ts#my_index'
-  get '/w000ts/me/:type' => 'w000ts#my_index'
+  get '/w000ts/me/:type' => 'w000ts#my_index', as: 'w000ts_me_by_type'
   get '/w000ts/meme' => 'w000ts#my_image_index'
 
   # w000ts and tokens
-  resources :w000ts, param: :short_url, except: [:edit, :update]
-
+  resources :w000ts, param: :short_url, except: [:edit]
   # w000ts redirections
   get '/:short_url/click' => 'w000ts#click', as: :w000t_click
   get '/:short_url' => 'w000ts#redirect', as: :w000t_redirect

@@ -17,4 +17,14 @@ module W000tHelper
       end
     end
   end
+
+  def pretty_tags(w000t)
+    return content_tag :span, class: 'label label-default' do
+      c = content_tag :i, '', class: 'fa fa-tags'
+      c + ' Add tags'
+    end if w000t.tags_array.empty?
+    w000t.tags_array.each.map do |tag|
+      content_tag :span, tag, class: 'label label-primary'
+    end.join(' ').html_safe
+  end
 end

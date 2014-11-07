@@ -116,6 +116,9 @@ GEM
       bundler (>= 1.0.0)
       rails (>= 3.2.0)
       railties (>= 3.2.0)
+    mongoid_taggable (1.1.1)
+      mongoid (>= 3)
+      rake
     moped (2.0.0)
       bson (~> 2.2)
       connection_pool (~> 2.0)
@@ -242,6 +245,7 @@ DEPENDENCIES
   mina-sidekiq
   mongoid (~> 4)!
   mongoid_rails_migrations
+  mongoid_taggable
   newrelic_rpm
   pry
   rails (= 4.1.2)
