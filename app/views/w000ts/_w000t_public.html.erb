@@ -1,10 +1,8 @@
 <tr>
   <td class="truncate w000t-long-url"><%= w000t.url_info_url %></td>
-  <td rowspan="2"><%= w000t.number_of_click %></td>
-  <td rowspan="2">
-    <%= pretty_http_status(w000t.url_info) %>
-  </td>
-  <td rowspan="2">
+  <td><%= w000t.number_of_click %></td>
+  <td><%= pretty_http_status(w000t.url_info) %></td>
+  <td>
     <%= get_w000t_link(w000t) %>
     <% if current_user && current_user.admin? %>
       <%= link_to w000t, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-default' do %>
