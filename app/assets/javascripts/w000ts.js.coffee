@@ -22,9 +22,13 @@ $(".w000ts.my_index").ready ->
   $('.tags-search').tokenfield()
   $('.w000t-tags-form').tokenfield()
   $("div.container").delegate ".w000t-tags", "click", ->
+    $(".tags-input-displayed").hide()
+    $(".tags-td-hidden").show()
     $el = $(this).closest("td").siblings(".w000t-form")
     $el.show()
-    $(this).hide()
+    $el.addClass("tags-input-displayed")
+    $el.find('input').focus()
+    $(this).hide().addClass('tags-td-hidden')
 
 $(".w000ts.my_image_index").ready ->
 

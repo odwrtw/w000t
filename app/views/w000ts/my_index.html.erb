@@ -1,25 +1,31 @@
 <h1>My w000ts</h1>
 
-<%= form_tag nil, method: :get do %>
-  <%= label_tag :tags, "Search for tags:" %>
-  <%= text_field_tag :tags, nil, class: "tags-search form-control", id: "tokenfield-typeahead" %>
-  <%= submit_tag "Search", class: "hidden" %>
-<% end %>
-<div class="btn-group btn-lg pull-right">
-  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-    Filter <span class="caret"></span>
-  </button>
-  <ul class="dropdown-menu" role="menu">
-    <% UrlInfo::TYPES.each do |type| %>
-      <li>
-      <a href="#"></a>
-      <%= link_to w000ts_me_by_type_path(type: type, tags: @tags) do  %>
-        <%= url_type_span(type) %>
-      <% end %>
-      </li>
+<div class="row">
+  <div class="col-xs-11">
+    <%= form_tag nil, method: :get do %>
+      <%= text_field_tag :tags, nil, class: "tags-search form-control", placeholder: 'Filter by tags', id: "tokenfield-typeahead" %>
+      <%= submit_tag "Search", class: "hidden" %>
     <% end %>
-  </ul>
+  </div>
+
+  <div class="col-xs-1">
+      <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+        Filter <span class="caret"></span>
+      </button>
+      <ul class="dropdown-menu" role="menu">
+        <% UrlInfo::TYPES.each do |type| %>
+          <li>
+          <a href="#"></a>
+          <%= link_to w000ts_me_by_type_path(type: type, tags: @tags) do  %>
+            <%= url_type_span(type) %>
+          <% end %>
+          </li>
+        <% end %>
+      </ul>
+  </div>
 </div>
+
+<br>
 
 <table class="table table-responsive">
   <thead>

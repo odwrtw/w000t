@@ -2,7 +2,7 @@
 class W000tsController < ApplicationController
   before_action :set_w000t, only:
                   [:show, :edit, :update, :destroy, :redirect, :click]
-  before_action :authenticate_user!, only: [:destroy]
+  before_action :authenticate_user!, only: [:destroy, :update, :edit]
   before_action :prevent_w000tception,
                 :check_token,
                 :check_w000t,
@@ -27,8 +27,14 @@ class W000tsController < ApplicationController
 
   # GET /w000ts/new
   def update
+    unless current_user.w000ts.find_by(short_url: @w000t.short_url)
+      return redirect_to :back, flash: {
+        alert: 'You can not update this w000t, only the owner can'
+      }
+    end
+
     respond_to do |format|
-      format.js { @w000t } unless @w000t.update(w000t_params)
+      format.js { @w000t } unless @w000t.update(tags: w000t_params[:tags])
       format.js { render :update_tags, locals: { w000t: @w000t } }
     end
   end

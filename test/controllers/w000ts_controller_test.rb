@@ -112,6 +112,38 @@ class W000tsControllerTest < ActionController::TestCase
                  flash[:alert]
   end
 
+  test 'should update as a logged in user' do
+    sign_in @user
+    @user_w000t = W000t.create!(
+      user: @user,
+      long_url: 'http://updated_logged_in.com'
+    )
+    patch :update, short_url: @user_w000t.short_url, format: :js,
+                   w000t: { tags: 'test,      yo' }
+    assert_response :success
+    @w = W000t.find(@user_w000t.id)
+    assert_equal %w(test yo), @w.tags_array
+    assert_equal 'test,yo', @w.tags
+  end
+
+  test 'should not update as anonymous user' do
+    patch :update, short_url: @w000t, format: :js, w000t: { tags: 'test, yo' }
+    assert_response 401
+  end
+
+  test 'should not update as the wrong user' do
+    joe = FactoryGirl.create(:user, pseudo: 'Joe', email: 'joe@plop.com')
+    w000t_by_joe = W000t.create(
+      long_url: 'http://superjoe.com',
+      user: joe
+    )
+    sign_in @user
+    patch :update, short_url: w000t_by_joe.short_url, format: :js,
+                   w000t: { tags: 'test, yo' }
+    assert_equal 'You can not update this w000t, only the owner can',
+                 flash[:alert]
+  end
+
   test 'should create a w000t with a token' do
     @authentication_token.user = @user
     @authentication_token.save
