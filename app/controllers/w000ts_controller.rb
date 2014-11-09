@@ -104,7 +104,7 @@ class W000tsController < ApplicationController
     return redirect_to new_user_session_path unless user_signed_in?
     @w000ts = current_user.w000ts
     unless params[:tags].blank?
-      @w000ts = @w000ts.tagged_with_all(params[:tags].split(',').map{ |l| l.strip })
+      @w000ts = @w000ts.tagged_with_all(params[:tags].split(',').map(&:strip))
       @tags = params[:tags]
     end
     if params[:type]
@@ -137,6 +137,7 @@ class W000tsController < ApplicationController
   # Use callbacks to share common setup or constraints between actions.
   def set_w000t
     @w000t = W000t.find_by(short_url: params[:short_url])
+    redirect_to w000ts_path unless @w000t
   end
 
   # Never trust parameters from the scary internet, only allow the white list

@@ -172,6 +172,44 @@ class W000tsControllerTest < ActionController::TestCase
     end
   end
 
+  # Create two w000t, only one tagged with 'test'
+  # Search for tag:'test', expect 1 only one result
+  test 'should filter by tags' do
+    sign_in @user
+    @w000t_no_tag = FactoryGirl.create(
+      :w000t, long_url: 'yo.com', user: @user
+    )
+    @w000t_tag_test = FactoryGirl.create(
+      :w000t, long_url: 'test.com', tags: 'test  ', user: @user
+    )
+    assert_equal 2, @user.w000ts.count
+    get :my_index, tags: 'test'
+    assert_response :success
+    assert_tag :tbody, children: { count: 2, only: { tag: 'tr' } }
+    assert_tag :td, attributes: { class: 'w000t-tags' },
+                    children: { count: 1, only: { tag: 'span' } }
+  end
+
+  # Create two typed w000t with the same tag
+  # 1 - type: pdf - tag: test
+  # 1 - type: image - tag: test
+  # Search for type:'image' and tag:'test', expect 1 only one result
+  test 'should filter by tags and type' do
+    sign_in @user
+    @w000t_image_no_tag = FactoryGirl.create(
+      :w000t, long_url: 'yo.com/t.pdf', tags: 'test', user: @user
+    )
+    @w000t_image_tag = FactoryGirl.create(
+      :w000t, long_url: 'test.com/t.jpg', tags: 'test', user: @user
+    )
+    assert_equal 2, @user.w000ts.count
+    get :my_index, tags: 'test', type: 'image'
+    assert_response :success
+    assert_tag :tbody, children: { count: 2, only: { tag: 'tr' } }
+    assert_tag :td, attributes: { class: 'w000t-tags' },
+                    children: { count: 1, only: { tag: 'span' } }
+  end
+
   test 'should get user index with a filter error' do
     sign_in @user
     get :my_index, type: 'some shit'
@@ -207,6 +245,11 @@ class W000tsControllerTest < ActionController::TestCase
     after_redirect = W000t.find(@w000t.id).number_of_click
     assert_equal before_redirect + 1, after_redirect, 'Wrong number of click'
     assert_redirected_to @w000t.long_url
+  end
+
+  test 'should be redirected to the home page for a fake link' do
+    get :redirect, short_url: 'null'
+    assert_redirected_to w000ts_path
   end
 
   test 'should be have one more click' do
