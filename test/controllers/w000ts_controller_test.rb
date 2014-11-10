@@ -5,6 +5,7 @@ class W000tsControllerTest < ActionController::TestCase
   setup do
     User.all.destroy
     W000t.all.destroy
+    AuthenticationToken.all.destroy
 
     request.env['HTTP_REFERER'] = 'previous_page'
 
@@ -100,7 +101,8 @@ class W000tsControllerTest < ActionController::TestCase
 
   test 'should not destroy as the wrong user' do
     joe = FactoryGirl.create(:user, pseudo: 'Joe', email: 'joe@plop.com')
-    w000t_by_joe = W000t.create(
+    w000t_by_joe = FactoryGirl.create(
+      :w000t,
       long_url: 'http://superjoe.com',
       user: joe
     )
@@ -114,7 +116,8 @@ class W000tsControllerTest < ActionController::TestCase
 
   test 'should update as a logged in user' do
     sign_in @user
-    @user_w000t = W000t.create!(
+    @user_w000t = FactoryGirl.create(
+      :w000t,
       user: @user,
       long_url: 'http://updated_logged_in.com'
     )
@@ -133,7 +136,8 @@ class W000tsControllerTest < ActionController::TestCase
 
   test 'should not update as the wrong user' do
     joe = FactoryGirl.create(:user, pseudo: 'Joe', email: 'joe@plop.com')
-    w000t_by_joe = W000t.create(
+    w000t_by_joe = FactoryGirl.create(
+      :w000t,
       long_url: 'http://superjoe.com',
       user: joe
     )

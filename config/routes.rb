@@ -13,7 +13,7 @@ Rails.application.routes.draw do
   devise_for :users
 
   resources :users, only: [] do
-    resources :authentication_tokens, except: [:edit, :update], path: :tokens
+    resources :authentication_tokens, path: :tokens
   end
 
   # Personnal w000ts

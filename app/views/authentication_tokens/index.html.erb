@@ -27,6 +27,9 @@
           <%= link_to user_authentication_token_path(@user, authentication_token), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-default'  do %>
             <i class="fa fa-trash"></i>
           <% end %>
+          <%= link_to edit_user_authentication_token_path(@user, authentication_token), class: 'btn btn-default'  do %>
+            <i class="fa fa-edit"></i>
+          <% end %>
         </td>
       </tr>
     <% end %>

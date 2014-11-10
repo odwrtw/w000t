@@ -27,6 +27,28 @@ class AuthenticationTokensController < ApplicationController
   def edit
   end
 
+  def update
+    unless current_user.authentication_tokens.find(params[:id])
+      return redirect_to :back, flash: {
+        alert: 'You can not update this token, only the owner can'
+      }
+    end
+
+    respond_to do |format|
+      if @authentication_token.update(name: authentication_token_params[:name])
+        format.html do
+          redirect_to user_authentication_tokens_url,
+                      notice: 'Authentication token was successfully updated.'
+        end
+      else
+        format.html do
+          render :edit,
+                 notice: 'Couldn\'t edit authentication tokens.'
+        end
+      end
+    end
+  end
+
   # POST /authentication_tokens
   # POST /authentication_tokens.json
   def create

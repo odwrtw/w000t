@@ -9,4 +9,7 @@ class AuthenticationToken
   # Association
   belongs_to :user
   delegate :pseudo, :email, to: :user, prefix: true
+
+  # Model validation
+  validates_uniqueness_of :name, scope: :user
 end
