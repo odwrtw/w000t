@@ -137,7 +137,7 @@ class W000tsController < ApplicationController
   # Use callbacks to share common setup or constraints between actions.
   def set_w000t
     @w000t = W000t.find_by(short_url: params[:short_url])
-    redirect_to w000ts_path unless @w000t
+    raise AbstractController::ActionNotFound unless @w000t
   end
 
   # Never trust parameters from the scary internet, only allow the white list

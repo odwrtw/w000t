@@ -247,9 +247,9 @@ class W000tsControllerTest < ActionController::TestCase
     assert_redirected_to @w000t.long_url
   end
 
-  test 'should be redirected to the home page for a fake link' do
+  test 'should get a 404 http code for a fake link' do
     get :redirect, short_url: 'null'
-    assert_redirected_to w000ts_path
+    assert_response 404
   end
 
   test 'should be have one more click' do
