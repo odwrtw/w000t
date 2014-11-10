@@ -7,6 +7,7 @@ class AdminControllerTest < ActionController::TestCase
   setup do
     User.all.destroy
     W000t.all.destroy
+    AuthenticationToken.all.destroy
     Sidekiq::Worker.clear_all
 
     request.env['HTTP_REFERER'] = 'previous_page'
