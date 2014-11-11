@@ -61,7 +61,6 @@ class W000tsController < ApplicationController
         format.json do
           render json: @w000t.errors, status: :unprocessable_entity
         end
-        format.js { @w000t }
       end
     end
   end
@@ -143,7 +142,10 @@ class W000tsController < ApplicationController
   # Never trust parameters from the scary internet, only allow the white list
   # through.
   def w000t_params
-    params.require(:w000t).permit(:long_url, :tags)
+    params.require(:w000t).permit(
+      :long_url,
+      :tags,
+    )
   end
 
   def prevent_w000tception
@@ -170,6 +172,7 @@ class W000tsController < ApplicationController
       'url_info.url' => url
     )
     return unless w000t
+
     respond_to do |format|
       format.json do
         render json: w000t.full_shortened_url(request.base_url),

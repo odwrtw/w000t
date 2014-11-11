@@ -33,7 +33,7 @@ module TypableUrl
   protected
 
   def image
-    /.+\.(gif|png|jpg|jpeg)\Z/ =~ url
+    /.+\.(gif|png|jpg|jpeg)\Z/i =~ url
   end
 
   def pdf

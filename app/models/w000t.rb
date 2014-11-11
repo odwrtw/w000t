@@ -8,6 +8,7 @@ class W000t
 
   # Callbacks
   before_save :create_short_url
+  after_create :create_task
 
   attr_accessor :long_url
 
@@ -18,8 +19,13 @@ class W000t
   field :archive, type: Integer, default: 0
   field :long_url, as: :old_long_url, type: String
 
+  # Indexes
+  index({ short_url: 1 }, { unique: true, name: 'short_url_index' })
+
   # Association
   embeds_one :url_info, cascade_callbacks: true
+
+  accepts_nested_attributes_for :url_info
 
   belongs_to :user
   delegate :pseudo, :email, to: :user, prefix: true
@@ -27,6 +33,10 @@ class W000t
            :last_check, to: :url_info, prefix: true
 
   scope :by_type, ->(type) { where('url_info.type' => type) }
+
+  def create_task
+    UrlLifeChecker.perform_async(_id)
+  end
 
   # Define the short_url as the id of the model
   def to_param

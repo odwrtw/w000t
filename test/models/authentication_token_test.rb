@@ -3,10 +3,6 @@ require 'test_helper'
 # AuthenticationToken Model unittest
 class AuthenticationTokenTest < ActiveSupport::TestCase
   setup do
-    User.all.destroy
-    W000t.all.destroy
-    AuthenticationToken.all.destroy
-
     # Known values
     @user = FactoryGirl.create(:user)
   end

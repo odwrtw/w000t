@@ -50,6 +50,13 @@ gem 'flowdock'
 # Monitoring
 gem 'newrelic_rpm'
 
+# Image
+gem 'carrierwave-mongoid', require: 'carrierwave/mongoid'
+gem 'rmagick'
+
+# gem 'fog', '~> 1.22.0'
+gem 'fog', git: 'git://github.com/fog/fog.git'
+
 group :development, :test do
   # Spring speeds up development by keeping your application running in the
   # background. Read more: https://github.com/rails/spring
@@ -61,8 +68,8 @@ group :development, :test do
   gem 'factory_girl_rails'
 
   # Better stack straces
-  gem "better_errors"
-  gem "binding_of_caller"
+  gem 'better_errors'
+  gem 'binding_of_caller'
 
   # Use debugger
   # gem 'debugger', group: [:development, :test]
@@ -73,6 +80,8 @@ group :development, :test do
   # Or for reloading rais server on config change
   # rerun --dir config rails s
   gem 'rerun'
+  gem 'guard-minitest'
+  gem 'fakeweb'
 
   # OS X specific gem to listen to file change
   gem 'rb-fsevent'

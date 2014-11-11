@@ -1,6 +1,7 @@
 <h1>
   Admin dashboard
 </h1>
+<br>
 <div class="row">
   <div class="col-md-4">
     <div class="panel panel-primary">
@@ -98,6 +99,32 @@
         <%= link_to admin_check_all_w000ts_path, data: { confirm: 'Sure ?' }, method: :post, class: 'btn btn-default' do  %>
           <i class="fa fa-database"> Check all w000ts</i>
         <% end %>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-12">
+    <div class="panel panel-primary">
+      <div class="panel-heading">
+        <h5>
+          Top URLs
+        </h5>
+      </div>
+      <div class="panel-body">
+        <table class="table">
+          <thead>
+            <th class="text-center">Url</th>
+            <th class="text-center">Count</th>
+          </thead>
+          <tbody>
+            <% @url_info_top_ten_url.each do |u| %>
+            <tr class="text-center">
+              <td><%= u['_id'] %></td>
+              <td><%= u['count']%></td>
+            </tr>
+            <% end %>
+          </tbody>
+        </table>
       </div>
     </div>
   </div>

@@ -1,4 +1,6 @@
 require 'test_helper'
+require 'sidekiq/testing'
+Sidekiq::Testing.fake!
 
 # W000t Model unittest
 class W000tTest < ActiveSupport::TestCase
@@ -7,9 +9,6 @@ class W000tTest < ActiveSupport::TestCase
 
   # Run before each test
   setup do
-    User.all.destroy
-    W000t.all.destroy
-
     # Known values
     @long_url = 'http://www.google.com'
     @short_url_without_user = '738ddf35b3'
@@ -51,5 +50,11 @@ class W000tTest < ActiveSupport::TestCase
     assert @w000t.url_info.valid?, 'w000t without http prefix is invalid'
     assert @w000t.url_info.url =~ /^http/,
            'w000t without http prefix does not have http prefix'
+  end
+
+  test 'shoud create a life checker task when creating a new w000t' do
+    assert_difference 'UrlLifeChecker.jobs.size' do
+      @w000t = W000t.create(long_url: @long_url)
+    end
   end
 end

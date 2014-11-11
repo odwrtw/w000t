@@ -15,16 +15,27 @@ class AdminController < ApplicationController
       @user_data[user.pseudo][:w000t_counts] = user.w000ts.count
     end
 
-    @url_info_count_by_codes = UrlInfo.collection.aggregate(
-      '$group' => {
-        '_id' => '$http_code',
+    @url_info_count_by_codes = W000t.collection.aggregate([
+      {
+        '$group' => {
+          '_id' => '$url_info.http_code',
+          count: { '$sum' => 1 }
+        }
+      },
+      { '$sort' => { 'count' => -1 } }
+    ])
+    @url_info_top_ten_url = W000t.collection.aggregate([
+      { '$group' => {
+        '_id' => '$url_info.url',
         count: { '$sum' => 1 }
-      }
-    )
+      } },
+      { '$sort' => { 'count' => -1 } },
+      { '$limit' => 10 }
+    ])
   end
 
   def check_all_w000ts
-    W000t.all.each { |w| w.url_info.create_task }
+    W000t.all.each(&:create_task)
     redirect_to :back, notice: 'All w000t will be checked soon'
   end
 
@@ -32,8 +43,10 @@ class AdminController < ApplicationController
     short_url = admin_params[:short_url]
     return redirect_to :back,
                        flash: { alert: 'Missing short url' } unless short_url
-    # TODO : search by w000t and use create_task
-    UrlLifeChecker.perform_async(short_url)
+    w000t = W000t.find(short_url)
+    return redirect_to :back,
+                       flash: { alert: 'Unknown w000t' } unless w000t
+    w000t.create_task
     redirect_to :back, notice: 'Task created'
   end
 

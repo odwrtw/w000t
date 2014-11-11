@@ -3,23 +3,23 @@ class UrlInfo
   include Mongoid::Document
   include TypableUrl
 
-  after_create :create_task
   before_validation :check_http_prefix
 
   field :http_code, type: Integer
+  field :content_length, type: Integer
   field :number_of_checks, type: Integer, default: 0
   field :last_check, type: Time
   field :url
+  field :cloud_image_urls, type: Hash
+
+  # Image
+  mount_uploader :cloud_image, ImageUploader
 
   # Model validation
   validates :url, presence: true, format: { with: %r{\Ahttps?:\/\/.+\Z} }
 
   # Association
   embedded_in :w000t
-
-  def create_task
-    UrlLifeChecker.perform_async(w000t._id)
-  end
 
   def active?
     return true if http_code.nil?
@@ -29,9 +29,12 @@ class UrlInfo
 
   def update_http_code
     uri = parse_uri
-    code = head_request(uri) if uri
-    self.http_code = code ? code : 500
-    save!
+    logger.info "URI #{uri}"
+    head = head_request(uri) if uri
+    logger.info "head #{head.inspect}"
+    self.http_code = head ? head.code : 500
+    self.content_length = head ? head.content_length : 0
+    save
   end
 
   def increase_number_of_checks
@@ -43,10 +46,27 @@ class UrlInfo
   end
 
   def update_linked_w000t
-    if self.active?
+    if active?
       w000t.restore!
     else
       w000t.archive!
+    end
+  end
+
+  def store_in_cloud
+    unless http_code == 200
+      logger.info "Don't store in cloud, not an http_code 200 OK ( #{http_code} )"
+      return
+    end
+    if content_length > 1.megabytes
+      logger.info "Don't store in cloud, too big #{content_length}"
+      return
+    end
+    if type == 'image'
+      logger.info "----- In url_info #{id} with w000t :  #{w000t.id}"
+      CloudImageUploader.perform_async(w000t._id)
+    else
+      logger.info "Don't upload because of type #{type}"
     end
   end
 
@@ -63,18 +83,18 @@ class UrlInfo
   def parse_uri
     URI.parse(url)
     rescue URI::Error
+      logger.info 'Uri parse error'
       nil
   end
 
   def head_request(uri)
-    response = nil
     http = Net::HTTP.new(uri.host, uri.port)
     http.use_ssl = (uri.scheme == 'https')
     http.verify_mode = OpenSSL::SSL::VERIFY_NONE
     http.read_timeout = 10
-    http.start { |r| response = r.head(uri.path.size > 0 ? uri.path : '/') }
-    response.code
+    http.start { |r| r.head(uri.path.size > 0 ? uri.path : '/') }
   rescue
+    logger.info "ERROR when requesting url => #{$ERROR_INFO}"
     nil
   end
 
@@ -85,5 +105,17 @@ class UrlInfo
 
     # Add prefix
     self.url = UrlInfo.prefixed_url(url)
+  end
+
+  def remove_cloud_image!
+    super
+  rescue Fog::Storage::OpenStack::NotFound
+    logger.warn "cloud_image didn't exsist, wtf?"
+    true
+  end
+
+  def w000t_cloud_image_url(type)
+    return cloud_image_urls[type.to_sym] if cloud_image_urls
+    cloud_image.url
   end
 end
