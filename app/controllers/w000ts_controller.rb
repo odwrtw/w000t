@@ -75,7 +75,7 @@ class W000tsController < ApplicationController
     unless current_user.w000ts.find_by(short_url: @w000t.short_url)
       return redirect_to :back, flash: {
         alert: 'You can not delete this w000t, only the owner can'
-      }
+      } unless current_user.admin
     end
 
     @w000t.destroy

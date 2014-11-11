@@ -92,6 +92,19 @@ class W000tsControllerTest < ActionController::TestCase
     assert_equal 'W000t was successfully destroyed.', flash[:notice]
   end
 
+  test 'should destroy as an admin user' do
+    sign_in @admin_user
+    @user_w000t = W000t.create!(
+      user: @user,
+      long_url: 'http://destroy_logged_in.com'
+    )
+    assert_difference('W000t.count', -1) do
+      post :destroy, short_url: @user_w000t.short_url
+    end
+    assert_redirected_to 'previous_page'
+    assert_equal 'W000t was successfully destroyed.', flash[:notice]
+  end
+
   test 'should not destroy as anonymous user' do
     assert_difference('W000t.count', 0) do
       post :destroy, short_url: @w000t.short_url
