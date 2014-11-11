@@ -11,5 +11,5 @@ class AuthenticationToken
   delegate :pseudo, :email, to: :user, prefix: true
 
   # Model validation
-  validates_uniqueness_of :name, scope: :user
+  validates :name, uniqueness: { scope: :user }
 end

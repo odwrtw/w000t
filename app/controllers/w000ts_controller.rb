@@ -12,7 +12,7 @@ class W000tsController < ApplicationController
   # GET /w000ts.json
   def index
     @w000ts = W000t.where(user: nil).order_by(created_at: :desc)
-                   .page(params[:page]).per(25)
+              .page(params[:page]).per(25)
   end
 
   # GET /w000ts/1
@@ -112,11 +112,11 @@ class W000tsController < ApplicationController
         return redirect_to w000ts_me_path, flash: { alert: 'Invalid filter' }
       end
       @w000ts = @w000ts.by_type(params[:type])
-                       .order_by(created_at: :desc)
-                       .page(params[:page]).per(25)
+                .order_by(created_at: :desc)
+                .page(params[:page]).per(25)
     else
       @w000ts = @w000ts.order_by(created_at: :desc)
-                       .page(params[:page]).per(25)
+                .page(params[:page]).per(25)
     end
   end
 
@@ -137,7 +137,7 @@ class W000tsController < ApplicationController
   # Use callbacks to share common setup or constraints between actions.
   def set_w000t
     @w000t = W000t.find_by(short_url: params[:short_url])
-    raise AbstractController::ActionNotFound unless @w000t
+    fail AbstractController::ActionNotFound unless @w000t
   end
 
   # Never trust parameters from the scary internet, only allow the white list
