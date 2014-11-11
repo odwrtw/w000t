@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 # ROR
-ruby '2.1.2'
+ruby '2.1.4'
 gem 'rails', '4.1.2'
 
 # Use SCSS for stylesheets
