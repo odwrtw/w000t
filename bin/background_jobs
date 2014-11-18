@@ -2,7 +2,7 @@
 
 cd $(dirname $0)/..
 app_root=$(pwd)
-sidekiq_pidfile="$app_root/tmp/pids/sidekiq.pid"
+sidekiq_pidfile="$app_root/pids/sidekiq.pid"
 sidekiq_logfile="$app_root/log/sidekiq.log"
 
 warn()
