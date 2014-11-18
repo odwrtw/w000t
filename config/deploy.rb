@@ -36,7 +36,7 @@ set :repository, 'ssh://git@gitlab.quimbo.fr:5022/PouuleT/w000t.git'
 # Manually create these paths in shared/ (eg: shared/config/database.yml) in
 # your server.
 # They will be linked in the 'deploy:link_shared_paths' step.
-set :shared_paths, ['log']
+set :shared_paths, %w( log pids )
 
 # Optional settings:
 set :port, '2277'     # SSH port number.
