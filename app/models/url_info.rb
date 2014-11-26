@@ -59,6 +59,10 @@ class UrlInfo
   end
 
   def store_in_cloud
+    unless w000t.user
+      logger.info "Don't store, it's a public w000t"
+      return
+    end
     unless http_code == 200
       logger.info "Don't store, not an http_code 200 OK (#{http_code})"
       return
