@@ -102,12 +102,12 @@ task deploy: :environment do
   end
 end
 
-desc "Shows application logs."
+desc 'Shows application logs.'
 task :logs do
-    queue %[cd #{deploy_to!} && tail -n 50 -f shared/log/#{server}.log]
+  queue %(cd #{deploy_to!} && tail -n 50 -f shared/log/#{server}.log)
 end
 
-desc "Shows sidekiq logs."
+desc 'Shows sidekiq logs.'
 task :sidekiq_logs do
-    queue %[cd #{deploy_to!} && tail -n 50 -f shared/log/sidekiq.log]
+  queue %(cd #{deploy_to!} && tail -n 50 -f shared/log/sidekiq.log)
 end

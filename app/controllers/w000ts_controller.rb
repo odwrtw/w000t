@@ -144,7 +144,7 @@ class W000tsController < ApplicationController
   def w000t_params
     params.require(:w000t).permit(
       :long_url,
-      :tags,
+      :tags
     )
   end
 

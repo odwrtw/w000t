@@ -32,8 +32,13 @@ class UrlInfo
     logger.info "URI #{uri}"
     head = head_request(uri) if uri
     logger.info "head #{head.inspect}"
-    self.http_code = head ? head.code : 500
-    self.content_length = head ? head.content_length : 0
+    if head
+      self.http_code = head.code ? head.code : 500
+      self.content_length = head.content_length ? head.content_length : 0
+    else
+      self.http_code = 500
+      self.content_length = 0
+    end
     save
   end
 
@@ -55,11 +60,11 @@ class UrlInfo
 
   def store_in_cloud
     unless http_code == 200
-      logger.info "Don't store in cloud, not an http_code 200 OK ( #{http_code} )"
+      logger.info "Don't store, not an http_code 200 OK (#{http_code})"
       return
     end
-    if content_length > 1.megabytes
-      logger.info "Don't store in cloud, too big #{content_length}"
+    if (!content_length) || content_length > 1.megabytes
+      logger.info "Don't store, not valid content_length  #{content_length}"
       return
     end
     if type == 'image'
