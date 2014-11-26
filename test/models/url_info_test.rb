@@ -92,14 +92,31 @@ class UrlInfoTest < ActiveSupport::TestCase
   end
 
   test 'shoud download when image is valid' do
+    @greg = FactoryGirl.create(:user, pseudo: 'greg', email: 'greg@odwrtw.com')
     Sidekiq::Testing.inline! do
-      @w000t = W000t.create(long_url: FAKE_WEB_LIST[:image_ok][:url])
+      @w000t = W000t.create(
+        long_url: FAKE_WEB_LIST[:image_ok][:url],
+        user: @greg
+      )
     end
     @w000t.reload
 
     assert_equal 12_000, @w000t.url_info.content_length
     assert_not_equal @w000t.url_info.url, @w000t.url_info.cloud_image_urls[:url]
     assert_not nil, @w000t.url_info.cloud_image_urls[:thumb]
+  end
+
+  test 'shoud not download when image is valid but w000t is public' do
+    Sidekiq::Testing.inline! do
+      @w000t = W000t.create(
+        long_url: FAKE_WEB_LIST[:image_ok][:url]
+      )
+    end
+    @w000t.reload
+
+    assert_equal nil, @w000t.url_info.cloud_image_urls,
+                 'Cloud image is not nil but not an image'
+    assert_equal 12_000, @w000t.url_info.content_length
   end
 
   test 'shoud not download when not a valid image' do
