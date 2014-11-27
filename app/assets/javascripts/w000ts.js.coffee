@@ -30,7 +30,7 @@ $(".w000ts.my_index").ready ->
     $el.find('input').focus()
     $(this).hide().addClass('tags-td-hidden')
 
-$(".w000ts.my_image_index").ready ->
+$(".w000ts.my_image_index, .w000ts.image_index").ready ->
 
   # When we click on the share button, we show a div with the w000ted url and
   # select the text
