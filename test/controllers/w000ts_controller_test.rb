@@ -240,6 +240,23 @@ class W000tsControllerTest < ActionController::TestCase
     assert_select 'li', 3
   end
 
+  test 'should get public wall of a user as anonymous user' do
+    @w000t_public = FactoryGirl.create(
+      :w000t, long_url: 'yo.com/t.gif', user: @user
+    )
+    @w000t_private = FactoryGirl.create(
+      :w000t, long_url: 'test.com/t.jpg', status: :private, user: @user
+    )
+    get :image_index, user_id: @user.pseudo
+    assert_response :success
+    assert_select 'figure', @user.w000ts.where(status: :public).count
+  end
+
+  test 'should get 404 on public wall of fake user' do
+    get :image_index, user_id: 'bazooka'
+    assert_response 404
+  end
+
   test 'should get index as a non admin user' do
     sign_in @user
     get :index

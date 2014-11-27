@@ -7,6 +7,7 @@ class W000tsController < ApplicationController
                 :check_token,
                 :check_w000t,
                 only: [:create]
+  before_action :set_user, only: [:image_index]
 
   # GET /w000ts
   # GET /w000ts.json
@@ -131,6 +132,17 @@ class W000tsController < ApplicationController
     ).page(params[:page]).per(20)
   end
 
+  def image_index
+    params[:seed] ||= Random.new_seed
+    srand params[:seed].to_i
+    @w000ts = Kaminari.paginate_array(
+      @user.w000ts.by_type('image')
+                         .and(archive: 0)
+                         .and(status: :public)
+                         .shuffle
+    ).page(params[:page]).per(20)
+  end
+
   private
 
   # Use callbacks to share common setup or constraints between actions.
@@ -190,5 +202,12 @@ class W000tsController < ApplicationController
     token.inc(number_of_use: 1)
     # Get user
     @token_user = token.user
+  end
+
+  # Set user on image_index
+  def set_user
+    # Get user
+    @user = User.find_by(pseudo: params[:user_id])
+    fail AbstractController::ActionNotFound unless @user
   end
 end

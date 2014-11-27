@@ -57,4 +57,18 @@ class W000tTest < ActiveSupport::TestCase
       @w000t = W000t.create(long_url: @long_url)
     end
   end
+
+  test 'shoud have a valid status' do
+    W000t::STATUS.each do |s|
+      @w000t = FactoryGirl.build(:w000t, long_url: @long_url, status: s)
+      assert @w000t.valid?, "w000t should be valid with this staus : #{s}"
+    end
+  end
+
+  test 'shoud not be valid with a wrong status' do
+    %i( test yo mama ).each do |s|
+      @w000t = FactoryGirl.build(:w000t, long_url: @long_url, status: s)
+      assert @w000t.invalid?, "invalid w000t status #{s}"
+    end
+  end
 end
