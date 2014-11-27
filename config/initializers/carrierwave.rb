@@ -13,6 +13,7 @@ CarrierWave.configure do |config|
     openstack_region: ENV['OPENSTACK_REGION'] || 'SBG-1'
   }
   config.fog_directory  = ENV['FOG_DIRECTORY'] || ENV['RAILS_ENV'] || 'test_directory'
+  config.asset_host  = ENV['OPENSTACK_ASSET_HOST'] || nil
   config.fog_public     = true         # optional, defaults to true
   config.fog_attributes = {
     'Cache-Control' => "max-age=#{365.day.to_i}"

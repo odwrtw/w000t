@@ -4,7 +4,7 @@
       <div class="text-center shared">
         <%= w000t.full_shortened_url(request.base_url) %>
       </div>
-      <%= link_to( image_tag(w000t.url_info.w000t_cloud_image_url('thumb_url'), class:"img-thumbnail img-responsive"), w000t_redirect_path(w000t.short_url) ) %>
+      <%= link_to( image_tag(w000t.url_info.cloud_image.thumb.url, class:"img-thumbnail img-responsive"), w000t_redirect_path(w000t.short_url) ) %>
       <div class="effect">
         <table class="table">
           <thead>
