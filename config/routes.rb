@@ -14,6 +14,7 @@ Rails.application.routes.draw do
 
   resources :users, only: [] do
     resources :authentication_tokens, path: :tokens
+    get 'wall' => 'w000ts#image_index'
   end
 
   # Personnal w000ts
