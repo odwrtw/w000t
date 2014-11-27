@@ -6,6 +6,8 @@ class W000t
   include ActionView::Helpers::TextHelper
   require 'digest/sha1'
 
+  STATUS = %i( private hidden public )
+
   # Callbacks
   before_save :create_short_url
   after_create :create_task
@@ -14,6 +16,7 @@ class W000t
 
   # DB fields
   field :_id, as: :short_url
+  field :status, type: Symbol, default: :public
   field :user_id, type: Integer
   field :number_of_click, type: Integer, default: 0
   field :archive, type: Integer, default: 0
@@ -26,6 +29,9 @@ class W000t
   embeds_one :url_info, cascade_callbacks: true
 
   accepts_nested_attributes_for :url_info
+
+  # Model validation
+  validates :status, presence: true, inclusion: { in: STATUS }
 
   belongs_to :user
   delegate :pseudo, :email, to: :user, prefix: true
