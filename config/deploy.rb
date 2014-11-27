@@ -41,7 +41,7 @@ set :shared_paths, %w( log pids )
 # Optional settings:
 set :port, '2277'     # SSH port number.
 set :user, 'deploy'
-set :ssh_options, '-A'
+set :ssh_options, '-A -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null'
 
 # This task is the environment that is loaded for most commands, such as
 # `mina deploy` or `mina rake`.
