@@ -4,9 +4,11 @@
   <%= devise_error_messages_custom! %>
 
   <div><%= f.label :email %><br />
-  <%= f.email_field :email, autofocus: true %></div>
+  <%= f.email_field :email, autofocus: true, class: "form-control" %></div>
 
-  <div><%= f.submit "Send me reset password instructions" %></div>
+  <br>
+  <div><%= f.submit "Send me reset password instructions", class: "form-control btn btn-primary" %></div>
 <% end %>
+<br>
 
 <%= render "devise/shared/links" %>
