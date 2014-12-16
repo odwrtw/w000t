@@ -44,6 +44,25 @@ class W000tsControllerTest < ActionController::TestCase
     assert_response :success
   end
 
+  test 'should create a w000t with a status as json' do
+    url = 'http://google.fr'
+    assert_difference('W000t.count') do
+      post :create, w000t: { long_url: url, status: 'private' },
+                    user_id: @user.id, format: :json
+    end
+    assert_response :success
+    w = W000t.find_by('url_info.url' => url)
+    assert_equal w.status, :private, 'w000t status should be private'
+  end
+
+  test 'should not create a w000t with a wrong status as json' do
+    assert_difference('W000t.count', 0) do
+      post :create, w000t: { long_url: 'http://google.fr', status: 'yo' },
+                    user_id: @user.id, format: :json
+    end
+    assert_response 422 # unprocessable entity
+  end
+
   test 'should create an existing w000t as json' do
     assert_difference('W000t.count', 0) do
       post :create, w000t: { long_url: @w000t.long_url },
