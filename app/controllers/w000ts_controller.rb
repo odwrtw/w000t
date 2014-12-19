@@ -206,7 +206,10 @@ class W000tsController < ApplicationController
       format.json do
         render json: {
           w000t: @w000t.full_shortened_url(request.base_url),
-          url: @w000t.url_info_url
+          url: @w000t.url_info_url,
+          tags: @w000t.tags_array,
+          status: @w000t.status,
+          id: @w000t.id
         },
                status: :created
       end
