@@ -2,7 +2,6 @@
 class UrlInfo
   include Mongoid::Document
   include TypableUrl
-  require 'file_size_validator'
 
   before_validation :check_http_prefix
 
@@ -24,9 +23,6 @@ class UrlInfo
   validate :validates_url_or_upload_is_present
   validate :validates_url_format_is_good
   validates :internal_status, presence: true, inclusion: { in: INTERNAL_STATUS }
-  validates :cloud_image, file_size: {
-    maximum: MAX_UPLOAD_SIZE
-  }
 
   # Association
   embedded_in :w000t
