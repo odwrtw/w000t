@@ -13,6 +13,7 @@ class W000t
   after_create :create_task
 
   attr_accessor :long_url
+  attr_accessor :upload_image
 
   # DB fields
   field :_id, as: :short_url
@@ -20,7 +21,6 @@ class W000t
   field :user_id, type: Integer
   field :number_of_click, type: Integer, default: 0
   field :archive, type: Integer, default: 0
-  field :long_url, as: :old_long_url, type: String
 
   # Indexes
   index({ short_url: 1 }, { unique: true, name: 'short_url_index' })
@@ -39,9 +39,16 @@ class W000t
            :last_check, to: :url_info, prefix: true
 
   scope :by_type, ->(type) { where('url_info.type' => type) }
+  scope :by_status, ->(status) { where('url_info.status' => status) }
 
   def create_task
-    UrlLifeChecker.perform_async(_id)
+    if url_info.internal_status == :to_upload
+      # If internal_status is to_upload, need to create UploadChecker
+      UploadChecker.perform_async(_id)
+    else
+      # Else, simply create UrlLifeChecker
+      UrlLifeChecker.perform_async(_id)
+    end
   end
 
   # Define the short_url as the id of the model
@@ -59,29 +66,47 @@ class W000t
   end
 
   def archive!
-    self.archive = 1
+    archive
     save
   end
 
+  def archive
+    self.archive = 1
+  end
+
   def restore!
-    self.archive = 0
+    restore
     save
+  end
+
+  def restore
+    self.archive = 0
   end
 
   def initialize(attributes = {})
     super
-    build_url_info(url: long_url)
+
+    params = {
+      url: long_url,
+      cloud_image: upload_image
+    }
+    build_url_info(params)
   end
 
   private
 
   # Create short url on save if not yet defined
   def create_short_url
-    # Don't redefine the short_url
     return if short_url
+    # Check if the required parameters are present
+    unless upload_image || long_url
+      logger.info "url : #{url_info.inspect} self : #{inspect}"
+      fail 'Missing long_url or upload_image'
+    end
 
-    # Hash the long url by default
-    to_hash = long_url
+    self.long_url = url_info.id if long_url.blank?
+
+    to_hash = long_url.to_s
 
     # Custom hash if the user is logged in
     to_hash = user.pseudo + 'pw3t' + long_url if user_id

@@ -14,14 +14,19 @@ class UrlLifeChecker
     w.url_info.increase_number_of_checks
     w.url_info.update_last_check
     w.url_info.update_linked_w000t
+
     logger.info "=== Checking life === Checking done #{w.url_info.http_code}"
-    if w.url_info.cloud_image_urls
+
+    w.url_info.internal_status = :done
+    if w.url_info.cloud_image
       logger.info '=== Checking life === Image already uploaded'
-    else
+    elsif w.url_info.store_in_cloud?
+      w.url_info.internal_status = :to_upload
       logger.info '=== Checking life === Creating store_in_cloud Task'
-      fnret = w.url_info.store_in_cloud
+      fnret = w.url_info.store_in_cloud!
       logger.info "=== Checking life === Upload : #{fnret}"
     end
+    w.save
     logger.info '=== Checking life === ALL DONE'
   end
 end

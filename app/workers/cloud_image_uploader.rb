@@ -30,6 +30,7 @@ class CloudImageUploader
       url: w.url_info.cloud_image.url,
       thumb_url: w.url_info.cloud_image.thumb.url
     }
+    w.url_info.internal_status = :done
     fnret = w.save
 
     logger.info "=== Uploading === #{fnret} === file uploaded #{w.short_url}"
