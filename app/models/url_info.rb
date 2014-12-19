@@ -105,7 +105,7 @@ class UrlInfo
     end
 
     # Don't upload hidden image
-    return false if w000t.hidden?
+    return false if w000t.status.eql? :hidden
 
     if type == 'image'
       logger.info "----- In url_info #{id} with w000t :  #{w000t.id}"

@@ -49,7 +49,7 @@ class W000tTest < ActiveSupport::TestCase
 
   test 'should be valid with upload_image' do
     @w000t = W000t.new(
-      upload_image: File.open('/home/pouulet_gmail_com/dev/test.jpg')
+      upload_image: File.open("#{Rails.root}/app/assets/images/w000t.jpg")
     )
     assert @w000t.valid?, 'A w000t with a upload_image should be valid'
   end

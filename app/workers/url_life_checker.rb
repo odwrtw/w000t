@@ -18,7 +18,7 @@ class UrlLifeChecker
     logger.info "=== Checking life === Checking done #{w.url_info.http_code}"
 
     w.url_info.internal_status = :done
-    if w.url_info.cloud_image
+    if !w.url_info.cloud_image.blank?
       logger.info '=== Checking life === Image already uploaded'
     elsif w.url_info.store_in_cloud?
       w.url_info.internal_status = :to_upload
