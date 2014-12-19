@@ -95,7 +95,7 @@ task deploy: :environment do
 
     to :launch do
       queue %(echo "-----> Restarting the server and the sidekiq workers")
-      queue "mkdir -p #{deploy_to}/#{current_path}/tmp/"
+      queue "mkdir -p #{deploy_to}/#{current_path}/tmp/images"
       queue "touch #{deploy_to}/#{current_path}/tmp/restart.txt"
       invoke :'sidekiq:restart'
     end
@@ -110,4 +110,9 @@ end
 desc 'Shows sidekiq logs.'
 task :sidekiq_logs do
   queue %(cd #{deploy_to!} && tail -n 50 -f shared/log/sidekiq.log)
+end
+
+desc 'Shows nginx logs.'
+task :sidekiq_logs do
+  queue %(tail -n 50 -f /var/log/nginx/access.log)
 end

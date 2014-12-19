@@ -218,6 +218,7 @@ class W000tsController < ApplicationController
         redirect_to :back,
                     notice: "W000t created #{@w000t.full_shortened_url(request.base_url)}."
       end
+      format.text { render text: @w000t.full_shortened_url(request.base_url) }
     end
   end
 end
