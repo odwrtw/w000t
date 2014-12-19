@@ -2,8 +2,12 @@
 class UrlInfo
   include Mongoid::Document
   include TypableUrl
+  require 'file_size_validator'
 
   before_validation :check_http_prefix
+
+  INTERNAL_STATUS = %i( todo to_upload done )
+  MAX_UPLOAD_SIZE = 2.megabytes.to_i
 
   field :http_code, type: Integer
   field :content_length, type: Integer
@@ -11,20 +15,42 @@ class UrlInfo
   field :last_check, type: Time
   field :url
   field :cloud_image_urls, type: Hash
+  field :internal_status, type: Symbol, default: :todo
 
   # Image
   mount_uploader :cloud_image, ImageUploader
 
   # Model validation
-  validates :url, presence: true, format: { with: %r{\Ahttps?:\/\/.+\Z} }
+  validate :validates_url_or_upload_is_present
+  validate :validates_url_format_is_good
+  validates :internal_status, presence: true, inclusion: { in: INTERNAL_STATUS }
+  validates :cloud_image, file_size: {
+    maximum: MAX_UPLOAD_SIZE
+  }
 
   # Association
   embedded_in :w000t
+
+  def validates_url_or_upload_is_present
+    errors.add(:url, 'Should not be nil') if cloud_image.blank? && url.blank?
+  end
+
+  def validates_url_format_is_good
+    return unless cloud_image.blank?
+    errors.add(
+      :url, 'Should begin with http or https'
+    ) if !url.blank? && %r{\Ahttps?:\/\/.+\Z} !~ url
+  end
 
   def active?
     return true if http_code.nil?
     http_code >= 100 && http_code < 400 && (return true)
     false
+  end
+
+  def update_http_code!
+    update_http_code
+    save
   end
 
   def update_http_code
@@ -39,7 +65,6 @@ class UrlInfo
       self.http_code = 500
       self.content_length = 0
     end
-    save
   end
 
   def increase_number_of_checks
@@ -52,35 +77,52 @@ class UrlInfo
 
   def update_linked_w000t
     if active?
-      w000t.restore!
+      w000t.restore
     else
-      w000t.archive!
+      w000t.archive
     end
   end
 
-  def store_in_cloud
+  def update_linked_w000t!
+    update_linked_w000t
+    save
+  end
+
+  def store_in_cloud?
     unless w000t.user
       logger.info "Don't store, it's a public w000t"
-      return
+      return false
     end
+
     unless http_code == 200
       logger.info "Don't store, not an http_code 200 OK (#{http_code})"
-      return
+      return false
     end
-    if (!content_length) || content_length > 1.megabytes
+
+    if (!content_length) || content_length > MAX_UPLOAD_SIZE
       logger.info "Don't store, not valid content_length  #{content_length}"
-      return
+      return false
     end
+
+    # Don't upload hidden image
+    return false if w000t.hidden?
+
     if type == 'image'
       logger.info "----- In url_info #{id} with w000t :  #{w000t.id}"
-      CloudImageUploader.perform_async(w000t._id)
+      return true
     else
       logger.info "Don't upload because of type #{type}"
+      return false
     end
+  end
+
+  def store_in_cloud!
+    CloudImageUploader.perform_async(w000t._id)
   end
 
   # Add http prefix if needed
   def self.prefixed_url(url)
+    return unless url
     return url if /\Ahttp/ =~ url
 
     # Add prefix
@@ -109,8 +151,13 @@ class UrlInfo
 
   # Add http prefix if needed
   def check_http_prefix
-    return unless url
     return if /\Ahttp/ =~ url
+
+    if cloud_image.file
+      self.internal_status = :to_upload
+      self.url = nil
+      return
+    end
 
     # Add prefix
     self.url = UrlInfo.prefixed_url(url)

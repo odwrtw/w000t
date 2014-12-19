@@ -1,10 +1,12 @@
 require 'test_helper'
 require 'sidekiq/testing'
+require 'carrierwave/test/matchers'
 Sidekiq::Testing.fake!
 
 # W000t Model unittest
 class W000tTest < ActiveSupport::TestCase
   include ActionView::Helpers::TextHelper
+  include CarrierWave::Test::Matchers
   require 'digest/sha1'
 
   # Run before each test
@@ -40,9 +42,16 @@ class W000tTest < ActiveSupport::TestCase
     assert @w000t.url_info.errors[:url].any?
   end
 
-  test 'should be valid' do
+  test 'should be valid with long_url' do
     @w000t = W000t.new(long_url: @long_url)
-    assert @w000t.valid?
+    assert @w000t.valid?, 'A w000t with a long_url should be valid'
+  end
+
+  test 'should be valid with upload_image' do
+    @w000t = W000t.new(
+      upload_image: File.open('/home/pouulet_gmail_com/dev/test.jpg')
+    )
+    assert @w000t.valid?, 'A w000t with a upload_image should be valid'
   end
 
   test 'should be valid whitout http prefix and should have http prefix' do
@@ -70,5 +79,20 @@ class W000tTest < ActiveSupport::TestCase
       @w000t = FactoryGirl.build(:w000t, long_url: @long_url, status: s)
       assert @w000t.invalid?, "invalid w000t status #{s}"
     end
+  end
+
+  test 'shoud create a w000t with a upload_image' do
+    @w000t = W000t.new(
+      upload_image: File.open("#{Rails.root}/app/assets/images/w000t.jpg")
+    )
+
+    assert @w000t.url_info.valid?, 'w000t without http prefix is invalid'
+    assert_equal @w000t.url_info.internal_status,
+                 :to_upload,
+                 'w000t with upload_image should have an internal_status'
+    assert_equal @w000t.url_info.url,
+                 nil, 'w000t with upload_image should have a nil url'
+
+    @w000t.url_info.cloud_image.remove!
   end
 end

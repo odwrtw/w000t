@@ -31,6 +31,15 @@ tbody tr td.w000t-tags, tbody tr td.w000t-form {
   padding-bottom: 5px;
   display: block;
   margin: 0 auto;
+  transition: all .05s ease-in-out;
+}
+
+.w000t-wat:hover {
+  transform: scale(1.05);
+}
+
+.wat-container {
+  height: 160px;
 }
 
 .truncate {
@@ -83,9 +92,13 @@ div.effect {
   opacity: 0.8;
 }
 
-figure:hover div.effect{
+figure:hover div.effect {
   bottom: 0px;
   visibility:visible;
   opacity: 0.9;
   transition-delay:0s;
+}
+
+.upload-image {
+  display: none;
 }

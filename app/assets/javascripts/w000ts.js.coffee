@@ -18,6 +18,12 @@ $(".w000ts").ready ->
   $("a.type-youtube").click (event)->
     $('#w000t-preview-modal').modal()
 
+$(".w000ts.new").ready ->
+  $(".w000t-wat").click (event)->
+    $('.upload-image').toggle(300)
+    $('.form-url').toggle(300)
+
+
 $(".w000ts.my_index").ready ->
   $('.tags-search').tokenfield()
   $('.w000t-tags-form').tokenfield()

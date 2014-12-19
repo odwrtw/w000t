@@ -35,7 +35,7 @@ class UrlInfoTest < ActiveSupport::TestCase
     }
   }
 
-  test 'type sould be found' do
+  test 'type should be found' do
     types_and_urls = {
       youtube: 'https://www.youtube.com/watch?v=LoJtfpDWpmY',
       image: 'http://test/yo.jpg',
@@ -102,8 +102,7 @@ class UrlInfoTest < ActiveSupport::TestCase
     @w000t.reload
 
     assert_equal 12_000, @w000t.url_info.content_length
-    assert_not_equal @w000t.url_info.url, @w000t.url_info.cloud_image_urls[:url]
-    assert_not nil, @w000t.url_info.cloud_image_urls[:thumb]
+    assert_not_nil @w000t.url_info.cloud_image.thumb.url
   end
 
   test 'shoud not download when image is valid but w000t is public' do
@@ -176,6 +175,28 @@ class UrlInfoTest < ActiveSupport::TestCase
     assert_equal @w000t.url_info.cloud_image.url,
                  @w000t.url_info.w000t_cloud_image_url(:thumb),
                  'Bad image default url'
+  end
+
+  test 'shoud have a valid internal_status' do
+    UrlInfo::INTERNAL_STATUS.each do |s|
+      @url_info = FactoryGirl.build(
+        :url_info, url: 'http://google.com',
+                   internal_status: s
+      )
+      assert @url_info.valid?,
+             "url_info should be valid with this status : #{s}"
+    end
+  end
+
+  test 'shoud have a invalid internal_status' do
+    %i( test yo mama ).each do |s|
+      @url_info = FactoryGirl.build(
+        :url_info, url: 'http://google.com',
+                   internal_status: s
+      )
+      assert @url_info.invalid?,
+             "url_info should be invalid with this status : #{s}"
+    end
   end
 
   private
