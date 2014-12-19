@@ -12,7 +12,7 @@ class W000tsController < ApplicationController
   # GET /w000ts
   # GET /w000ts.json
   def index
-    @w000ts = W000t.where(user: nil).order_by(created_at: :desc)
+    @w000ts = W000t.where(user: nil, status: :public).order_by(created_at: :desc)
               .page(params[:page]).per(25)
   end
 
@@ -50,18 +50,14 @@ class W000tsController < ApplicationController
     if @w000t.save
       # If it's a success, we return directly the new shortened url for
       # easy parsing
-      respond_to do |format|
-        format.json do
-          render json: @w000t.full_shortened_url(request.base_url),
-                 status: :created
-        end
-        format.js { render :create, locals: { w000t: @w000t } }
-      end
+      render_w000t
     else
+      # binding.pry
       respond_to do |format|
         format.json do
           render json: @w000t.errors, status: :unprocessable_entity
         end
+        format.html { render action: :new }
       end
     end
   end
@@ -128,6 +124,7 @@ class W000tsController < ApplicationController
     @w000ts = Kaminari.paginate_array(
       current_user.w000ts.by_type('image')
                          .and(archive: 0)
+                         .ne(status: :hidden)
                          .shuffle
     ).page(params[:page]).per(20)
   end
@@ -156,42 +153,35 @@ class W000tsController < ApplicationController
   def w000t_params
     params.require(:w000t).permit(
       :long_url,
-      :tags
+      :tags,
+      :status,
+      :upload_image
     )
   end
 
   def prevent_w000tception
     match = /\A#{request.base_url}\/(\w{10})\Z/.match(w000t_params[:long_url])
     return unless match
-    w000t = W000t.find_by(_id: match[1])
-    return unless w000t
-    respond_to do |format|
-      format.json do
-        render json: w000t.full_shortened_url(request.base_url),
-               status: :created
-      end
-      format.js { render :create, locals: { w000t: w000t } }
-    end
+    @w000t = W000t.find_by(_id: match[1])
+    return unless @w000t
+    render_w000t
   end
 
   # If there is already an existing w000t, return it
   def check_w000t
+    # Don't need to check w000t if user is uploading an image
+    return if w000t_params[:url_info_attributes]
+
     user_id = current_user ? current_user.id : nil
     user_id = @token_user.id if @token_user
     url = UrlInfo.prefixed_url(w000t_params[:long_url])
-    w000t = W000t.find_by(
+    @w000t = W000t.find_by(
       user_id: user_id,
       'url_info.url' => url
     )
-    return unless w000t
+    return unless @w000t
 
-    respond_to do |format|
-      format.json do
-        render json: w000t.full_shortened_url(request.base_url),
-               status: :created
-      end
-      format.js { render :create, locals: { w000t: w000t } }
-    end
+    render_w000t
   end
 
   # Allow auth by token
@@ -209,5 +199,26 @@ class W000tsController < ApplicationController
     # Get user
     @user = User.find_by(pseudo: params[:user_id])
     fail AbstractController::ActionNotFound unless @user
+  end
+
+  def render_w000t
+    respond_to do |format|
+      format.json do
+        render json: {
+          w000t: @w000t.full_shortened_url(request.base_url),
+          url: @w000t.url_info_url,
+          tags: @w000t.tags_array,
+          status: @w000t.status,
+          id: @w000t.id
+        },
+               status: :created
+      end
+      format.js { render :create, locals: { w000t: @w000t } }
+      format.html do
+        redirect_to :back,
+                    notice: "W000t created #{@w000t.full_shortened_url(request.base_url)}."
+      end
+      format.text { render text: @w000t.full_shortened_url(request.base_url) }
+    end
   end
 end

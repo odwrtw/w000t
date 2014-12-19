@@ -1,19 +1,28 @@
-<%= form_for w000t, remote: true do |f| %>
+<%= form_for w000t, :html => { multipart: :true }, remote: true do |f| %>
   <% if w000t.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(w000t.errors.count, "error") %> prohibited this w000t from being saved:</h2>
-
-      <ul>
-      <% w000t.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
-      </ul>
+    <div class='panel panel-danger'>
+      <div class='panel-heading'><%= pluralize(w000t.errors.count + w000t.url_info.errors.count, "error") %> prohibited this w000t from being saved:</div>
+      <div class='panel-body'>
+        <ul>
+        <% w000t.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+        <% w000t.url_info.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+        </ul>
+      </div>
     </div>
   <% end %>
 
-  <div class="field">
+  <div class="field form-url">
     <%= f.text_field :long_url, class: "form-control" %>
   </div>
+
+  <div class="field upload-image">
+    <%= f.file_field :upload_image, class: "form-control" %>
+  </div>
+
   <div class="actions">
     <%= f.submit 'w000t it', class: "btn btn-primary btn-lg btn-block w000tNewBtn" %>
   </div>
