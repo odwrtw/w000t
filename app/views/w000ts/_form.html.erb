@@ -1,7 +1,7 @@
 <%= form_for w000t, :html => { multipart: :true }, remote: true do |f| %>
   <% if w000t.errors.any? %>
     <div class='panel panel-danger'>
-      <div class='panel-heading'><%= pluralize(w000t.errors.count, "error") %> prohibited this w000t from being saved:</div>
+      <div class='panel-heading'><%= pluralize(w000t.errors.count + w000t.url_info.errors.count, "error") %> prohibited this w000t from being saved:</div>
       <div class='panel-body'>
         <ul>
         <% w000t.errors.full_messages.each do |message| %>
@@ -15,11 +15,11 @@
     </div>
   <% end %>
 
-  <div class="field">
+  <div class="field form-url">
     <%= f.text_field :long_url, class: "form-control" %>
   </div>
 
-  <div class="field">
+  <div class="field upload-image">
     <%= f.file_field :upload_image, class: "form-control" %>
   </div>
 

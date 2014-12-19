@@ -12,7 +12,7 @@ class W000tsController < ApplicationController
   # GET /w000ts
   # GET /w000ts.json
   def index
-    @w000ts = W000t.where(user: nil).order_by(created_at: :desc)
+    @w000ts = W000t.where(user: nil, status: :public).order_by(created_at: :desc)
               .page(params[:page]).per(25)
   end
 
@@ -124,6 +124,7 @@ class W000tsController < ApplicationController
     @w000ts = Kaminari.paginate_array(
       current_user.w000ts.by_type('image')
                          .and(archive: 0)
+                         .ne(status: :hidden)
                          .shuffle
     ).page(params[:page]).per(20)
   end
@@ -153,7 +154,7 @@ class W000tsController < ApplicationController
     params.require(:w000t).permit(
       :long_url,
       :tags,
-      :status
+      :status,
       :upload_image
     )
   end
