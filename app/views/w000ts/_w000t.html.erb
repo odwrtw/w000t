@@ -15,6 +15,21 @@
         <i class="fa fa-link"></i>
       <% end %>
     <% end %>
+    <div class="dropdown" style="display: inline-block">
+      <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+        <%= w000t_status_icon(w000t.status) %>
+        <i class="fa fa-caret-down"></i>
+      </button>
+      <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+        <% w000t_status_available(w000t.status).each do |s| %>
+          <li role="presentation">
+            <%= link_to w000t_path(w000t, w000t:{status: s}), method: :put do %>
+              <%= w000t_status_icon(s) %> <%= s.to_s.capitalize%>
+            <% end %>
+          </li>
+        <% end %>
+      </ul>
+    </div>
   </td>
 </tr>
 <tr>
