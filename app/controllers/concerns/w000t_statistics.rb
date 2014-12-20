@@ -133,6 +133,23 @@ module W000tStatistics
     result
   end
 
+  def w000t_count_by_status(user = nil)
+    query = [
+      {
+        '$group' => {
+          '_id' => '$status',
+          count: { '$sum' => 1 }
+        }
+      },
+      { '$sort' => { 'count' => -1 } }
+    ]
+
+    # Filter by user
+    query.unshift('$match' => { user_id: user.id }) if user
+
+    W000t.collection.aggregate(query)
+  end
+
   def user_login_count(user = nil)
     query = [
       {

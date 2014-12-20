@@ -18,6 +18,7 @@ class AdminController < ApplicationController
     @url_info_top_ten_url = url_info_top_ten_url
     @w000t_by_day = w000t_by_day
     @user_login_count = user_login_count
+    @w000t_count_by_status = w000t_count_by_status
   end
 
   def check_all_w000ts

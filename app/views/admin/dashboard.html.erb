@@ -24,6 +24,30 @@
     <div class="panel panel-primary">
       <div class="panel-heading">
         <h5>
+          Status
+        </h5>
+      </div>
+      <div class="panel-body">
+        <table class="table">
+          <thead>
+            <th class="text-center">Status</th>
+            <th class="text-center">Number</th>
+          </thead>
+          <tbody>
+            <% @w000t_count_by_status.each do |w| %>
+            <tr class="text-center">
+              <td><%= w['_id'] %></td>
+              <td><%= w['count']%></td>
+            </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="panel panel-primary">
+      <div class="panel-heading">
+        <h5>
           Sidekiq
         </h5>
       </div>
