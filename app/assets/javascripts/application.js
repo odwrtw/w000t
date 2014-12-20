@@ -20,4 +20,6 @@
 //= require turbolinks
 //= require jquery-readyselector/jquery.readyselector
 //= require bootstrap-tokenfield/dist/bootstrap-tokenfield
+//= require highcharts/highcharts
+//= require chartkick/chartkick
 //= require_tree .

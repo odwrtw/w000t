@@ -50,6 +50,9 @@ gem 'flowdock'
 # Monitoring
 gem 'newrelic_rpm'
 
+# Graph
+gem 'chartkick'
+
 # Image
 gem 'carrierwave-mongoid', require: 'carrierwave/mongoid'
 gem 'rmagick'

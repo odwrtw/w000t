@@ -24,6 +24,7 @@ class AdminController < ApplicationController
       },
       { '$sort' => { 'count' => -1 } }
     ])
+
     @url_info_top_ten_url = W000t.collection.aggregate([
       { '$group' => {
         '_id' => '$url_info.url',
@@ -32,6 +33,42 @@ class AdminController < ApplicationController
       { '$sort' => { 'count' => -1 } },
       { '$limit' => 10 }
     ])
+
+    @result = {}
+    @w000t_by_day = W000t.collection.aggregate([
+      # Get year, month and day from created_at
+      {
+        '$project' => {
+          _id: 0,
+          day: { '$dayOfMonth' => '$created_at' },
+          month: { '$month' => '$created_at' },
+          year: { '$year' => '$created_at' }
+        }
+      },
+      # Concat the year, month and day
+      {
+        '$project' => {
+          date: {
+            '$concat' => [
+              { '$substr' => ['$year', 0, 4] }, '-',
+              { '$substr' => ['$month', 0, 2] }, '-',
+              { '$substr' => ['$day', 0, 2] }
+            ]
+          }
+        }
+      },
+      # Use the concateneted string to group and count
+      {
+        '$group' => {
+          _id: '$date', count: { '$sum' => 1 }
+        }
+      }
+      # Map the whole thing to satisfy chartkick
+    ]).map do |r|
+      @result[r[:_id]] = r[:count]
+    end
+
+    @w000t_by_day = @result
   end
 
   def check_all_w000ts
