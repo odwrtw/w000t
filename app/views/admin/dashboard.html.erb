@@ -141,4 +141,32 @@
       </div>
     </div>
   </div>
+
+  <div class="col-md-12">
+    <div class="panel panel-primary">
+      <div class="panel-heading">
+        <h5>
+          Top clicked w000ts
+        </h5>
+      </div>
+      <div class="panel-body">
+        <table class="table">
+          <thead>
+            <th class="text-center">Url</th>
+            <th class="text-center">Count</th>
+            <th class="text-center">User</th>
+          </thead>
+          <tbody>
+            <% @w000t_top_ten.each do |u| %>
+            <tr class="text-center">
+              <td><%= u['_id'] %></td>
+              <td><%= u['number_of_click']%></td>
+              <td><%= u['user'] %></td>
+            </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
 </div>

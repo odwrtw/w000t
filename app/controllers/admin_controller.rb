@@ -34,6 +34,22 @@ class AdminController < ApplicationController
       { '$limit' => 10 }
     ])
 
+    @w000t_top_ten = W000t.collection.aggregate([
+      {
+        '$project' => {
+          '_id' => '$url_info.url',
+          'number_of_click' => '$number_of_click',
+          'user_id' => '$user_id'
+        }
+      },
+      { '$sort' => { 'number_of_click' => -1 } },
+      { '$limit' => 10 }
+    ]).map! do |r|
+      r[:user] = 'Anonymous'
+      r[:user] = User.find(r[:user_id]).pseudo if r[:user_id]
+      r
+    end
+
     @result = {}
     @w000t_by_day = W000t.collection.aggregate([
       # Get year, month and day from created_at
