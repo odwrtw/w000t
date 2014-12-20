@@ -11,27 +11,13 @@ class AdminController < ApplicationController
     @total_url_number = User.all.count
 
     # User info
-    @w000t_top_ten = W000t.collection.aggregate([
-      {
-        '$project' => {
-          '_id' => '$url_info.url',
-          'number_of_click' => '$number_of_click',
-          'user_id' => '$user_id'
-        }
-      },
-      { '$sort' => { 'number_of_click' => -1 } },
-      { '$limit' => 10 }
-    ]).map! do |r|
-      r[:user] = 'Anonymous'
-      r[:user] = User.find(r[:user_id]).pseudo if r[:user_id]
-      r
-    end
-
     # Get data from W000tStatistics concern
-    @user_data = w000ts_by_user
+    @w000t_top_ten = w000t_top_ten
+    @w000t_count_by_user = w000t_count_by_user
     @url_info_count_by_codes = url_info_count_by_codes
     @url_info_top_ten_url = url_info_top_ten_url
     @w000t_by_day = w000t_by_day
+    @user_login_count = user_login_count
   end
 
   def check_all_w000ts

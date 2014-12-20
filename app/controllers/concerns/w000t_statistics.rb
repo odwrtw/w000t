@@ -46,6 +46,29 @@ module W000tStatistics
     W000t.collection.aggregate(query)
   end
 
+  def w000t_top_ten(user = nil)
+    query = [
+      {
+        '$project' => {
+          '_id' => '$url_info.url',
+          'number_of_click' => '$number_of_click',
+          'user_id' => '$user_id'
+        }
+      },
+      { '$sort' => { 'number_of_click' => -1 } },
+      { '$limit' => 10 }
+    ]
+
+    # Filter by user
+    query.unshift('$match' => { user_id: user.id }) if user
+
+    W000t.collection.aggregate(query).map! do |r|
+      r[:user] = 'Anonymous'
+      r[:user] = User.find(r[:user_id]).pseudo if r[:user_id]
+      r
+    end
+  end
+
   def w000t_by_day(user = nil)
     query = [
       # Get year, month and day from created_at
@@ -88,12 +111,51 @@ module W000tStatistics
     result
   end
 
-  def w000ts_by_user
-    user_data = {}
-    User.all.each do |user|
-      user_data[user.pseudo] = user.attributes
-      user_data[user.pseudo][:w000t_counts] = user.w000ts.count
+  def w000t_count_by_user(user = nil)
+    query = [
+      {
+        '$group' => {
+          '_id' => '$user_id',
+          count: { '$sum' => 1 }
+        }
+      },
+      { '$sort' => { 'count' => -1 } }
+    ]
+
+    # Filter by user
+    query.unshift('$match' => { user_id: user.id }) if user
+
+    result = {}
+    W000t.collection.aggregate(query).map do |r|
+      pseudo = r[:_id] ? User.find(r[:_id].to_s).pseudo : 'Anonymous'
+      result[pseudo] = r[:count]
     end
-    user_data
+    result
+  end
+
+  def user_login_count(user = nil)
+    query = [
+      {
+        '$project' => {
+          '_id' => 0,
+          'sign_in_count' => '$sign_in_count',
+          'last_sign_in_at' => '$last_sign_in_at',
+          'pseudo' => '$pseudo'
+        }
+      },
+      { '$sort' => { 'sign_in_count' => -1 } }
+    ]
+
+    # Filter by user
+    query.unshift('$match' => { user_id: user.id }) if user
+
+    result = {}
+    User.collection.aggregate(query).map do |r|
+      result[r[:pseudo]] = {
+        sign_in_count: r[:sign_in_count],
+        last_sign_in_at: r[:last_sign_in_at]
+      }
+    end
+    result
   end
 end

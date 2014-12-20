@@ -13,9 +13,9 @@
       </div>
       <div class="panel-body">
         <dl class="dl-horizontal">
-            <% @user_data.each do |pseudo, data| %>
+            <% @w000t_count_by_user.each do |pseudo, count| %>
               <dt><%= pseudo %></dt>
-              <dd><%= data[:w000t_counts] %></dd>
+              <dd><%= count %></dd>
             <% end %>
         </dl>
       </div>
@@ -60,7 +60,7 @@
             <th class="text-center">Last seen</th>
           </thead>
           <tbody>
-            <% @user_data.each do |pseudo, data| %>
+            <% @user_login_count.each do |pseudo, data| %>
             <tr>
               <td><%= pseudo %></td>
               <td><%= data[:sign_in_count] %></td>
