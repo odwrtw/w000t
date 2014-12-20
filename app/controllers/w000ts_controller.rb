@@ -64,7 +64,6 @@ class W000tsController < ApplicationController
       # easy parsing
       render_w000t
     else
-      # binding.pry
       respond_to do |format|
         format.json do
           render json: @w000t.errors, status: :unprocessable_entity
@@ -92,6 +91,7 @@ class W000tsController < ApplicationController
         redirect_to :back,
                     notice: 'W000t was successfully destroyed'
       end
+      format.js { render :delete_w000t, locals: { w000t: @w000t } }
     end
   end
 

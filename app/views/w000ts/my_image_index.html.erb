@@ -1,10 +1,10 @@
 <div id="w000t-wall-container" class="grid">
   <% @w000ts.each do |w000t| %>
-    <figure class="item col-lg-3 col-md-4 col-xs-6">
+    <figure class="item col-lg-3 col-md-4 col-xs-6" id="w000t-<%= w000t.short_url %>">
       <div class="text-center shared">
         <%= w000t.full_shortened_url(request.base_url) %>
       </div>
-      <%= link_to( image_tag(w000t.url_info.cloud_image.thumb.url, class:"img-thumbnail img-responsive"), w000t_redirect_path(w000t.short_url) ) %>
+      <%= link_to( image_tag(w000t.url_info.cloud_image.thumb.url ,class:"img-thumbnail img-responsive"), w000t_redirect_path(w000t.short_url) ) %>
       <div class="effect">
         <table class="table">
           <thead>
@@ -17,7 +17,7 @@
                 </a>
               </td>
               <td class="text-center">
-                <%= link_to w000t, method: :delete, data: { confirm: 'Are you sure?' } do %>
+                <%= link_to w000t, method: :delete, remote: true, data: { confirm: 'Are you sure?' } do %>
                   <div>
                     Destroy
                   </div>
