@@ -216,7 +216,7 @@ class W000tsController < ApplicationController
   # Set user on image_index
   def set_user
     # Get user
-    @user = User.find_by(pseudo: params[:user_id])
+    @user = User.find_by(pseudo: params[:user_pseudo])
     fail AbstractController::ActionNotFound unless @user
   end
 

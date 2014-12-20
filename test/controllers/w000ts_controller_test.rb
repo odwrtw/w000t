@@ -266,13 +266,13 @@ class W000tsControllerTest < ActionController::TestCase
     @w000t_private = FactoryGirl.create(
       :w000t, long_url: 'test.com/t.jpg', status: :private, user: @user
     )
-    get :image_index, user_id: @user.pseudo
+    get :image_index, user_pseudo: @user.pseudo
     assert_response :success
     assert_select 'figure', @user.w000ts.where(status: :public).count
   end
 
   test 'should get 404 on public wall of fake user' do
-    get :image_index, user_id: 'bazooka'
+    get :image_index, user_pseudo: 'bazooka'
     assert_response 404
   end
 
