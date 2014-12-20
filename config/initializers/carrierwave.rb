@@ -2,7 +2,7 @@
 
 CarrierWave.configure do |config|
   config.storage = :fog
-  if Rails.env.development?
+  if Rails.env.development? || Rails.env.test?
     config.fog_credentials = {
       provider: 'OpenStack',
       openstack_tenant: '98091111',

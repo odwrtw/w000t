@@ -27,4 +27,18 @@ module W000tHelper
       content_tag :span, tag, class: 'label label-primary'
     end.join(' ').html_safe
   end
+
+  STATUS_ICON_CLASS = {
+    private: 'lock',
+    hidden: 'eye-slash',
+    public: 'globe'
+  }
+
+  def w000t_status_icon(status_sym)
+    content_tag :i, '', class: "fa fa-#{STATUS_ICON_CLASS[status_sym]}"
+  end
+
+  def w000t_status_available(current_status)
+    Array.new(W000t::STATUS) - [current_status]
+  end
 end

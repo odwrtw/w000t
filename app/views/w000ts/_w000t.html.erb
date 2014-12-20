@@ -1,12 +1,33 @@
-<tr>
-  <td class="truncate w000t-long-url"><%= w000t.url_info_url %></td>
-  <td rowspan="2"><%= w000t.number_of_click %></td>
-  <td rowspan="2">
+<tr id="w000t-<%= w000t.short_url%>">
+  <td class="truncate w000t-long-url">
+    <table class="w000t-url edit-tags">
+      <tbody>
+        <tr>
+          <td>
+            <%= w000t.url_info_url %>
+          </td>
+        </tr>
+        <tr>
+          <td class="w000t-tags" id="w000t-<%=w000t.short_url%>-td">
+            <%= pretty_tags(w000t) %>
+          </td>
+          <td class="w000t-form" id="w000t-<%=w000t.short_url%>-form" style="display: none;">
+            <%= form_for (w000t), remote: true do |f| %>
+              <%= f.text_field :tags, class: "form-control w000t-tags-form input-sm", placeholder: "Enter tags" %>
+              <%= f.submit 'Update', class: "hidden" %>
+            <% end %>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </td>
+  <td><%= w000t.number_of_click %></td>
+  <td>
     <%= pretty_http_status(w000t.url_info) %>
   </td>
-  <td rowspan="2">
+  <td>
     <%= get_w000t_link(w000t) %>
-    <%= link_to w000t, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-default' do %>
+    <%= link_to w000t, method: :delete, remote: true, data: { confirm: 'Are you sure?' }, class: 'btn btn-default' do %>
       <i class="fa fa-trash"></i>
     <% end %>
     <% if current_user && current_user.admin? %>
@@ -15,16 +36,20 @@
         <i class="fa fa-link"></i>
       <% end %>
     <% end %>
-  </td>
-</tr>
-<tr>
-  <td class="w000t-tags" id="w000t-<%=w000t.short_url%>-td">
-    <%= pretty_tags(w000t) %>
-  </td>
-  <td class="w000t-form" id="w000t-<%=w000t.short_url%>-form" style="display: none;">
-    <%= form_for (w000t), remote: true do |f| %>
-      <%= f.text_field :tags, class: "form-control w000t-tags-form input-sm", placeholder: "Enter tags" %>
-      <%= f.submit 'Update', class: "hidden" %>
-    <% end %>
+    <div class="dropdown" style="display: inline-block">
+      <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+        <%= w000t_status_icon(w000t.status) %>
+        <i class="fa fa-caret-down"></i>
+      </button>
+      <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+        <% w000t_status_available(w000t.status).each do |s| %>
+          <li role="presentation">
+            <%= link_to w000t_path(w000t, w000t:{status: s}), method: :put do %>
+              <%= w000t_status_icon(s) %> <%= s.to_s.capitalize%>
+            <% end %>
+          </li>
+        <% end %>
+      </ul>
+    </div>
   </td>
 </tr>

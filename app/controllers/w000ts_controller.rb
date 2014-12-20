@@ -34,9 +34,21 @@ class W000tsController < ApplicationController
       }
     end
 
-    respond_to do |format|
-      format.js { @w000t } unless @w000t.update(tags: w000t_params[:tags])
-      format.js { render :update_tags, locals: { w000t: @w000t } }
+    if @w000t.update(w000t_update_params)
+      respond_to do |format|
+        format.js { render :update_tags, locals: { w000t: @w000t } }
+        format.html do
+          redirect_to :back,
+                      notice: 'W000t was successfully updated'
+        end
+      end
+    else
+      respond_to do |format|
+        format.json do
+          render json: @w000t.errors, status: :unprocessable_entity
+        end
+        format.html { render action: :new }
+      end
     end
   end
 
@@ -52,7 +64,6 @@ class W000tsController < ApplicationController
       # easy parsing
       render_w000t
     else
-      # binding.pry
       respond_to do |format|
         format.json do
           render json: @w000t.errors, status: :unprocessable_entity
@@ -78,8 +89,9 @@ class W000tsController < ApplicationController
     respond_to do |format|
       format.html do
         redirect_to :back,
-                    notice: 'W000t was successfully destroyed.'
+                    notice: 'W000t was successfully destroyed'
       end
+      format.js { render :delete_w000t, locals: { w000t: @w000t } }
     end
   end
 
@@ -159,6 +171,13 @@ class W000tsController < ApplicationController
     )
   end
 
+  def w000t_update_params
+    params.require(:w000t).permit(
+      :tags,
+      :status
+    )
+  end
+
   def prevent_w000tception
     match = /\A#{request.base_url}\/(\w{10})\Z/.match(w000t_params[:long_url])
     return unless match
@@ -216,7 +235,7 @@ class W000tsController < ApplicationController
       format.js { render :create, locals: { w000t: @w000t } }
       format.html do
         redirect_to :back,
-                    notice: "W000t created #{@w000t.full_shortened_url(request.base_url)}."
+                    notice: "W000t created #{@w000t.full_shortened_url(request.base_url)}"
       end
       format.text { render text: @w000t.full_shortened_url(request.base_url) }
     end

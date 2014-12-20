@@ -108,7 +108,7 @@ class W000tsControllerTest < ActionController::TestCase
       post :destroy, short_url: @user_w000t.short_url
     end
     assert_redirected_to 'previous_page'
-    assert_equal 'W000t was successfully destroyed.', flash[:notice]
+    assert_equal 'W000t was successfully destroyed', flash[:notice]
   end
 
   test 'should destroy as an admin user' do
@@ -121,7 +121,7 @@ class W000tsControllerTest < ActionController::TestCase
       post :destroy, short_url: @user_w000t.short_url
     end
     assert_redirected_to 'previous_page'
-    assert_equal 'W000t was successfully destroyed.', flash[:notice]
+    assert_equal 'W000t was successfully destroyed', flash[:notice]
   end
 
   test 'should not destroy as anonymous user' do
