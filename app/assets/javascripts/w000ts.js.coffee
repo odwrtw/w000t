@@ -37,6 +37,9 @@ $(".w000ts.my_index").ready ->
     $(this).hide().addClass('tags-td-hidden')
 
 $(".w000ts.my_image_index, .w000ts.image_index").ready ->
+  # When we click on the current status, we show a ul with the others statuses
+  $("div.container").delegate "td.w000t-status", "click", ->
+    $(this).parents("figure").find(".w000t-form-status").toggle()
 
   # When we click on the share button, we show a div with the w000ted url and
   # select the text
@@ -46,9 +49,10 @@ $(".w000ts.my_image_index, .w000ts.image_index").ready ->
     $el.selectText()
 
   # When we leave the figure, we need to hide the w000ted url that was shown by
-  # clicking on the share button
+  # clicking on the share button and the status form
   $("div.container").delegate "figure", "mouseleave", ->
     $(this).children(".shared").hide()
+    $(this).children(".w000t-form-status").hide()
 
   # Masonry options
   masonry_options =
