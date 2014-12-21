@@ -4,6 +4,17 @@
       <div class="text-center shared">
         <%= w000t.full_shortened_url(request.base_url) %>
       </div>
+      <div class="w000t-form-status" >
+        <ul role="menu" aria-labelledby="dropdownMenu1">
+          <% w000t_status_available(w000t.status).each do |s| %>
+            <%= link_to w000t_path(w000t, w000t:{status: s}), method: :put do %>
+              <li class="w000t-form-available-status" role="presentation">
+                <%= w000t_status_icon(s) %> <%= s.to_s.capitalize%>
+              </li>
+            <% end %>
+          <% end %>
+        </ul>
+      </div>
       <%= link_to( image_tag(w000t.url_info.cloud_image.thumb.url ,class:"img-thumbnail img-responsive"), w000t_redirect_path(w000t.short_url) ) %>
       <div class="effect">
         <table class="table">
@@ -16,12 +27,18 @@
                   </div>
                 </a>
               </td>
-              <td class="text-center">
+              <td class="text-center" style="border-right: solid 1px">
                 <%= link_to w000t, method: :delete, remote: true, data: { confirm: 'Are you sure?' } do %>
                   <div>
                     Destroy
                   </div>
                 <% end %>
+              </td>
+              <td class="text-center w000t-status">
+                <div class="dropdown" style="display: inline-block">
+                  <%= w000t_status_icon(w000t.status) %>
+                  <i class="fa fa-caret-down"></i>
+                </div>
               </td>
             </tr>
           </thead>
