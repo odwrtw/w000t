@@ -1,0 +1,106 @@
+<h1>
+  <i class="fa fa-tachometer"></i>
+  Dashboard
+  <span class="label label-primary pull-right"><%= @total_w000t_number %><span>
+</h1>
+<br>
+<div class="row">
+  <div class="col-md-6">
+    <div class="panel panel-primary">
+      <div class="panel-heading">
+        <h5>
+          Status
+          <i class="fa fa-globe pull-right"></i>
+        </h5>
+      </div>
+      <div class="panel-body">
+        <table class="table">
+          <thead>
+            <th class="text-center"></th>
+            <th class="text-center">Status</th>
+            <th class="text-center">Number</th>
+          </thead>
+          <tbody>
+            <% @w000t_count_by_status.each do |w| %>
+            <tr class="text-center">
+              <td><%= w000t_status_icon(w['_id'].to_sym) %></td>
+              <td><%= w['_id'] %></td>
+              <td><%= w['count']%></td>
+            </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-6">
+    <div class="panel panel-primary">
+      <div class="panel-heading">
+        <h5>
+          Types
+          <i class="fa fa-file pull-right"></i>
+        </h5>
+      </div>
+      <div class="panel-body">
+        <table class="table">
+          <thead>
+            <th class="text-center"></th>
+            <th class="text-center">Type</th>
+            <th class="text-center">Number</th>
+          </thead>
+          <tbody>
+            <% @w000t_count_by_type.each do |type, count| %>
+            <tr class="text-center">
+              <td><%= type_icon_span(type) %></td>
+              <td><%= type.capitalize.gsub('_', ' ') %></td>
+              <td><%= count %></td>
+            </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-12">
+    <div class="panel panel-primary">
+      <div class="panel-heading">
+        <h5>
+          History graph
+          <i class="fa fa-area-chart pull-right"></i>
+        </h5>
+      </div>
+      <div class="panel-body">
+        <%= line_chart @w000t_by_day %>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-12">
+    <div class="panel panel-primary">
+      <div class="panel-heading">
+        <h5>
+          Top clicked w000ts
+          <i class="fa fa-line-chart pull-right"></i>
+        </h5>
+      </div>
+      <div class="panel-body">
+        <table class="table">
+          <thead>
+            <th class="text-center">Url</th>
+            <th class="text-center">Count</th>
+          </thead>
+          <tbody>
+            <% @w000t_top_ten.each do |u| %>
+            <tr class="text-center">
+              <td><%= u['_id'] %></td>
+              <td><%= u['number_of_click']%></td>
+            </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

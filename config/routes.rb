@@ -12,9 +12,10 @@ Rails.application.routes.draw do
 
   devise_for :users
 
-  resources :users, only: [] do
+  resources :users, param: :pseudo, only: [] do
     resources :authentication_tokens, path: :tokens
     get 'wall' => 'w000ts#image_index'
+    get 'dashboard' => 'user_dashboard#show'
   end
 
   # Personnal w000ts

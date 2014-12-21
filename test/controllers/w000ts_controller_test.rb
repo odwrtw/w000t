@@ -253,12 +253,6 @@ class W000tsControllerTest < ActionController::TestCase
     assert_equal 'Invalid filter', flash[:alert]
   end
 
-  test 'should get index as anonymous user' do
-    get :index
-    assert_response :success
-    assert_select 'li', 3
-  end
-
   test 'should get public wall of a user as anonymous user' do
     @w000t_public = FactoryGirl.create(
       :w000t, long_url: 'yo.com/t.gif', user: @user
@@ -266,13 +260,13 @@ class W000tsControllerTest < ActionController::TestCase
     @w000t_private = FactoryGirl.create(
       :w000t, long_url: 'test.com/t.jpg', status: :private, user: @user
     )
-    get :image_index, user_id: @user.pseudo
+    get :image_index, user_pseudo: @user.pseudo
     assert_response :success
     assert_select 'figure', @user.w000ts.where(status: :public).count
   end
 
   test 'should get 404 on public wall of fake user' do
-    get :image_index, user_id: 'bazooka'
+    get :image_index, user_pseudo: 'bazooka'
     assert_response 404
   end
 
@@ -280,14 +274,20 @@ class W000tsControllerTest < ActionController::TestCase
     sign_in @user
     get :index
     assert_response :success
-    assert_select 'li', 5
+    assert_select 'li', 6
   end
 
   test 'should get index as an admin user' do
     sign_in @admin_user
     get :index
     assert_response :success
-    assert_select 'li', 6
+    assert_select 'li', 7
+  end
+
+  test 'should get index as anonymous user' do
+    get :index
+    assert_response :success
+    assert_select 'li', 3
   end
 
   test 'should be redirected' do

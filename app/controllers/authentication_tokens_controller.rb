@@ -7,10 +7,7 @@ class AuthenticationTokensController < ApplicationController
   # GET /authentication_tokens
   # GET /authentication_tokens.json
   def index
-    user = current_user if user_signed_in?
-    user = @token_user if @token_user
-    return redirect_to new_user_session unless user
-    @authentication_tokens = user.authentication_tokens
+    @authentication_tokens = @user.authentication_tokens
   end
 
   # GET /authentication_tokens/1
@@ -90,7 +87,12 @@ class AuthenticationTokensController < ApplicationController
   private
 
   def set_user
+    return redirect_to new_user_session_path unless user_signed_in?
     @user = current_user
+    # Don't allow the wrong user in
+    unless @user.pseudo == params[:user_pseudo]
+      fail AbstractController::ActionNotFound
+    end
   end
 
   # Use callbacks to share common setup or constraints between actions.
