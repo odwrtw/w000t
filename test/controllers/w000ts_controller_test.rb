@@ -230,6 +230,7 @@ class W000tsControllerTest < ActionController::TestCase
     json_expected_keys %w(
       id w000t url type tags status number_of_click created_at
     )
+    json_unexpected_keys %w( user url_info )
 
     assert_equal 'http://google.fr', json_response['url']
     assert_equal 'private', json_response['status']
@@ -243,7 +244,7 @@ class W000tsControllerTest < ActionController::TestCase
     assert_response :created
 
     json_expected_keys %w( id w000t url type number_of_click created_at )
-    json_unexpected_keys %w( tags status )
+    json_unexpected_keys %w( tags status user url_info )
 
     assert_equal 'http://google.fr', json_response['url']
     assert_equal nil, json_response['type']
@@ -257,7 +258,9 @@ class W000tsControllerTest < ActionController::TestCase
     get :show, short_url: @w000t.short_url, format: :json
     assert_response :success
     json_expected_keys %w( id w000t url type )
-    json_unexpected_keys %w( tags status number_of_click created_at )
+    json_unexpected_keys %w(
+      tags status number_of_click created_at user url_info
+    )
   end
 
   test 'should get w000t as an admin user as json' do
@@ -267,7 +270,7 @@ class W000tsControllerTest < ActionController::TestCase
     get :show, short_url: @w000t.short_url, format: :json
     assert_response :success
     json_expected_keys %w(
-      id w000t url type tags status number_of_click created_at
+      id w000t url type tags status number_of_click created_at user url_info
     )
   end
 
@@ -278,7 +281,7 @@ class W000tsControllerTest < ActionController::TestCase
     get :show, short_url: @w000t.short_url, format: :json
     assert_response :success
     json_expected_keys %w(
-      id w000t url type tags status number_of_click created_at
+      id w000t url type tags status number_of_click created_at user url_info
     )
   end
 
