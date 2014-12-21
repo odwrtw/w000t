@@ -25,9 +25,8 @@ class AdminControllerTest < ActionController::TestCase
   end
 
   test 'should be redirected if not logged' do
-    sign_in @user
     get :dashboard
-    assert_redirected_to root_path
+    assert_redirected_to new_user_session_path
   end
 
   test 'should get dashboard as admin' do
@@ -36,10 +35,10 @@ class AdminControllerTest < ActionController::TestCase
     assert_response :success
   end
 
-  test 'should be redirected if not admin' do
+  test 'should be get 404 if not admin' do
     sign_in @user
     get :dashboard
-    assert_redirected_to root_path
+    assert_response :not_found
   end
 
   test 'should update all the w000ts' do

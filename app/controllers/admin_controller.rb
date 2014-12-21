@@ -46,7 +46,7 @@ class AdminController < ApplicationController
   private
 
   def check_admin
-    redirect_to root_path unless current_user.admin?
+    fail AbstractController::ActionNotFound unless current_user.admin?
   end
 
   def admin_params
