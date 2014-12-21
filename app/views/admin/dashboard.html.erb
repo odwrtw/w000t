@@ -1,4 +1,5 @@
 <h1>
+  <i class="fa fa-tachometer"></i>
   Admin dashboard
 </h1>
 <br>
@@ -24,21 +25,24 @@
     <div class="panel panel-primary">
       <div class="panel-heading">
         <h5>
-          Status
+          Types
+          <i class="fa fa-file pull-right"></i>
         </h5>
       </div>
       <div class="panel-body">
         <table class="table">
           <thead>
-            <th class="text-center">Status</th>
+            <th class="text-center"></th>
+            <th class="text-center">Type</th>
             <th class="text-center">Number</th>
           </thead>
           <tbody>
-            <% @w000t_count_by_status.each do |w| %>
-            <tr class="text-center">
-              <td><%= w['_id'] %></td>
-              <td><%= w['count']%></td>
-            </tr>
+            <% @w000t_count_by_type.each do |type, count| %>
+              <tr class="text-center">
+                <td><%= type_icon_span(type) %></td>
+                <td><%= type.capitalize.gsub('_', ' ') %></td>
+                <td><%= count %></td>
+              </tr>
             <% end %>
           </tbody>
         </table>
@@ -123,6 +127,33 @@
         <%= link_to admin_check_all_w000ts_path, data: { confirm: 'Sure ?' }, method: :post, class: 'btn btn-default' do  %>
           <i class="fa fa-database"> Check all w000ts</i>
         <% end %>
+      </div>
+    </div>
+
+    <div class="panel panel-primary">
+      <div class="panel-heading">
+        <h5>
+          Status
+          <i class="fa fa-globe pull-right"></i>
+        </h5>
+      </div>
+      <div class="panel-body">
+        <table class="table">
+          <thead>
+            <th class="text-center"></th>
+            <th class="text-center">Status</th>
+            <th class="text-center">Number</th>
+          </thead>
+          <tbody>
+            <% @w000t_count_by_status.each do |w| %>
+              <tr class="text-center">
+                <td><%= w000t_status_icon(w['_id'].to_sym) %></td>
+                <td><%= w['_id'] %></td>
+                <td><%= w['count']%></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
       </div>
     </div>
   </div>

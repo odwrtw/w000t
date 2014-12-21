@@ -150,6 +150,28 @@ module W000tStatistics
     W000t.collection.aggregate(query)
   end
 
+  def w000t_count_by_type(user = nil)
+    query = [
+      {
+        '$group' => {
+          '_id' => '$url_info.type',
+          count: { '$sum' => 1 }
+        }
+      },
+      { '$sort' => { 'count' => -1 } }
+    ]
+
+    # Filter by user
+    query.unshift('$match' => { user_id: user.id }) if user
+
+    result = {}
+    W000t.collection.aggregate(query).map do |r|
+      type = r[:_id] ? r[:_id] : 'Undefined'
+      result[type] = r[:count]
+    end
+    result
+  end
+
   def user_login_count(user = nil)
     query = [
       {
