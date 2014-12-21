@@ -3,7 +3,6 @@ require 'test_helper'
 # User dashboard controller tests
 class UserDashboardControllerTest < ActionController::TestCase
   setup do
-    User.all.destroy
     @user_greg = FactoryGirl.create(
       :user, pseudo: 'greg', email: 'greg@w000t.me'
     )

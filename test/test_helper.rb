@@ -31,6 +31,23 @@ module ActiveSupport
       # Clear sidekiq queue
       Sidekiq::Worker.clear_all
     end
+
+    def json_response
+      ActiveSupport::JSON.decode @response.body
+    end
+
+    def json_expected_keys(keys)
+      keys.each do |k|
+        assert json_response.key?(k), "Missing key '#{k}' in json response"
+      end
+    end
+
+    def json_unexpected_keys(keys)
+      keys.each do |k|
+        assert_not json_response.key?(k),
+                   "The key '#{k}' should not be in the json response"
+      end
+    end
   end
 end
 
@@ -38,5 +55,10 @@ module ActionController
   # Devise helper for tests
   class TestCase
     include Devise::TestHelpers
+
+    setup do
+      # Set HTTP_REFERER
+      request.env['HTTP_REFERER'] = 'previous_page'
+    end
   end
 end
