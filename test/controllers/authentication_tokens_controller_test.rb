@@ -3,14 +3,9 @@ require 'test_helper'
 # AuthenticationToken
 class AuthenticationTokensControllerTest < ActionController::TestCase
   setup do
-    User.all.destroy
-    AuthenticationToken.all.destroy
-
     @user = FactoryGirl.create(:user)
     @authentication_token = FactoryGirl.create(:authentication_token)
     sign_in @user
-
-    request.env['HTTP_REFERER'] = 'previous_page'
   end
 
   test 'should get index' do

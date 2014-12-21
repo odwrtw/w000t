@@ -3,21 +3,17 @@ require 'test_helper'
 # w000tsController tests
 class W000tsControllerTest < ActionController::TestCase
   setup do
-    User.all.destroy
-    W000t.all.destroy
-    AuthenticationToken.all.destroy
-
-    request.env['HTTP_REFERER'] = 'previous_page'
-
     @user = FactoryGirl.create(:user)
     @admin_user = FactoryGirl.create(
-      :user,
-      pseudo: 'admin',
-      email: 'email@admin.com',
-      admin: true
+      :user, pseudo: 'admin', email: 'email@admin.com', admin: true
     )
     @w000t = FactoryGirl.create(:w000t)
-    @authentication_token = FactoryGirl.create(:authentication_token)
+    @authentication_token = FactoryGirl.create(
+      :authentication_token, user: @user
+    )
+    @admin_authentication_token = FactoryGirl.create(
+      :authentication_token, user: @admin_user
+    )
   end
 
   test 'should create a w000t as json' do
@@ -111,6 +107,26 @@ class W000tsControllerTest < ActionController::TestCase
     assert_equal 'W000t was successfully destroyed', flash[:notice]
   end
 
+  test 'should destroy with a user token as json' do
+    @w000t.user = @user
+    @w000t.save
+    request.headers['X-Token'] = @authentication_token.token
+    assert_difference('W000t.count', -1) do
+      post :destroy, short_url: @w000t.short_url, format: :json
+    end
+    assert_response :success
+  end
+
+  test 'should destroy with an admin token as json' do
+    @w000t.user = @user
+    @w000t.save
+    request.headers['X-Token'] = @admin_authentication_token.token
+    assert_difference('W000t.count', -1) do
+      post :destroy, short_url: @w000t.short_url, format: :json
+    end
+    assert_response :success
+  end
+
   test 'should destroy as an admin user' do
     sign_in @admin_user
     @user_w000t = W000t.create!(
@@ -180,9 +196,7 @@ class W000tsControllerTest < ActionController::TestCase
                  flash[:alert]
   end
 
-  test 'should create a w000t with a token' do
-    @authentication_token.user = @user
-    @authentication_token.save
+  test 'should create a w000t with a token as param' do
     assert_difference('W000t.count') do
       post :create, w000t: { long_url: 'google.fr' },
                     token: @authentication_token.token,
@@ -192,6 +206,80 @@ class W000tsControllerTest < ActionController::TestCase
     created_w000t = W000t.find_by('url_info.url' => 'http://google.fr')
     assert_not_nil created_w000t
     assert_equal created_w000t.user_id, @user.id
+  end
+
+  test 'should create a w000t with a token as header as json' do
+    request.headers['X-Token'] = @authentication_token.token
+    assert_difference('W000t.count') do
+      post :create, w000t: { long_url: 'google.fr', status: 'private' },
+                    format: :json
+    end
+    assert_response :created
+    created_w000t = W000t.find_by('url_info.url' => 'http://google.fr')
+    assert_not_nil created_w000t
+    assert_equal created_w000t.user_id, @user.id
+  end
+
+  test 'should return the user created w000t as json' do
+    request.headers['X-Token'] = @authentication_token.token
+    post :create, w000t: {
+      long_url: 'google.fr', status: 'private', tags: 'test,yo'
+    },
+                  format: :json
+    assert_response :created
+    json_expected_keys %w(
+      id w000t url type tags status number_of_click created_at
+    )
+
+    assert_equal 'http://google.fr', json_response['url']
+    assert_equal 'private', json_response['status']
+    assert_equal nil, json_response['type']
+    assert_equal 0, json_response['number_of_click']
+    assert_equal json_response['tags'], %w( test yo )
+  end
+
+  test 'should return the anonymously created w000t as json' do
+    post :create, w000t: { long_url: 'google.fr' }, format: :json
+    assert_response :created
+
+    json_expected_keys %w( id w000t url type number_of_click created_at )
+    json_unexpected_keys %w( tags status )
+
+    assert_equal 'http://google.fr', json_response['url']
+    assert_equal nil, json_response['type']
+    assert_equal 0, json_response['number_of_click']
+  end
+
+  test 'should get w000t as non admin user as json' do
+    sign_in @user
+    @w000t.user = @admin_user
+    @w000t.save
+    get :show, short_url: @w000t.short_url, format: :json
+    assert_response :success
+    json_expected_keys %w( id w000t url type )
+    json_unexpected_keys %w( tags status number_of_click created_at )
+  end
+
+  test 'should get w000t as an admin user as json' do
+    sign_in @admin_user
+    @w000t.user = @user
+    @w000t.save
+    get :show, short_url: @w000t.short_url, format: :json
+    assert_response :success
+    json_expected_keys %w(
+      id w000t url type tags status number_of_click created_at
+    )
+  end
+
+  test 'should get w000t with an admin token as json' do
+    @w000t.user = @user
+    @w000t.save
+    request.headers['X-Token'] = @admin_authentication_token.token
+    get :show, short_url: @w000t.short_url, format: :json
+    assert_response :success
+    json_expected_keys %w(
+      id w000t url type tags status number_of_click created_at
+    )
   end
 
   test 'should get user index' do
