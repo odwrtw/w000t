@@ -47,7 +47,7 @@ class W000tsController < ApplicationController
 
     if @w000t.update(w000t_update_params)
       respond_to do |format|
-        format.js { render :update_tags, locals: { w000t: @w000t } }
+        format.js { render :update_w000t, locals: { w000t: @w000t } }
         format.html do
           redirect_to :back,
                       notice: 'W000t was successfully updated'
