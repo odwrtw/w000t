@@ -1,24 +1,35 @@
 # w000ts Controller
 class W000tsController < ApplicationController
+  include TokenAuthentication
+
+  # Set w000t before w000t related actions
   before_action :set_w000t, only:
                   [:show, :edit, :update, :destroy, :redirect, :click]
-  before_action :authenticate_user!, only: [:destroy, :update, :edit]
+  # Actions where the user needs to be logged in
+  before_action :authenticate_user_by_token,
+                :authenticate_user!,
+                only: [:destroy, :update, :edit, :my_index]
+  # Check to performs before w000t creation
   before_action :prevent_w000tception,
                 :check_token,
                 :check_w000t,
                 only: [:create]
+  # Set the user from the routes
   before_action :set_user, only: [:image_index]
 
   # GET /w000ts
   # GET /w000ts.json
   def index
-    @w000ts = W000t.where(user: nil, status: :public).order_by(created_at: :desc)
-              .page(params[:page]).per(25)
+    @w000ts = W000t.where(user: nil, status: :public)
+                   .order_by(created_at: :desc)
+                   .page(params[:page]).per(25)
   end
 
   # GET /w000ts/1
   # GET /w000ts/1.json
   def show
+    # Auth by token before show, the informations depends on the user rights
+    authenticate_user_by_token
   end
 
   # GET /w000ts/new
@@ -36,7 +47,7 @@ class W000tsController < ApplicationController
 
     if @w000t.update(w000t_update_params)
       respond_to do |format|
-        format.js { render :update_tags, locals: { w000t: @w000t } }
+        format.js { render :update_w000t, locals: { w000t: @w000t } }
         format.html do
           redirect_to :back,
                       notice: 'W000t was successfully updated'
@@ -57,12 +68,11 @@ class W000tsController < ApplicationController
   def create
     @w000t = W000t.new(w000t_params)
     @w000t.user = current_user if user_signed_in?
-    @w000t.user = @token_user if @token_user
 
     if @w000t.save
       # If it's a success, we return directly the new shortened url for
       # easy parsing
-      render_w000t
+      render_create_w000t
     else
       respond_to do |format|
         format.json do
@@ -85,13 +95,22 @@ class W000tsController < ApplicationController
       } unless current_user.admin
     end
 
-    @w000t.destroy
-    respond_to do |format|
-      format.html do
-        redirect_to :back,
-                    notice: 'W000t was successfully destroyed'
+    if @w000t.destroy
+      respond_to do |format|
+        format.html do
+          redirect_to :back,
+                      notice: 'W000t was successfully destroyed'
+        end
+        format.js { render :delete_w000t, locals: { w000t: @w000t } }
+        format.json { head :no_content }
       end
-      format.js { render :delete_w000t, locals: { w000t: @w000t } }
+    else
+      respond_to do |format|
+        format.json do
+          render json: @w000t.errors, status: :unprocessable_entity
+        end
+        # TODO: add html respose for errors
+      end
     end
   end
 
@@ -109,7 +128,6 @@ class W000tsController < ApplicationController
   end
 
   def my_index
-    return redirect_to new_user_session_path unless user_signed_in?
     @w000ts = current_user.w000ts
     unless params[:tags].blank?
       @w000ts = @w000ts.tagged_with_all(params[:tags].split(',').map(&:strip))
@@ -160,8 +178,14 @@ class W000tsController < ApplicationController
     fail AbstractController::ActionNotFound unless @w000t
   end
 
-  # Never trust parameters from the scary internet, only allow the white list
-  # through.
+  # Set user on image_index
+  def set_user
+    # Get user
+    @user = User.find_by(pseudo: params[:user_pseudo])
+    fail AbstractController::ActionNotFound unless @user
+  end
+
+  # Allowed params for w000t creation
   def w000t_params
     params.require(:w000t).permit(
       :long_url,
@@ -171,6 +195,7 @@ class W000tsController < ApplicationController
     )
   end
 
+  # Allowed params for w000t update
   def w000t_update_params
     params.require(:w000t).permit(
       :tags,
@@ -178,12 +203,19 @@ class W000tsController < ApplicationController
     )
   end
 
+  # Prevent from w000ting a w000t
+  # If the w000t already exists, return it with a status 200 OK
   def prevent_w000tception
+    # Check url format
     match = /\A#{request.base_url}\/(\w{10})\Z/.match(w000t_params[:long_url])
     return unless match
+
+    # Check if the w000t already exists
     @w000t = W000t.find_by(_id: match[1])
     return unless @w000t
-    render_w000t
+
+    # w000t already created, return status ok
+    render_create_w000t(:ok)
   end
 
   # If there is already an existing w000t, return it
@@ -200,44 +232,19 @@ class W000tsController < ApplicationController
     )
     return unless @w000t
 
-    render_w000t
+    # w000t already created, return status ok
+    render_create_w000t(:ok)
   end
 
-  # Allow auth by token
-  def check_token
-    token = AuthenticationToken.find_by(token: params[:token])
-    return unless token
-    # Count token usage
-    token.inc(number_of_use: 1)
-    # Get user
-    @token_user = token.user
-  end
-
-  # Set user on image_index
-  def set_user
-    # Get user
-    @user = User.find_by(pseudo: params[:user_id])
-    fail AbstractController::ActionNotFound unless @user
-  end
-
-  def render_w000t
+  # Render the w000t creation in any format
+  def render_create_w000t(status = nil)
+    status ||= :created
+    w000t_url = @w000t.full_shortened_url(request.base_url)
     respond_to do |format|
-      format.json do
-        render json: {
-          w000t: @w000t.full_shortened_url(request.base_url),
-          url: @w000t.url_info_url,
-          tags: @w000t.tags_array,
-          status: @w000t.status,
-          id: @w000t.id
-        },
-               status: :created
-      end
-      format.js { render :create, locals: { w000t: @w000t } }
-      format.html do
-        redirect_to :back,
-                    notice: "W000t created #{@w000t.full_shortened_url(request.base_url)}"
-      end
-      format.text { render text: @w000t.full_shortened_url(request.base_url) }
+      format.json { render :create, locals: { w000t: @w000t }, status: status }
+      format.js   { render :create, locals: { w000t: @w000t } }
+      format.html { redirect_to :back, notice: "W000t created #{w000t_url}" }
+      format.text { render text: w000t_url }
     end
   end
 end

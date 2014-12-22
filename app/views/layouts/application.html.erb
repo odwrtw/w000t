@@ -31,6 +31,7 @@
             <% if user_signed_in? %>
               <%= nav_link 'My list', w000ts_me_path %>
               <%= nav_link 'Wall', w000ts_meme_path %>
+              <%= nav_link 'Dashboard', user_dashboard_path(user_pseudo: current_user.pseudo) %>
             <% end %>
           </ul>
           <ul class="nav navbar-nav navbar-right">

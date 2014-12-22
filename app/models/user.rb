@@ -46,6 +46,10 @@ class User
   # :both
   # field :locked_at,       type: Time
 
+  index({ id: 1 }, { name: 'user_index_on_id' })
+  index({ email: 1 }, { name: 'user_index_on_email' })
+  index({ pseudo: 1 }, { name: 'user_index_on_pseudo' })
+
   def to_param
     pseudo
   end

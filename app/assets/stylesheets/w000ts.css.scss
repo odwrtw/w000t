@@ -86,10 +86,55 @@ div.effect {
   line-height: 40px;
   vertical-align: middle;
   width: 100%;
-  display:none;
+  display: none;
   background-color: #46637f;
   color: white;
   opacity: 0.8;
+}
+
+.effect td a, a:visited {
+  text-decoration: none;
+  color: white;
+}
+
+.effect td:hover {
+  background-color: #46637f;
+}
+
+.w000t-form-status {
+  position: absolute;
+  bottom: 35px;
+  vertical-align: middle;
+  display: none;
+  color: white;
+  width: 100%;
+}
+
+.w000t-form-status ul {
+  list-style-type: none;
+  width: 30%;
+  float: right;
+  background-color: #34495e;
+  margin: 0;
+  opacity: 0.9;
+  padding: 0;
+}
+
+.w000t-form-status > ul > a:first-child > li {
+  border-bottom: solid 1px;
+}
+
+.w000t-form-status ul li {
+  padding: 10%;
+}
+
+.w000t-form-status ul a, a:visited {
+  text-decoration: none;
+  color: white;
+}
+
+.w000t-form-status ul li:hover {
+  background-color: #46637f;
 }
 
 figure:hover div.effect {

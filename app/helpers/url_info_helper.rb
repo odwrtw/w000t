@@ -27,6 +27,11 @@ module UrlInfoHelper
     TYPE_ICON_CLASS[type.to_sym]
   end
 
+  def type_icon_span(type)
+    icon_class = type_icon(type)
+    content_tag :i, '', class: "fa fa-#{icon_class}"
+  end
+
   def type_class(type)
     return unless type
     return '' unless TYPE_ICON_CLASS.key?(type.to_sym)
