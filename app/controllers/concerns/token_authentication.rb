@@ -18,7 +18,7 @@ module TokenAuthentication
   # Check token from header or params
   # Increase token count
   def check_token
-    input_token = request.headers['X-Token'] || params[:token]
+    input_token = request.headers['X-Auth-Token'] || params[:token]
     return unless input_token
 
     token = AuthenticationToken.find_by(token: input_token)
