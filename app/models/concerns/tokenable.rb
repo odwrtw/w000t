@@ -5,6 +5,8 @@ module Tokenable
   included do
     field :token, type: String
 
+    index({ token: 1 }, { name: 'authentication_token_index_on_token' })
+
     before_create :generate_token
   end
 
