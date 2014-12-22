@@ -1,0 +1,15 @@
+if ($(".w000ts.my_image_index").length) {
+  var $w000t = $("figure#w000t-<%= escape_javascript w000t.short_url %>");
+  if ("<%= w000t.status %>" === "hidden") {
+    // We destroy the figure object
+    $w000t.remove();
+    $("div#w000t-wall-container").masonry();
+  } else {
+    // We re render the partial of the w000t image's menu
+    $w000t.find(".menu").html("<%= escape_javascript render partial: 'w000ts/image_w000t_menu', locals: { w000t: w000t } %>");
+  }
+} else if ($(".w000ts.my_index").length || $(".w000ts.index").length) {
+  // We fill the td with the new tags and hide the form
+  $("#w000t-<%= escape_javascript w000t.short_url %>-form").hide();
+  $("#w000t-<%= escape_javascript w000t.short_url %>-td").html("<%= escape_javascript pretty_tags(w000t) %>").show();
+}
