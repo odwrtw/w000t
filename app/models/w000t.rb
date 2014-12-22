@@ -23,7 +23,16 @@ class W000t
   field :archive, type: Integer, default: 0
 
   # Indexes
-  index({ short_url: 1 }, { unique: true, name: 'short_url_index' })
+  index({ short_url: 1 }, { unique: true, name: 'w000t_index_on_short_url' })
+  index({ status: 1 }, { name: 'w000t_index_on_status' })
+  index({ archive: 1 }, { name: 'w000t_index_on_archive' })
+  index({ user_id: 1 }, { name: 'user_index_on_id' })
+
+  index({ 'url_info.url' => 1 }, { name: 'url_index_on_url' })
+  index(
+    { user_id: 1, 'url_info.url' => 1 },
+    { unique: true, name: 'user_url_unique_index' }
+  )
 
   # Association
   embeds_one :url_info, cascade_callbacks: true
