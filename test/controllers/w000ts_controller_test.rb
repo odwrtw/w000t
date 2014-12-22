@@ -110,7 +110,7 @@ class W000tsControllerTest < ActionController::TestCase
   test 'should destroy with a user token as json' do
     @w000t.user = @user
     @w000t.save
-    request.headers['X-Token'] = @authentication_token.token
+    request.headers['X-Auth-Token'] = @authentication_token.token
     assert_difference('W000t.count', -1) do
       post :destroy, short_url: @w000t.short_url, format: :json
     end
@@ -120,7 +120,7 @@ class W000tsControllerTest < ActionController::TestCase
   test 'should destroy with an admin token as json' do
     @w000t.user = @user
     @w000t.save
-    request.headers['X-Token'] = @admin_authentication_token.token
+    request.headers['X-Auth-Token'] = @admin_authentication_token.token
     assert_difference('W000t.count', -1) do
       post :destroy, short_url: @w000t.short_url, format: :json
     end
@@ -209,7 +209,7 @@ class W000tsControllerTest < ActionController::TestCase
   end
 
   test 'should create a w000t with a token as header as json' do
-    request.headers['X-Token'] = @authentication_token.token
+    request.headers['X-Auth-Token'] = @authentication_token.token
     assert_difference('W000t.count') do
       post :create, w000t: { long_url: 'google.fr', status: 'private' },
                     format: :json
@@ -221,7 +221,7 @@ class W000tsControllerTest < ActionController::TestCase
   end
 
   test 'should return the user created w000t as json' do
-    request.headers['X-Token'] = @authentication_token.token
+    request.headers['X-Auth-Token'] = @authentication_token.token
     post :create, w000t: {
       long_url: 'google.fr', status: 'private', tags: 'test,yo'
     },
@@ -277,7 +277,7 @@ class W000tsControllerTest < ActionController::TestCase
   test 'should get w000t with an admin token as json' do
     @w000t.user = @user
     @w000t.save
-    request.headers['X-Token'] = @admin_authentication_token.token
+    request.headers['X-Auth-Token'] = @admin_authentication_token.token
     get :show, short_url: @w000t.short_url, format: :json
     assert_response :success
     json_expected_keys %w(
