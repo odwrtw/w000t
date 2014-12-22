@@ -1,13 +1,14 @@
 # w000ts Controller
 class W000tsController < ApplicationController
-  include TokenAuthentication
+  include W000thentication
 
   # Set w000t before w000t related actions
   before_action :set_w000t, only:
                   [:show, :edit, :update, :destroy, :redirect, :click]
+  # Auth by token before show, the informations depends on the user rights
+  before_action :w000thenticate, only: [:show]
   # Actions where the user needs to be logged in
-  before_action :authenticate_user_by_token,
-                :authenticate_user!,
+  before_action :w000thenticate!,
                 only: [:destroy, :update, :edit, :my_index]
   # Check to performs before w000t creation
   before_action :prevent_w000tception,
@@ -28,8 +29,6 @@ class W000tsController < ApplicationController
   # GET /w000ts/1
   # GET /w000ts/1.json
   def show
-    # Auth by token before show, the informations depends on the user rights
-    authenticate_user_by_token
   end
 
   # GET /w000ts/new
