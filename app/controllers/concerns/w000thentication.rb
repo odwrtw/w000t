@@ -1,16 +1,23 @@
 # User authentication
-module TokenAuthentication
+module W000thentication
   extend ActiveSupport::Concern
 
   # Set user no redirection will be done
-  def authenticate_user_by_token
-    check_token unless user_signed_in?
+  def w000thenticate
+    check_token
   end
 
   # Set user and redirect if the user is not found
-  def authenticate_user_by_token!
-    authenticate_user_by_token
-    redirect_to new_user_session_path unless user_signed_in?
+  def w000thenticate!
+    check_token
+    authenticate_user!
+  end
+
+  # Set user and redirect if the user is not found
+  def w000thenticate_admin!
+    check_token
+    authenticate_user!
+    fail AbstractController::ActionNotFound unless current_user.admin?
   end
 
   private
