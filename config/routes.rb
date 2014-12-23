@@ -15,7 +15,7 @@ Rails.application.routes.draw do
   get '/users' => 'users#index'
   resources :users, param: :pseudo, only: [] do
     resources :authentication_tokens, path: :tokens
-    root to:             'users#show'
+    get '/'           => 'users#show'
     get '/wall'       => 'w000ts#image_index'
     get '/dashboard'  => 'user_dashboard#show'
   end
