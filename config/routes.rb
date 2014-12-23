@@ -10,6 +10,7 @@ Rails.application.routes.draw do
     post 'admin/reset_sidekiq_stat'
   end
 
+  # Public wall
   get 'public/wall' => 'w000ts#public_wall'
 
   # Users
@@ -18,14 +19,14 @@ Rails.application.routes.draw do
   resources :users, param: :pseudo, only: [] do
     resources :authentication_tokens, path: :tokens
     get '/'           => 'users#show'
-    get '/wall'       => 'w000ts#image_index'
+    get '/wall'       => 'w000ts#user_wall'
     get '/dashboard'  => 'user_dashboard#show'
   end
 
   # Personnal w000ts
-  get '/w000ts/me'          => 'w000ts#my_index'
-  get '/w000ts/me/:type'    => 'w000ts#my_index', as: 'w000ts_me_by_type'
-  get '/w000ts/meme'        => 'w000ts#my_image_index'
+  get '/w000ts/me'          => 'w000ts#owner_list'
+  get '/w000ts/me/:type'    => 'w000ts#owner_list', as: 'w000ts_me_by_type'
+  get '/w000ts/meme'        => 'w000ts#owner_wall'
 
   # w000ts and tokens
   resources :w000ts, param: :short_url, except: [:edit]

@@ -8,15 +8,15 @@ class W000tsController < ApplicationController
   # Auth by token before show, the informations depends on the user rights
   before_action :w000thenticate, only: [:create, :show]
   # Actions where the user needs to be logged in
-  before_action :w000thenticate!, only: [:destroy, :update, :edit, :my_index]
+  before_action :w000thenticate!, only: [:destroy, :update, :edit, :owner_list]
   # Check to performs before w000t creation
   before_action :prevent_w000tception, :check_w000t, only: [:create]
   # Set the user from the routes
-  before_action :set_user, only: [:image_index]
+  before_action :set_user, only: [:user_wall]
   # Check the rights of the user on the w000t
   before_action :check_w000t_owner, only: [:update, :destroy]
   # Check if the type is allowed
-  before_action :check_w000t_type_params, only: [:my_index]
+  before_action :check_w000t_type_params, only: [:owner_list]
 
   # GET /w000ts
   def index
@@ -97,7 +97,7 @@ class W000tsController < ApplicationController
   end
 
   # GET /w000t/me
-  def my_index
+  def owner_list
     @w000ts = current_user.w000ts
     unless params[:tags].blank?
       @w000ts = @w000ts.tagged_with_all(params[:tags].split(',').map(&:strip))
@@ -113,12 +113,12 @@ class W000tsController < ApplicationController
   end
 
   # GET /w000ts/meme
-  def my_image_index
+  def owner_wall
     @w000ts = random_paginated_w000ts(current_user.w000ts.of_owner_wall)
   end
 
   # GET /users/:user_pseudo/wall
-  def image_index
+  def user_wall
     @w000ts = random_paginated_w000ts(@user.w000ts.of_public_wall)
   end
 
@@ -135,7 +135,7 @@ class W000tsController < ApplicationController
     fail AbstractController::ActionNotFound unless @w000t
   end
 
-  # Set user on image_index
+  # Set user on user wall
   def set_user
     # Get user
     @user = User.find_by(pseudo: params[:user_pseudo])
