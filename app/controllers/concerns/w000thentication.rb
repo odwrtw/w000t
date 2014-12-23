@@ -13,6 +13,13 @@ module W000thentication
     authenticate_user!
   end
 
+  # Set user and redirect if the user is not found
+  def w000thenticate_admin!
+    check_token
+    authenticate_user!
+    fail AbstractController::ActionNotFound unless current_user.admin?
+  end
+
   private
 
   # Check token from header or params
