@@ -10,6 +10,8 @@ Rails.application.routes.draw do
     post 'admin/reset_sidekiq_stat'
   end
 
+  get 'public/wall' => 'w000ts#public_wall'
+
   # Users
   devise_for :users
   get '/users' => 'users#index'

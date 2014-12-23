@@ -365,20 +365,20 @@ class W000tsControllerTest < ActionController::TestCase
     sign_in @user
     get :index
     assert_response :success
-    assert_select 'li', 6
+    assert_select 'li', 7
   end
 
   test 'should get index as an admin user' do
     sign_in @admin_user
     get :index
     assert_response :success
-    assert_select 'li', 7
+    assert_select 'li', 8
   end
 
   test 'should get index as anonymous user' do
     get :index
     assert_response :success
-    assert_select 'li', 3
+    assert_select 'li', 4
   end
 
   test 'should be redirected' do

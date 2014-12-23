@@ -114,20 +114,17 @@ class W000tsController < ApplicationController
 
   # GET /w000ts/meme
   def my_image_index
-    params[:seed] ||= Random.new_seed
-    srand params[:seed].to_i
-    @w000ts = Kaminari.paginate_array(
-      current_user.w000ts.of_owner_wall.shuffle
-    ).page(params[:page]).per(20)
+    @w000ts = random_paginated_w000ts(current_user.w000ts.of_owner_wall)
   end
 
   # GET /users/:user_pseudo/wall
   def image_index
-    params[:seed] ||= Random.new_seed
-    srand params[:seed].to_i
-    @w000ts = Kaminari.paginate_array(
-      @user.w000ts.of_public_user_wall.shuffle
-    ).page(params[:page]).per(20)
+    @w000ts = random_paginated_w000ts(@user.w000ts.of_public_wall)
+  end
+
+  # GET /public/wall
+  def public_wall
+    @w000ts = random_paginated_w000ts(W000t.of_public_wall.limit(200))
   end
 
   private
@@ -213,6 +210,13 @@ class W000tsController < ApplicationController
     unless TypableUrl::TYPES.include? params[:type].to_sym
       return redirect_to w000ts_me_path, flash: { alert: 'Invalid filter' }
     end
+  end
+
+  # Return an awesome random set of w000ts
+  def random_paginated_w000ts(query)
+    params[:seed] ||= Random.new_seed
+    srand params[:seed].to_i
+    Kaminari.paginate_array(query.shuffle).page(params[:page]).per(20)
   end
 
   # Render the w000t creation in any format

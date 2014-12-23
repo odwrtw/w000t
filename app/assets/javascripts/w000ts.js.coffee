@@ -36,7 +36,7 @@ $(".w000ts.my_index").ready ->
     $el.find('input').focus()
     $(this).hide().addClass('tags-td-hidden')
 
-$(".w000ts.my_image_index, .w000ts.image_index").ready ->
+$(".w000ts.my_image_index, .w000ts.image_index, .w000ts.public_wall").ready ->
   # When we click on the current status, we show a ul with the others statuses
   $("div.container").delegate "td.w000t-status", "click", ->
     $(this).parents("figure").find(".w000t-form-status").toggle()
