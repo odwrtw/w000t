@@ -49,6 +49,12 @@ class W000t
 
   scope :by_type, ->(type) { where('url_info.type' => type) }
   scope :by_status, ->(status) { where('url_info.status' => status) }
+  scope :of_owner_wall, -> {
+    by_type('image').and(archive: 0).ne(status: :hidden)
+  }
+  scope :of_public_wall, -> {
+    by_type('image').and(archive: 0).and(status: :public)
+  }
 
   def create_task
     if url_info.internal_status == :to_upload

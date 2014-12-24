@@ -285,16 +285,16 @@ class W000tsControllerTest < ActionController::TestCase
     )
   end
 
-  test 'should get user index' do
+  test 'should get user w000t list' do
     sign_in @user
-    get :my_index
+    get :owner_list
     assert_response :success
   end
 
-  test 'should get user index filtered by type' do
+  test 'should get user w000t list filtered by type' do
     sign_in @user
     TypableUrl::TYPES.each do |type|
-      get :my_index, type: type.to_s
+      get :owner_list, type: type.to_s
       assert_response :success
     end
   end
@@ -310,7 +310,7 @@ class W000tsControllerTest < ActionController::TestCase
       :w000t, long_url: 'test.com', tags: 'test  ', user: @user
     )
     assert_equal 2, @user.w000ts.count
-    get :my_index, tags: 'test'
+    get :owner_list, tags: 'test'
     assert_response :success
     assert_tag :tbody, children: { count: 2, only: { tag: 'tr' } }
     assert_tag :td, attributes: { class: 'w000t-tags' },
@@ -330,16 +330,16 @@ class W000tsControllerTest < ActionController::TestCase
       :w000t, long_url: 'test.com/t.jpg', tags: 'test', user: @user
     )
     assert_equal 2, @user.w000ts.count
-    get :my_index, tags: 'test', type: 'image'
+    get :owner_list, tags: 'test', type: 'image'
     assert_response :success
     assert_tag :tbody, children: { count: 2, only: { tag: 'tr' } }
     assert_tag :td, attributes: { class: 'w000t-tags' },
                     children: { count: 1, only: { tag: 'span' } }
   end
 
-  test 'should get user index with a filter error' do
+  test 'should get user w000t list with a filter error' do
     sign_in @user
-    get :my_index, type: 'some shit'
+    get :owner_list, type: 'some shit'
     assert_redirected_to w000ts_me_url
     assert_equal 'Invalid filter', flash[:alert]
   end
@@ -351,13 +351,13 @@ class W000tsControllerTest < ActionController::TestCase
     @w000t_private = FactoryGirl.create(
       :w000t, long_url: 'test.com/t.jpg', status: :private, user: @user
     )
-    get :image_index, user_pseudo: @user.pseudo
+    get :user_wall, user_pseudo: @user.pseudo
     assert_response :success
     assert_select 'figure', @user.w000ts.where(status: :public).count
   end
 
   test 'should get 404 on public wall of fake user' do
-    get :image_index, user_pseudo: 'bazooka'
+    get :user_wall, user_pseudo: 'bazooka'
     assert_response 404
   end
 
@@ -365,20 +365,20 @@ class W000tsControllerTest < ActionController::TestCase
     sign_in @user
     get :index
     assert_response :success
-    assert_select 'li', 6
+    assert_select 'li', 7
   end
 
   test 'should get index as an admin user' do
     sign_in @admin_user
     get :index
     assert_response :success
-    assert_select 'li', 7
+    assert_select 'li', 8
   end
 
   test 'should get index as anonymous user' do
     get :index
     assert_response :success
-    assert_select 'li', 3
+    assert_select 'li', 4
   end
 
   test 'should be redirected' do

@@ -95,6 +95,9 @@ GEM
       railties (>= 3.2.6, < 5)
       thread_safe (~> 0.1)
       warden (~> 1.2.3)
+    dotenv (1.0.2)
+    dotenv-rails (1.0.2)
+      dotenv (= 1.0.2)
     erubis (2.7.0)
     excon (0.41.0)
     execjs (2.2.1)
@@ -329,6 +332,7 @@ DEPENDENCIES
   chartkick
   coffee-rails (~> 4.0.0)
   devise (~> 3.3.0)
+  dotenv-rails
   factory_girl_rails
   fakeweb
   flowdock

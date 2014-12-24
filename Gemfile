@@ -88,6 +88,9 @@ group :development, :test do
 
   # OS X specific gem to listen to file change
   gem 'rb-fsevent'
+
+  # Load conf from .env file
+  gem 'dotenv-rails'
 end
 
 gem 'mina'
