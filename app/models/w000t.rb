@@ -52,7 +52,7 @@ class W000t
   scope :of_owner_wall, -> {
     by_type('image').and(archive: 0).ne(status: :hidden)
   }
-  scope :of_public_user_wall, -> {
+  scope :of_public_wall, -> {
     by_type('image').and(archive: 0).and(status: :public)
   }
 

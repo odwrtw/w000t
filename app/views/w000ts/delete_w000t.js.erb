@@ -1,6 +1,6 @@
-if ($(".w000ts.my_image_index").length) {
+if ($(".w000ts.owner_wall").length) {
   $("figure#w000t-<%= escape_javascript w000t.short_url %>").remove();
   $("div#w000t-wall-container").masonry();
-} else if ($(".w000ts.my_index").length) {
+} else if ($(".w000ts.owner_list").length) {
   $("tr#w000t-<%= escape_javascript w000t.short_url %>").remove();
 }
