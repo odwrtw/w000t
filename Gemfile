@@ -56,8 +56,6 @@ gem 'chartkick'
 # Image
 gem 'carrierwave-mongoid', require: 'carrierwave/mongoid'
 gem 'rmagick'
-
-# gem 'fog', '~> 1.22.0'
 gem 'fog', git: 'git://github.com/fog/fog.git'
 
 group :development, :test do
@@ -93,6 +91,10 @@ group :development, :test do
   gem 'dotenv-rails'
 end
 
+# Deployment
 gem 'mina'
 gem 'mina-sidekiq'
 gem 'rb-readline'
+
+# Crontab
+gem 'whenever', :require => false

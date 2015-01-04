@@ -2,6 +2,7 @@ require 'mina/bundler'
 require 'mina/rails'
 require 'mina/git'
 require 'mina/rbenv'  # for rbenv support. (http://rbenv.org)
+require 'mina/whenever'
 require 'mina_sidekiq/tasks'
 
 # Basic settings:
@@ -81,6 +82,7 @@ desc 'Deploys the current version to the server.'
 task deploy: :environment do
   deploy do
     # stop accepting new workers
+    invoke :'whenever:clear'
     invoke :'sidekiq:quiet'
 
     # Put things that will set up an empty directory into a fully set-up
@@ -98,6 +100,7 @@ task deploy: :environment do
       queue "mkdir -p #{deploy_to}/#{current_path}/tmp/images"
       queue "touch #{deploy_to}/#{current_path}/tmp/restart.txt"
       invoke :'sidekiq:restart'
+      invoke :'whenever:write'
     end
   end
 end
