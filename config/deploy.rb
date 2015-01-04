@@ -82,7 +82,6 @@ desc 'Deploys the current version to the server.'
 task deploy: :environment do
   deploy do
     # stop accepting new workers
-    invoke :'whenever:clear'
     invoke :'sidekiq:quiet'
 
     # Put things that will set up an empty directory into a fully set-up
@@ -100,6 +99,7 @@ task deploy: :environment do
       queue "mkdir -p #{deploy_to}/#{current_path}/tmp/images"
       queue "touch #{deploy_to}/#{current_path}/tmp/restart.txt"
       invoke :'sidekiq:restart'
+      invoke :'whenever:clear'
       invoke :'whenever:write'
     end
   end
