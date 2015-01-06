@@ -2,6 +2,7 @@ require 'mina/bundler'
 require 'mina/rails'
 require 'mina/git'
 require 'mina/rbenv'  # for rbenv support. (http://rbenv.org)
+require 'mina/whenever'
 require 'mina_sidekiq/tasks'
 
 # Basic settings:
@@ -98,6 +99,8 @@ task deploy: :environment do
       queue "mkdir -p #{deploy_to}/#{current_path}/tmp/images"
       queue "touch #{deploy_to}/#{current_path}/tmp/restart.txt"
       invoke :'sidekiq:restart'
+      invoke :'whenever:clear'
+      invoke :'whenever:write'
     end
   end
 end
