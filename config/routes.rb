@@ -10,6 +10,9 @@ Rails.application.routes.draw do
     post 'admin/reset_sidekiq_stat'
   end
 
+  # Hack for workflow_ios
+  get 'workflow_ios/w000ts' => 'w000ts#create'
+
   # Public wall
   get 'public/wall' => 'w000ts#public_wall'
 
