@@ -5,7 +5,7 @@ class UrlInfo
 
   before_validation :check_http_prefix
 
-  INTERNAL_STATUS = %i( todo to_upload done )
+  INTERNAL_STATUS = %i( todo to_upload done error )
   MAX_UPLOAD_SIZE = 2.megabytes.to_i
 
   field :http_code, type: Integer
