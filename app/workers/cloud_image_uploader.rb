@@ -7,19 +7,28 @@ class CloudImageUploader
     w = W000t.find(w000t_id)
     logger.info '=== Uploading === got the w000t...'
 
-    u = w.url_info
-    logger.info "=== Uploading === got the url_info... #{u.url}"
+    logger.info "=== Uploading === got the url_info... #{w.url_info.url}"
     logger.info '=== Uploading === creating the image object'
     # Create the image object
     w.url_info.cloud_image = ImageUploader.new
     # check error
     logger.info '=== Uploading === image object created'
 
-    logger.info '=== Uploading === Downloading image....'
     # Download the image
-    fnret = w.url_info.cloud_image.download!(w.url_info_url)
-    # Check error
-    logger.info "=== Uploading === #{fnret} === image downloaded...."
+    logger.info '=== Uploading === Downloading image....'
+    begin
+      w.url_info.cloud_image.download!(w.url_info_url)
+    rescue CarrierWave::DownloadError => e
+      logger.info "Failed to download image : #{e}"
+      w.url_info.internal_status = :error
+      w.save
+      return
+    rescue CarrierWave::ProcessingError => e
+      logger.info "Failed to proccess image : #{e}"
+      w.url_info.internal_status = :error
+      w.save
+      return
+    end
 
     logger.info '=== Uploading === saving image to the cloud....'
     # Save the image in the cloud
