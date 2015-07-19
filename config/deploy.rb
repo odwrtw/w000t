@@ -116,6 +116,6 @@ task :sidekiq_logs do
 end
 
 desc 'Shows nginx logs.'
-task :sidekiq_logs do
+task :nginx_logs do
   queue %(tail -n 50 -f /var/log/nginx/access.log)
 end
