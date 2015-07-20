@@ -103,6 +103,18 @@ class W000tsController < ApplicationController
       @w000ts = @w000ts.tagged_with_all(params[:tags].split(',').map(&:strip))
       @tags = params[:tags]
     end
+    unless params[:search].blank?
+      # Get all the words of the search
+      words = params[:search].split(' ').map(&:strip)
+
+      # Prepare the query
+      components = words.map do |value|
+        { :'url_info.url' => /#{value}/ }
+      end
+      query = components.length > 1 ? { :$and => components } : components.first
+
+      @w000ts = @w000ts.where(query)
+    end
     if params[:type]
       @w000ts = @w000ts.by_type(params[:type])
                 .order_by(created_at: :desc).page(params[:page]).per(25)
