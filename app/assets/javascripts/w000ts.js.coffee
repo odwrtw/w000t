@@ -25,6 +25,10 @@ $(".w000ts.new").ready ->
 
 
 $(".w000ts.owner_list").ready ->
+  $("#search-toggle button").click (event)->
+    $('#search-forms div.form').hide()
+    $('#'+this.id+'-form').show()
+
   $('.tags-search').tokenfield()
   $('.w000t-tags-form').tokenfield()
   $("div.container").delegate ".w000t-tags", "click", ->

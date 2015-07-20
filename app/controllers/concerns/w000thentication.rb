@@ -33,6 +33,8 @@ module W000thentication
 
     # Count token usage
     token.inc(number_of_use: 1)
+    # Update the updated_at because inc doesn't do it
+    token.set(updated_at: Time.now)
 
     # Sign in
     sign_in token.user
