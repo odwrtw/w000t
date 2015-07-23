@@ -8,7 +8,14 @@ class UsersController < ApplicationController
 
   # GET /users
   def index
-    @users = User.all
+    respond_to do |format|
+      format.html do
+        fail ActionController::RoutingError.new(UsersController, 'Not Found')
+      end
+      format.json do
+        @users = User.all
+      end
+    end
   end
 
   # GET /users/:user_pseudo
