@@ -11,6 +11,7 @@ class ApplicationController < ActionController::Base
 
   # Handle 404
   rescue_from AbstractController::ActionNotFound, with: :render_404
+  rescue_from ActionView::MissingTemplate, with: :render_404
 
   protected
 
