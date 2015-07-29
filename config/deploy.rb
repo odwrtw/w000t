@@ -32,7 +32,7 @@ else
 end
 
 set :deploy_to, '/home/deploy/w000t'
-set :repository, 'ssh://git@gitlab.quimbo.fr:5022/PouuleT/w000t.git'
+set :repository, 'https://github.com/odwrtw/w000t.git'
 
 # Manually create these paths in shared/ (eg: shared/config/database.yml) in
 # your server.
