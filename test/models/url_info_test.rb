@@ -37,17 +37,36 @@ class UrlInfoTest < ActiveSupport::TestCase
 
   test 'type should be found' do
     types_and_urls = {
-      youtube: 'https://www.youtube.com/watch?v=LoJtfpDWpmY',
-      image: 'http://test/yo.jpg',
-      pdf: 'http://test/yo.pdf',
-      soundcloud: 'https://soundcloud.com/l-c-a-w/andreas-moe-ocean',
-      github: 'https://github.com/gregdel',
-      stack_overflow: 'http://stackoverflow.com/questions/948135',
-      hackernews: 'https://news.ycombinator.com/'
+      youtube: [
+        'https://www.youtube.com/watch?v=LoJtfpDWpmY',
+        'http://www.youtube.com/watch?v=LoJtfpDWpmY',
+        'https://youtu.be/watch?v=LoJtfpDWpmY',
+        'http://youtu.be/watch?v=LoJtfpDWpmY',
+      ],
+      image: [
+        'http://test/yo.jpg',
+      ],
+      pdf: [
+        'http://test/yo.pdf',
+      ],
+      soundcloud: [
+        'https://soundcloud.com/l-c-a-w/andreas-moe-ocean',
+      ],
+      github: [
+        'https://github.com/gregdel',
+      ],
+      stack_overflow: [
+        'http://stackoverflow.com/questions/948135',
+      ],
+      hackernews: [
+        'https://news.ycombinator.com/',
+      ]
     }
-    types_and_urls.each do |type, url|
-      @w000t = FactoryGirl.create(:w000t, long_url: url)
-      assert_equal type.to_s, @w000t.url_info.type
+    types_and_urls.each do |type, urls|
+      urls.each do |url|
+        @w000t = FactoryGirl.create(:w000t, long_url: url)
+        assert_equal type.to_s, @w000t.url_info.type
+      end
     end
   end
 

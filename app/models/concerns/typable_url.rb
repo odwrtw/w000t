@@ -51,7 +51,8 @@ module TypableUrl
   end
 
   def youtube
-    %r{\Ahttps?://www\.youtube\.com} =~ url
+    %r{\Ahttps?://www\.youtube\.com} =~ url ||
+      %r{\Ahttps?://youtu\.be} =~ url
   end
 
   def stack_overflow
