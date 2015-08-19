@@ -1,13 +1,70 @@
 <p id="notice"><%= notice %></p>
 
-<p>
-  <strong>Long url:</strong>
-  <%= @w000t.url_info_url %>
-</p>
-
-<p>
-  <strong>Short url:</strong>
-  <%= @w000t.short_url %>
-</p>
+<div class="col-md-8 col-md-offset-2 col-xs-12">
+  <h1>
+    <i class="fa fa-tachometer"></i>
+    w000t details
+  </h1>
+  <br>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="panel panel-primary">
+        <div class="panel-heading">
+          <h5>
+            Long URL
+            <i class="fa fa-external-link pull-right"></i>
+          </h5>
+        </div>
+        <div class="panel-body">
+            <td><%= @w000t.url_info_url %></td>
+        </div>
+      </div>
+      <div class="panel panel-primary">
+        <div class="panel-heading">
+          <h5>
+            Short URL
+            <i class="fa fa-dedent pull-right"></i>
+          </h5>
+        </div>
+        <div class="panel-body">
+          <%= @w000t_url %>
+        </div>
+      </div>
+      <div class="panel panel-primary">
+        <div class="panel-heading">
+          <h5>
+            Number of clicks
+            <i class="fa fa-line-chart pull-right"></i>
+          </h5>
+        </div>
+        <div class="panel-body">
+            <td><%= @w000t.number_of_click %></td>
+        </div>
+      </div>
+      <div class="panel panel-primary">
+        <div class="panel-heading">
+          <h5>
+            HTTP Status
+            <i class="fa fa-heart pull-right"></i>
+          </h5>
+        </div>
+        <div class="panel-body">
+          <%= pretty_http_status(@w000t.url_info) %>
+        </div>
+      </div>
+      <div class="panel panel-primary">
+        <div class="panel-heading">
+          <h5>
+            Type
+            <i class="fa fa-gears pull-right"></i>
+          </h5>
+        </div>
+        <div class="panel-body">
+          <%= @w000t.url_info.type %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
 <%= link_to 'Back', w000ts_path %>
