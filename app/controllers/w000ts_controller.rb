@@ -27,6 +27,7 @@ class W000tsController < ApplicationController
 
   # GET /w000ts/1
   def show
+    @w000t_url = @w000t.full_shortened_url(request.base_url)
   end
 
   # GET /w000ts/new
