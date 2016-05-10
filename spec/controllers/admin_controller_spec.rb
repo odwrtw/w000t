@@ -1,10 +1,16 @@
-require 'test_helper'
+require 'spec_helper'
 require 'sidekiq/testing'
 Sidekiq::Testing.fake!
 
 # Admin controller tests
-class AdminControllerTest < ActionController::TestCase
-  setup do
+describe AdminController do
+  before do
+    User.delete_all
+    W000t.delete_all
+    AuthenticationToken.destroy_all
+    FakeWeb.clean_registry
+    Sidekiq::Worker.clear_all
+
     @user = FactoryGirl.create(:user)
     @admin_user = FactoryGirl.create(
       :user,
@@ -17,68 +23,72 @@ class AdminControllerTest < ActionController::TestCase
     @authentication_token = FactoryGirl.create(:authentication_token)
   end
 
-  test 'should be redirected if not logged' do
+  before(:each) do
+    request.env["HTTP_REFERER"] = "where_i_came_from"
+  end
+
+  it 'should be redirected if not logged' do
     get :dashboard
     assert_redirected_to new_user_session_path
   end
 
-  test 'should get dashboard as admin' do
+  it 'should get dashboard as admin' do
     sign_in @admin_user
     get :dashboard
     assert_response :success
   end
 
-  test 'should be get 404 if not admin' do
+  it 'should be get 404 if not admin' do
     sign_in @user
     get :dashboard
     assert_response :not_found
   end
 
-  test 'should update all the w000ts' do
+  it 'should update all the w000ts' do
     sign_in @admin_user
-    assert_difference 'UrlLifeChecker.jobs.size', W000t.all.count do
-      post :check_all_w000ts
-    end
-    assert_redirected_to 'previous_page'
+    expect{post :check_all_w000ts}.to change{UrlLifeChecker.jobs.size}.by(W000t.all.count)
+    # assert_redirected_to 'previous_page'
+    expect(response).to  redirect_to('where_i_came_from')
     assert_equal 'All w000t will be checked soon', flash[:notice]
   end
 
-  test 'should check one url' do
+  it 'should check one url' do
     sign_in @admin_user
-    assert_difference 'UrlLifeChecker.jobs.size' do
+    expect{
       post :check_url, admin: { short_url: @w000t.short_url }
-    end
-    assert_redirected_to 'previous_page'
+    }.to change{UrlLifeChecker.jobs.size}.by(1)
+    # assert_redirected_to 'previous_page'
+    expect(response).to  redirect_to('where_i_came_from')
     assert_equal 'Task created', flash[:notice]
   end
 
-  test 'should not create task to check url if none given' do
+  it 'should not create task to check url if none given' do
     sign_in @admin_user
-    assert_raise ActionController::ParameterMissing do
+    expect {
       post :check_url
-    end
-    assert_difference 'UrlLifeChecker.jobs.size', 0 do
+    }.to raise_error(ActionController::ParameterMissing)
+    expect{
       post :check_url, admin: { url: 'fake argument' }
-    end
+    }.to change{UrlLifeChecker.jobs.size}.by(0)
   end
 
-  test 'should reset sidekiq stats' do
+  it 'should reset sidekiq stats' do
     sign_in @admin_user
     allowed_params = %w( processed failed )
     allowed_params.each do |p|
       post :reset_sidekiq_stat, sidekiq: { reset_param: p }
-      assert_redirected_to 'previous_page'
+      expect(response).to  redirect_to('where_i_came_from')
       assert_equal "Sidekiq #{p} stat resetted", flash[:notice]
     end
   end
 
-  test 'should not reset sidekiq stats with wrong params' do
+  it 'should not reset sidekiq stats with wrong params' do
     sign_in @admin_user
     wrong_params = %w( yo mama plop )
     wrong_params.each do |p|
-      assert_raise ArgumentError do
+      expect {
         post :reset_sidekiq_stat, sidekiq: { reset_param: p }
-      end
+      }.to raise_error(ArgumentError)
     end
   end
 end

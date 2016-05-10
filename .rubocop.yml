@@ -1,8 +1,2 @@
-AllCops:
-  RunRailsCops: true
-  Include:
-    - 'db/seeds.rb'
-  Exclude:
-    - 'vendor/**/*'
-    - 'db/**/*'
-    - 'bin/*'
+Rails:
+  Enabled: true

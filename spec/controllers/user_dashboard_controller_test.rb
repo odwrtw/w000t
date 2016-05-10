@@ -1,8 +1,14 @@
-require 'test_helper'
+require 'spec_helper'
 
 # User dashboard controller tests
-class UserDashboardControllerTest < ActionController::TestCase
-  setup do
+describe UserDashboardController do
+  before do
+    User.delete_all
+    W000t.delete_all
+    AuthenticationToken.destroy_all
+    FakeWeb.clean_registry
+    Sidekiq::Worker.clear_all
+
     @user_greg = FactoryGirl.create(
       :user, pseudo: 'greg', email: 'greg@w000t.me'
     )
@@ -11,18 +17,18 @@ class UserDashboardControllerTest < ActionController::TestCase
     )
   end
 
-  test 'should be redirected if not logged' do
+  it 'should be redirected if not logged' do
     get :show, user_pseudo: 'greg'
     assert_redirected_to new_user_session_path
   end
 
-  test 'should get user\'s dashboard' do
+  it 'should get user\'s dashboard' do
     sign_in @user_pouulet
     get :show, user_pseudo: @user_pouulet.pseudo
     assert_response :success
   end
 
-  test 'should get a 404 trying to access another user\'s dashboard' do
+  it 'should get a 404 trying to access another user\'s dashboard' do
     sign_in @user_pouulet
     get :show, user_pseudo: @user_greg.pseudo
     assert_response :not_found
