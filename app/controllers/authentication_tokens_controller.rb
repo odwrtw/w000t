@@ -91,7 +91,7 @@ class AuthenticationTokensController < ApplicationController
     @user = current_user
     # Don't allow the wrong user in
     unless @user.pseudo == params[:user_pseudo]
-      fail AbstractController::ActionNotFound
+      raise AbstractController::ActionNotFound
     end
   end
 

@@ -24,7 +24,7 @@ describe AdminController do
   end
 
   before(:each) do
-    request.env["HTTP_REFERER"] = "where_i_came_from"
+    request.env["HTTP_REFERER"] = 'where_i_came_from'
   end
 
   it 'should be redirected if not logged' do
@@ -46,9 +46,10 @@ describe AdminController do
 
   it 'should update all the w000ts' do
     sign_in @admin_user
-    expect{post :check_all_w000ts}.to change{UrlLifeChecker.jobs.size}.by(W000t.all.count)
-    # assert_redirected_to 'previous_page'
-    expect(response).to  redirect_to('where_i_came_from')
+    expect{
+      post :check_all_w000ts
+    }.to change { UrlLifeChecker.jobs.size }.by(W000t.all.count)
+    expect(response).to redirect_to('where_i_came_from')
     assert_equal 'All w000t will be checked soon', flash[:notice]
   end
 
@@ -56,9 +57,8 @@ describe AdminController do
     sign_in @admin_user
     expect{
       post :check_url, admin: { short_url: @w000t.short_url }
-    }.to change{UrlLifeChecker.jobs.size}.by(1)
-    # assert_redirected_to 'previous_page'
-    expect(response).to  redirect_to('where_i_came_from')
+    }.to change { UrlLifeChecker.jobs.size }.by(1)
+    expect(response).to redirect_to('where_i_came_from')
     assert_equal 'Task created', flash[:notice]
   end
 
@@ -69,7 +69,7 @@ describe AdminController do
     }.to raise_error(ActionController::ParameterMissing)
     expect{
       post :check_url, admin: { url: 'fake argument' }
-    }.to change{UrlLifeChecker.jobs.size}.by(0)
+    }.to change { UrlLifeChecker.jobs.size }.by(0)
   end
 
   it 'should reset sidekiq stats' do
@@ -77,7 +77,7 @@ describe AdminController do
     allowed_params = %w( processed failed )
     allowed_params.each do |p|
       post :reset_sidekiq_stat, sidekiq: { reset_param: p }
-      expect(response).to  redirect_to('where_i_came_from')
+      expect(response).to redirect_to('where_i_came_from')
       assert_equal "Sidekiq #{p} stat resetted", flash[:notice]
     end
   end

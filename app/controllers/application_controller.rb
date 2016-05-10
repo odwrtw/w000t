@@ -21,7 +21,7 @@ class ApplicationController < ActionController::Base
         render file: "#{Rails.root}/public/404",
                layout: 'application', status: :not_found
       end
-      format.any  { head :not_found }
+      format.any { head :not_found }
     end
   end
 

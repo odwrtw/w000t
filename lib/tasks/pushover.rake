@@ -4,7 +4,6 @@ APPLICATION_KEY = 'aQStcsBai8cpQqm661EarmkhTEojQG'
 USER_KEY = 'gDJi7GN3q9koHiTxSnMqcUCr1BPb8y'
 
 namespace :pushover do
-
   desc 'Push a notification to all the devices'
   task :notify, [:message, :priority, :title] do |t, args|
     args[:title] ||= 'w000t'
@@ -18,5 +17,4 @@ namespace :pushover do
                          retry: 60)
     puts "Response : #{resp}"
   end
-
 end

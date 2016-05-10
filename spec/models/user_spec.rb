@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe "Users" do
+describe 'Users' do
   # test "the truth" do
   #   assert true
   # end

@@ -3,7 +3,7 @@ require 'sidekiq/testing'
 Sidekiq::Testing.fake!
 
 # UrlInfo test
-describe "UrlInfos" do
+describe 'UrlInfos' do
   before do
     # Clean all fakewebs
     FakeWeb.clean_registry
@@ -96,7 +96,7 @@ describe "UrlInfos" do
     assert_equal 'image', @w000t.url_info.type
   end
 
-  it 'shoud update http_code and content_length when creating a new w000t' do
+  it 'should update http_code and content_length when creating a new w000t' do
     Sidekiq::Testing.inline! do
       @w000t_404 = W000t.create(long_url: FAKE_WEB_LIST[:image_404][:url])
       @w000t_404.reload
@@ -110,7 +110,7 @@ describe "UrlInfos" do
     end
   end
 
-  it 'shoud download when image is valid' do
+  it 'should download when image is valid' do
     @greg = FactoryGirl.create(:user, pseudo: 'greg', email: 'greg@odwrtw.com')
     Sidekiq::Testing.inline! do
       @w000t = W000t.create(
@@ -124,7 +124,7 @@ describe "UrlInfos" do
     expect(@w000t.url_info.cloud_image.thumb.url).not_to be_nil
   end
 
-  it 'shoud not download when image is valid but w000t is public' do
+  it 'should not download when image is valid but w000t is public' do
     Sidekiq::Testing.inline! do
       @w000t = W000t.create(
         long_url: FAKE_WEB_LIST[:image_ok][:url]
@@ -137,7 +137,7 @@ describe "UrlInfos" do
     assert_equal 12_000, @w000t.url_info.content_length
   end
 
-  it 'shoud not download when not a valid image' do
+  it 'should not download when not a valid image' do
     Sidekiq::Testing.inline! do
       @w000t = W000t.create(long_url: FAKE_WEB_LIST[:not_image_ok][:url])
     end
@@ -147,7 +147,7 @@ describe "UrlInfos" do
                  'Cloud image is not nil but not an image'
   end
 
-  it 'shoud not download when image too big' do
+  it 'should not download when image too big' do
     Sidekiq::Testing.inline! do
       @w000t = W000t.create(long_url: FAKE_WEB_LIST[:image_too_big][:url])
     end
@@ -157,7 +157,7 @@ describe "UrlInfos" do
                  'Cloud image is not nil but too big'
   end
 
-  it 'shoud not download when image is not 200' do
+  it 'should not download when image is not 200' do
     Sidekiq::Testing.inline! do
       @w000t = W000t.create(long_url: FAKE_WEB_LIST[:image_404][:url])
     end
@@ -167,7 +167,7 @@ describe "UrlInfos" do
                  'Cloud image is not nil but 301'
   end
 
-  it 'shoud get default url when cloud_image not yet set' do
+  it 'should get default url when cloud_image not yet set' do
     @w000t = W000t.create(long_url: FAKE_WEB_LIST[:image_ok][:url])
     @w000t.reload
 
@@ -175,7 +175,7 @@ describe "UrlInfos" do
                  'Bad image default url'
   end
 
-  it 'shoud get good url' do
+  it 'should get good url' do
     Sidekiq::Testing.inline! do
       @w000t_cloudy = W000t.create(long_url: FAKE_WEB_LIST[:image_ok][:url])
     end
@@ -196,7 +196,7 @@ describe "UrlInfos" do
                  'Bad image default url'
   end
 
-  it 'shoud have a valid internal_status' do
+  it 'should have a valid internal_status' do
     UrlInfo::INTERNAL_STATUS.each do |s|
       @url_info = FactoryGirl.build(
         :url_info, url: 'http://google.com',
@@ -207,7 +207,7 @@ describe "UrlInfos" do
     end
   end
 
-  it 'shoud have a invalid internal_status' do
+  it 'should have a invalid internal_status' do
     %i( test yo mama ).each do |s|
       @url_info = FactoryGirl.build(
         :url_info, url: 'http://google.com',

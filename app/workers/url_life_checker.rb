@@ -7,7 +7,7 @@ class UrlLifeChecker
     w = W000t.find(w000t_id)
     unless w
       logger.info "=== Checking life === There is no w000t with id #{w000t_id}"
-      fail "No w000t with id #{w000t_id}"
+      raise "No w000t with id #{w000t_id}"
     end
     logger.info "=== Checking life === of url #{w.url_info.url}"
     w.url_info.update_http_code

@@ -18,6 +18,6 @@ CarrierWave.configure do |config|
   config.asset_host       = ENV['OPENSTACK_ASSET_HOST']
   config.fog_public       = true         # optional, defaults to true
   config.fog_attributes   = {
-    'Cache-Control' => "max-age=#{365.day.to_i}"
+    'Cache-Control' => "max-age=#{365.days.to_i}"
   }
 end

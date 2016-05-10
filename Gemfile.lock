@@ -456,9 +456,9 @@ DEPENDENCIES
   capybara
   carrierwave-mongoid
   chartkick
-  coffee-rails
+  coffee-rails (~> 4.1.1)
   database_cleaner
-  devise
+  devise (~> 4.1.0)
   dotenv-rails
   factory_girl_rails
   fakeweb
@@ -466,7 +466,7 @@ DEPENDENCIES
   fog!
   guard
   guard-rspec
-  jbuilder
+  jbuilder (~> 2.4.1)
   jquery-rails
   jquery-turbolinks
   kaminari
@@ -485,14 +485,14 @@ DEPENDENCIES
   rmagick
   rspec-rails
   rushover
-  sass-rails
-  sdoc
+  sass-rails (~> 5.0.4)
+  sdoc (~> 0.4.1)
   sidekiq
   sinatra
   slim
   spring
   turbolinks
-  uglifier
+  uglifier (>= 3.0.0)
   whenever
 
 RUBY VERSION

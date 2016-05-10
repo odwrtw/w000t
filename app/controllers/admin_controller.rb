@@ -46,7 +46,7 @@ class AdminController < ApplicationController
   private
 
   def check_admin
-    fail AbstractController::ActionNotFound unless current_user.admin?
+    raise AbstractController::ActionNotFound unless current_user.admin?
   end
 
   def admin_params
@@ -61,6 +61,6 @@ class AdminController < ApplicationController
     allowed_params = %w( processed failed )
     @reset_param = sidekiq_params[:reset_param]
     return if allowed_params.include? @reset_param
-    fail ArgumentError, 'Unauthorized argument'
+    raise ArgumentError, 'Unauthorized argument'
   end
 end

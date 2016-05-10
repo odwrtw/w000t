@@ -1,7 +1,7 @@
 require 'mina/bundler'
 require 'mina/rails'
 require 'mina/git'
-require 'mina/rbenv'  # for rbenv support. (http://rbenv.org)
+require 'mina/rbenv' # for rbenv support. (http://rbenv.org)
 require 'mina/whenever'
 require 'mina_sidekiq/tasks'
 
@@ -40,7 +40,7 @@ set :repository, 'https://github.com/odwrtw/w000t.git'
 set :shared_paths, %w( log pids )
 
 # Optional settings:
-set :port, '2277'     # SSH port number.
+set :port, '2277' # SSH port number.
 set :user, 'deploy'
 set :ssh_options, '-A -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null'
 

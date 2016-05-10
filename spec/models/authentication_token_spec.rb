@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 # AuthenticationToken Model unittest
-describe "AuthenticationToken" do
+describe 'AuthenticationToken' do
   before do
     # Known values
     @user = FactoryGirl.create(:user)
