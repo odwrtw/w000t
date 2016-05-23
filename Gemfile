@@ -45,7 +45,6 @@ gem 'redis-namespace'
 
 # Notifications
 gem 'rushover'
-gem 'flowdock'
 
 # Monitoring
 gem 'newrelic_rpm'

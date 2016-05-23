@@ -1,15 +1,6 @@
 require 'spec_helper'
 
 describe 'W000ts' do
-  # it 'should hash a long url with no user' do
-  #   w000t_test = FactoryGirl.create(:w000t)
-  #   assert_equal '64a1f36deb', w000t_test.short_url
-
-    # user.send_password_reset
-    # last_token = user.password_reset_token
-    # user.send_password_reset
-    # user.password_reset_token.should_not eq(last_token)
-  # end
   include ActionView::Helpers::TextHelper
   include CarrierWave::Test::Matchers
   require 'digest/sha1'

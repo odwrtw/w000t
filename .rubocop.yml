@@ -1,2 +1,8 @@
 Rails:
   Enabled: true
+  Include:
+    - 'db/seeds.rb'
+  Exclude:
+    - 'vendor/**/*'
+    - 'db/**/*'
+    - 'bin/*'

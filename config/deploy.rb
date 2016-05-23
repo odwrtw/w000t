@@ -26,6 +26,10 @@ when 'production'
   set :domain, 'w000t.me'
   set :branch, 'master'
   set :rails_env, 'production'
+when 'dev'
+  set :domain, 'localhost'
+  set :branch, 'update'
+  set :rails_env, 'staging'
 else
   print_error 'Invalid server.'
   exit
@@ -75,7 +79,6 @@ desc 'Notify after installation'
 task :notify do
   queue %(echo "-----> Notifying the awesome devs")
   queue "bundle exec rake pushover:notify['Deployed to #{server}']"
-  queue "bundle exec rake 'flowdock:nofify_deploy[#{server}]'"
 end
 
 desc 'Deploys the current version to the server.'
@@ -92,7 +95,9 @@ task deploy: :environment do
     invoke :'bower'
     invoke :'rails:db_migrate'
     invoke :'rails:assets_precompile'
-    invoke :notify
+    if server == 'production'
+      invoke :notify
+    end
 
     to :launch do
       queue %(echo "-----> Restarting the server and the sidekiq workers")

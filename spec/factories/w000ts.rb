@@ -1,5 +1,4 @@
 # Read about factories at https://github.com/thoughtbot/factory_girl
-# require 'app/models/w000t.rb'
 
 FactoryGirl.define do
   factory :w000t do
