@@ -84,14 +84,14 @@ class W000tsController < ApplicationController
 
   # GET /:short_url
   def redirect
-    @w000t.inc(number_of_click: 1)
+    @w000t.click(request.remote_ip)
     redirect_to @w000t.url_info_url
   end
 
   # GET /:short_url/click
   # Add a click to the count but do not redirect, used to diplay w000t preview
   def click
-    @w000t.inc(number_of_click: 1)
+    @w000t.click()
     respond_to do |format|
       format.js { @w000t }
     end

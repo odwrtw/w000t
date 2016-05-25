@@ -30,14 +30,16 @@ class W000t
 
   index({ 'url_info.url' => 1 }, name: 'url_index_on_url')
   index(
-   { user_id: 1, 'url_info.url' => 1 },
+    { user_id: 1, 'url_info.url' => 1 },
     unique: true, name: 'user_url_unique_index'
   )
 
   # Association
   embeds_one :url_info, cascade_callbacks: true
-
   accepts_nested_attributes_for :url_info
+
+  embeds_many :clicks, cascade_callbacks: true
+  accepts_nested_attributes_for :clicks
 
   # Model validation
   validates :status, presence: true, inclusion: { in: STATUS }
@@ -106,6 +108,14 @@ class W000t
       cloud_image: upload_image
     }
     build_url_info(params)
+  end
+
+  # Click updates the w000t when clicked
+  def click(ip_address)
+    # Add the clicks
+    clicks.create(ip: ip_address)
+    # Increments the number of clicks
+    inc(number_of_click: 1)
   end
 
   private

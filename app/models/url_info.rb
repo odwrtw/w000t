@@ -128,7 +128,7 @@ class UrlInfo
   private
 
   def parse_uri
-      URI.parse(url)
+    URI.parse(url)
   rescue URI::Error
     logger.info 'Uri parse error'
     nil

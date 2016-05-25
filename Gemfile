@@ -27,6 +27,9 @@ gem 'mongoid', '~> 4'
 gem 'mongoid_rails_migrations'
 gem 'bson_ext'
 
+# Geocoder
+gem 'geocoder', '~> 1.3.4'
+
 # Authentication helper
 gem 'devise', '~> 4.1.0'
 
