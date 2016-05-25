@@ -1,17 +1,15 @@
 source 'https://rubygems.org'
 
 # ROR
-ruby '2.1.4'
+ruby '2.2.5'
 gem 'rails', '4.1.2'
 
 # Use SCSS for stylesheets
-gem 'sass-rails', '~> 4.0.3'
+gem 'sass-rails', '~> 5.0.4'
 # Use Uglifier as compressor for JavaScript assets
-gem 'uglifier', '>= 1.3.0'
+gem 'uglifier', '>= 3.0.0'
 # Use CoffeeScript for .js.coffee assets and views
-gem 'coffee-rails', '~> 4.0.0'
-# See https://github.com/sstephenson/execjs#readme for more supported runtimes
-# gem 'therubyracer',  platforms: :ruby
+gem 'coffee-rails', '~> 4.1.1'
 
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
@@ -20,17 +18,17 @@ gem 'turbolinks'
 gem 'jquery-turbolinks'
 
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
-gem 'jbuilder', '~> 2.0'
+gem 'jbuilder', '~> 2.4.1'
 # bundle exec rake doc:rails generates the API under doc/api.
-gem 'sdoc', '~> 0.4.0',          group: :doc
+gem 'sdoc', '~> 0.4.1', group: :doc
 
 # MongoDB
-gem 'mongoid', '~> 4', github: 'mongoid/mongoid'
+gem 'mongoid', '~> 4'
 gem 'mongoid_rails_migrations'
 gem 'bson_ext'
 
 # Authentication helper
-gem 'devise', '~> 3.3.0'
+gem 'devise', '~> 4.1.0'
 
 # Pagination helper
 gem 'kaminari'
@@ -43,9 +41,10 @@ gem 'sidekiq'
 gem 'sinatra', require: false
 gem 'slim'
 
+gem 'redis-namespace'
+
 # Notifications
 gem 'rushover'
-gem 'flowdock'
 
 # Monitoring
 gem 'newrelic_rpm'
@@ -71,17 +70,22 @@ group :development, :test do
   # Better stack straces
   gem 'better_errors'
   gem 'binding_of_caller'
+  gem 'database_cleaner'
 
   # Use debugger
   # gem 'debugger', group: [:development, :test]
 
   # Restart proccess if the code change
   # Ex for sidekiq
-  # bundle exec rerun --background --dir app,db,lib --pattern '{**/*.rb}' -- bundle exec sidekiq --verbose
+  # bundle exec rerun --background --dir app,db,lib --pattern '{**/*.rb}' --
+  # bundle exec sidekiq --verbose
   # Or for reloading rais server on config change
   # rerun --dir config rails s
   gem 'rerun'
-  gem 'guard-minitest'
+  gem 'guard'
+  gem 'guard-rspec'
+  gem 'rspec-rails'
+
   gem 'fakeweb'
 
   # OS X specific gem to listen to file change
@@ -89,6 +93,8 @@ group :development, :test do
 
   # Load conf from .env file
   gem 'dotenv-rails'
+
+  gem 'capybara'
 end
 
 # Deployment
@@ -97,4 +103,4 @@ gem 'mina-sidekiq'
 gem 'rb-readline'
 
 # Crontab
-gem 'whenever', :require => false
+gem 'whenever', require: false

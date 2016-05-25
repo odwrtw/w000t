@@ -3,6 +3,13 @@
 # Version of your assets, change this if you want to expire all your assets.
 Rails.application.config.assets.version = '1.0'
 
+Rails.application.config.assets.precompile += %w(
+  fontawesome/fonts/fontawesome-webfont.eot
+  fontawesome/fonts/fontawesome-webfont.woff
+  fontawesome/fonts/fontawesome-webfont.ttf
+  fontawesome/fonts/fontawesome-webfont.svg
+)
+
 # Precompile additional assets.
 # application.js, application.css, and all non-JS/CSS in app/assets folder are
 # already added.

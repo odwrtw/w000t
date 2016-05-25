@@ -118,10 +118,10 @@ class W000tsController < ApplicationController
     end
     if params[:type]
       @w000ts = @w000ts.by_type(params[:type])
-                .order_by(created_at: :desc).page(params[:page]).per(25)
+                       .order_by(created_at: :desc).page(params[:page]).per(25)
     else
       @w000ts = @w000ts.order_by(created_at: :desc)
-                .page(params[:page]).per(25)
+                       .page(params[:page]).per(25)
     end
   end
 
@@ -145,14 +145,14 @@ class W000tsController < ApplicationController
   # Use callbacks to share common setup or constraints between actions.
   def set_w000t
     @w000t = W000t.find_by(short_url: params[:short_url])
-    fail AbstractController::ActionNotFound unless @w000t
+    raise AbstractController::ActionNotFound unless @w000t
   end
 
   # Set user on user wall
   def set_user
     # Get user
     @user = User.find_by(pseudo: params[:user_pseudo])
-    fail AbstractController::ActionNotFound unless @user
+    raise AbstractController::ActionNotFound unless @user
   end
 
   # Allowed params for w000t creation

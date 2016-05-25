@@ -39,5 +39,4 @@ Rails.application.routes.draw do
 
   # Default route
   root 'w000ts#new'
-
 end

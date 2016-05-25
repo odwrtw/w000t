@@ -1,6 +1,7 @@
 development:
   # Configure available database sessions. (required)
   sessions:
+  # clients:
     # Defines the default session. (required)
     default:
       # Defines the name of the default database that Mongoid can connect to.
@@ -58,6 +59,7 @@ development:
 test:
   options:
     raise_not_found_error: false
+  # clients:
   sessions:
     default:
       database: w000t_me_test
@@ -71,6 +73,7 @@ test:
         retry_interval: 0
 production:
   # Configure available database sessions. (required)
+  # clients:
   sessions:
     # Defines the default session. (required)
     default:
@@ -128,6 +131,7 @@ production:
     # use_utc: false
 staging:
   # Configure available database sessions. (required)
+  # clients:
   sessions:
     # Defines the default session. (required)
     default:

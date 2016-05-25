@@ -1,30 +1,36 @@
-require 'test_helper'
+require 'spec_helper'
 
 # AuthenticationToken
-class AuthenticationTokensControllerTest < ActionController::TestCase
-  setup do
+describe AuthenticationTokensController do
+  before do
+    User.delete_all
+    W000t.delete_all
+    AuthenticationToken.destroy_all
+    FakeWeb.clean_registry
+    Sidekiq::Worker.clear_all
+
     @user = FactoryGirl.create(:user)
     @authentication_token = FactoryGirl.create(:authentication_token)
     sign_in @user
   end
 
-  test 'should get index' do
+  it 'should get index' do
     get :index, user_pseudo: @user.pseudo
     assert_response :success
     assert_not_nil assigns(:authentication_tokens)
   end
 
-  test 'should get new' do
+  it 'should get new' do
     get :new, user_pseudo: @user.pseudo
     assert_response :success
   end
 
-  test 'should get edit' do
+  it 'should get edit' do
     get :edit, user_pseudo: @user.pseudo, id: @authentication_token.id
     assert_response :success
   end
 
-  test 'should create authentication_token' do
+  it 'should create authentication_token' do
     assert_difference('AuthenticationToken.count') do
       post :create,
            user_pseudo: @user.pseudo,
@@ -34,7 +40,7 @@ class AuthenticationTokensControllerTest < ActionController::TestCase
     assert_redirected_to user_authentication_tokens_path
   end
 
-  test 'should update authentication_token' do
+  it 'should update authentication_token' do
     @user_token = FactoryGirl.create(
       :authentication_token,
       user: @user,
@@ -50,7 +56,7 @@ class AuthenticationTokensControllerTest < ActionController::TestCase
     assert_redirected_to user_authentication_tokens_path
   end
 
-  test 'should not update as anonymous user' do
+  it 'should not update as anonymous user' do
     patch :update,
           id: @authentication_token.id,
           user_pseudo: @user.pseudo,
@@ -58,7 +64,7 @@ class AuthenticationTokensControllerTest < ActionController::TestCase
     assert_redirected_to 'previous_page'
   end
 
-  test 'should destroy authentication_token' do
+  it 'should destroy authentication_token' do
     assert_difference('AuthenticationToken.count', -1) do
       delete :destroy,
              user_pseudo: @user.pseudo,

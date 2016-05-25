@@ -1,8 +1,8 @@
-require 'test_helper'
+require 'spec_helper'
 
 # AuthenticationToken Model unittest
-class AuthenticationTokenTest < ActiveSupport::TestCase
-  setup do
+describe 'AuthenticationToken' do
+  before do
     # Known values
     @user = FactoryGirl.create(:user)
   end
@@ -15,7 +15,7 @@ class AuthenticationTokenTest < ActiveSupport::TestCase
     )
   end
 
-  test 'should not update authentication_token with same name' do
+  it 'should not update authentication_token with same name' do
     first_token = new_token(@user, 'test_token')
     assert first_token.valid?, 'Simple token should be valid'
     first_token.save
@@ -24,7 +24,7 @@ class AuthenticationTokenTest < ActiveSupport::TestCase
     assert second_token.invalid?, 'Duplicate token should not be valid'
   end
 
-  test 'should be valid' do
+  it 'should be valid' do
     @auth_token = new_token(@user, 'test_valid')
     assert @auth_token.valid?
     @auth_token.save

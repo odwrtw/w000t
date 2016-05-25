@@ -95,7 +95,7 @@ class UrlInfo
       return false
     end
 
-    if (!content_length) || content_length > MAX_UPLOAD_SIZE
+    if !content_length || content_length > MAX_UPLOAD_SIZE
       logger.info "Don't store, not valid content_length  #{content_length}"
       return false
     end
@@ -128,10 +128,10 @@ class UrlInfo
   private
 
   def parse_uri
-    URI.parse(url)
-    rescue URI::Error
-      logger.info 'Uri parse error'
-      nil
+      URI.parse(url)
+  rescue URI::Error
+    logger.info 'Uri parse error'
+    nil
   end
 
   def head_request(uri)

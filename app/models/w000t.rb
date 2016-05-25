@@ -23,15 +23,15 @@ class W000t
   field :archive, type: Integer, default: 0
 
   # Indexes
-  index({ short_url: 1 }, { unique: true, name: 'w000t_index_on_short_url' })
-  index({ status: 1 }, { name: 'w000t_index_on_status' })
-  index({ archive: 1 }, { name: 'w000t_index_on_archive' })
-  index({ user_id: 1 }, { name: 'user_index_on_id' })
+  index({ short_url: 1 }, unique: true, name: 'w000t_index_on_short_url')
+  index({ status: 1 }, name: 'w000t_index_on_status')
+  index({ archive: 1 }, name: 'w000t_index_on_archive')
+  index({ user_id: 1 }, name: 'user_index_on_id')
 
-  index({ 'url_info.url' => 1 }, { name: 'url_index_on_url' })
+  index({ 'url_info.url' => 1 }, name: 'url_index_on_url')
   index(
-    { user_id: 1, 'url_info.url' => 1 },
-    { unique: true, name: 'user_url_unique_index' }
+   { user_id: 1, 'url_info.url' => 1 },
+    unique: true, name: 'user_url_unique_index'
   )
 
   # Association
@@ -116,7 +116,7 @@ class W000t
     # Check if the required parameters are present
     unless upload_image || long_url
       logger.info "url : #{url_info.inspect} self : #{inspect}"
-      fail 'Missing long_url or upload_image'
+      raise 'Missing long_url or upload_image'
     end
 
     self.long_url = url_info.id if long_url.blank?

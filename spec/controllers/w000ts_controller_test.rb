@@ -1,8 +1,14 @@
-require 'test_helper'
+require 'spec_helper'
 
 # w000tsController tests
-class W000tsControllerTest < ActionController::TestCase
-  setup do
+describe W000tsController do
+  before do
+    User.delete_all
+    W000t.delete_all
+    AuthenticationToken.destroy_all
+    FakeWeb.clean_registry
+    Sidekiq::Worker.clear_all
+
     @user = FactoryGirl.create(:user)
     @admin_user = FactoryGirl.create(
       :user, pseudo: 'admin', email: 'email@admin.com', admin: true
@@ -16,7 +22,7 @@ class W000tsControllerTest < ActionController::TestCase
     )
   end
 
-  test 'should create a w000t as json' do
+  it 'should create a w000t as json' do
     assert_difference('W000t.count') do
       post :create, w000t: { long_url: 'http://google.fr' },
                     user_id: @user.id, format: :json
@@ -24,7 +30,7 @@ class W000tsControllerTest < ActionController::TestCase
     assert_response :success
   end
 
-  test 'should create a w000t as json with no http prefix' do
+  it 'should create a w000t as json with no http prefix' do
     assert_difference('W000t.count') do
       post :create, w000t: { long_url: 'google.fr' },
                     user_id: @user.id, format: :json
@@ -32,7 +38,7 @@ class W000tsControllerTest < ActionController::TestCase
     assert_response :success
   end
 
-  test 'should create a w000t as js' do
+  it 'should create a w000t as js' do
     assert_difference('W000t.count') do
       post :create, w000t: { long_url: 'http://google.fr' },
                     user_id: @user.id, format: :js
@@ -40,7 +46,7 @@ class W000tsControllerTest < ActionController::TestCase
     assert_response :success
   end
 
-  test 'should create a w000t with a status as json' do
+  it 'should create a w000t with a status as json' do
     url = 'http://google.fr'
     assert_difference('W000t.count') do
       post :create, w000t: { long_url: url, status: 'private' },
@@ -51,7 +57,7 @@ class W000tsControllerTest < ActionController::TestCase
     assert_equal w.status, :private, 'w000t status should be private'
   end
 
-  test 'should not create a w000t with a wrong status as json' do
+  it 'should not create a w000t with a wrong status as json' do
     assert_difference('W000t.count', 0) do
       post :create, w000t: { long_url: 'http://google.fr', status: 'yo' },
                     user_id: @user.id, format: :json
@@ -59,7 +65,7 @@ class W000tsControllerTest < ActionController::TestCase
     assert_response 422 # unprocessable entity
   end
 
-  test 'should create an existing w000t as json' do
+  it 'should create an existing w000t as json' do
     assert_difference('W000t.count', 0) do
       post :create, w000t: { long_url: @w000t.long_url },
                     user_id: @user.id, format: :json
@@ -67,7 +73,7 @@ class W000tsControllerTest < ActionController::TestCase
     assert_response :success
   end
 
-  test 'should return the same w000t as given' do
+  it 'should return the same w000t as given' do
     assert_difference('W000t.count', 0) do
       post :create,
            w000t: { long_url: @w000t.full_shortened_url(request.base_url) },
@@ -76,7 +82,7 @@ class W000tsControllerTest < ActionController::TestCase
     assert_response :success
   end
 
-  test 'should create an existing w000t as js' do
+  it 'should create an existing w000t as js' do
     assert_difference('W000t.count', 0) do
       post :create, w000t: { long_url: @w000t.long_url },
                     user_id: @user.id, format: :js
@@ -84,17 +90,17 @@ class W000tsControllerTest < ActionController::TestCase
     assert_response :success
   end
 
-  test 'should get show' do
+  it 'should get show' do
     get :show, short_url: @w000t.short_url
     assert_response :success
   end
 
-  test 'should get new' do
+  it 'should get new' do
     get :new
     assert_response :success
   end
 
-  test 'should destroy as a logged in user' do
+  it 'should destroy as a logged in user' do
     sign_in @user
     @user_w000t = W000t.create!(
       user: @user,
@@ -107,7 +113,7 @@ class W000tsControllerTest < ActionController::TestCase
     assert_equal 'W000t was successfully destroyed', flash[:notice]
   end
 
-  test 'should destroy with a user token as json' do
+  it 'should destroy with a user token as json' do
     @w000t.user = @user
     @w000t.save
     request.headers['X-Auth-Token'] = @authentication_token.token
@@ -117,7 +123,7 @@ class W000tsControllerTest < ActionController::TestCase
     assert_response :success
   end
 
-  test 'should destroy with an admin token as json' do
+  it 'should destroy with an admin token as json' do
     @w000t.user = @user
     @w000t.save
     request.headers['X-Auth-Token'] = @admin_authentication_token.token
@@ -127,7 +133,7 @@ class W000tsControllerTest < ActionController::TestCase
     assert_response :success
   end
 
-  test 'should destroy as an admin user' do
+  it 'should destroy as an admin user' do
     sign_in @admin_user
     @user_w000t = W000t.create!(
       user: @user,
@@ -140,14 +146,14 @@ class W000tsControllerTest < ActionController::TestCase
     assert_equal 'W000t was successfully destroyed', flash[:notice]
   end
 
-  test 'should not destroy as anonymous user' do
+  it 'should not destroy as anonymous user' do
     assert_difference('W000t.count', 0) do
       post :destroy, short_url: @w000t.short_url
     end
     assert_redirected_to new_user_session_url
   end
 
-  test 'should not destroy as the wrong user' do
+  it 'should not destroy as the wrong user' do
     joe = FactoryGirl.create(:user, pseudo: 'Joe', email: 'joe@plop.com')
     w000t_by_joe = FactoryGirl.create(
       :w000t,
@@ -162,7 +168,7 @@ class W000tsControllerTest < ActionController::TestCase
                  flash[:alert]
   end
 
-  test 'should update as a logged in user' do
+  it 'should update as a logged in user' do
     sign_in @user
     @user_w000t = FactoryGirl.create(
       :w000t,
@@ -177,12 +183,12 @@ class W000tsControllerTest < ActionController::TestCase
     assert_equal 'test,yo', @w.tags
   end
 
-  test 'should not update as anonymous user' do
+  it 'should not update as anonymous user' do
     patch :update, short_url: @w000t, format: :js, w000t: { tags: 'test, yo' }
     assert_response 401
   end
 
-  test 'should not update as the wrong user' do
+  it 'should not update as the wrong user' do
     joe = FactoryGirl.create(:user, pseudo: 'Joe', email: 'joe@plop.com')
     w000t_by_joe = FactoryGirl.create(
       :w000t,
@@ -196,7 +202,7 @@ class W000tsControllerTest < ActionController::TestCase
                  flash[:alert]
   end
 
-  test 'should create a w000t with a token as param' do
+  it 'should create a w000t with a token as param' do
     assert_difference('W000t.count') do
       post :create, w000t: { long_url: 'google.fr' },
                     token: @authentication_token.token,
@@ -208,7 +214,7 @@ class W000tsControllerTest < ActionController::TestCase
     assert_equal created_w000t.user_id, @user.id
   end
 
-  test 'should create a w000t with a token as header as json' do
+  it 'should create a w000t with a token as header as json' do
     request.headers['X-Auth-Token'] = @authentication_token.token
     assert_difference('W000t.count') do
       post :create, w000t: { long_url: 'google.fr', status: 'private' },
@@ -220,7 +226,7 @@ class W000tsControllerTest < ActionController::TestCase
     assert_equal created_w000t.user_id, @user.id
   end
 
-  test 'should return the user created w000t as json' do
+  it 'should return the user created w000t as json' do
     request.headers['X-Auth-Token'] = @authentication_token.token
     post :create, w000t: {
       long_url: 'google.fr', status: 'private', tags: 'test,yo'
@@ -239,7 +245,7 @@ class W000tsControllerTest < ActionController::TestCase
     assert_equal json_response['tags'], %w( test yo )
   end
 
-  test 'should return the anonymously created w000t as json' do
+  it 'should return the anonymously created w000t as json' do
     post :create, w000t: { long_url: 'google.fr' }, format: :json
     assert_response :created
 
@@ -251,7 +257,7 @@ class W000tsControllerTest < ActionController::TestCase
     assert_equal 0, json_response['number_of_click']
   end
 
-  test 'should get w000t as non admin user as json' do
+  it 'should get w000t as non admin user as json' do
     sign_in @user
     @w000t.user = @admin_user
     @w000t.save
@@ -263,7 +269,7 @@ class W000tsControllerTest < ActionController::TestCase
     )
   end
 
-  test 'should get w000t as an admin user as json' do
+  it 'should get w000t as an admin user as json' do
     sign_in @admin_user
     @w000t.user = @user
     @w000t.save
@@ -274,7 +280,7 @@ class W000tsControllerTest < ActionController::TestCase
     )
   end
 
-  test 'should get w000t with an admin token as json' do
+  it 'should get w000t with an admin token as json' do
     @w000t.user = @user
     @w000t.save
     request.headers['X-Auth-Token'] = @admin_authentication_token.token
@@ -285,13 +291,13 @@ class W000tsControllerTest < ActionController::TestCase
     )
   end
 
-  test 'should get user w000t list' do
+  it 'should get user w000t list' do
     sign_in @user
     get :owner_list
     assert_response :success
   end
 
-  test 'should get user w000t list filtered by type' do
+  it 'should get user w000t list filtered by type' do
     sign_in @user
     TypableUrl::TYPES.each do |type|
       get :owner_list, type: type.to_s
@@ -301,7 +307,7 @@ class W000tsControllerTest < ActionController::TestCase
 
   # Create two w000t, only one tagged with 'test'
   # Search for tag:'test', expect 1 only one result
-  test 'should filter by tags' do
+  it 'should filter by tags' do
     sign_in @user
     @w000t_no_tag = FactoryGirl.create(
       :w000t, long_url: 'yo.com', user: @user
@@ -321,7 +327,7 @@ class W000tsControllerTest < ActionController::TestCase
   # 1 - type: pdf - tag: test
   # 1 - type: image - tag: test
   # Search for type:'image' and tag:'test', expect 1 only one result
-  test 'should filter by tags and type' do
+  it 'should filter by tags and type' do
     sign_in @user
     @w000t_image_no_tag = FactoryGirl.create(
       :w000t, long_url: 'yo.com/t.pdf', tags: 'test', user: @user
@@ -337,14 +343,14 @@ class W000tsControllerTest < ActionController::TestCase
                     children: { count: 1, only: { tag: 'span' } }
   end
 
-  test 'should get user w000t list with a filter error' do
+  it 'should get user w000t list with a filter error' do
     sign_in @user
     get :owner_list, type: 'some shit'
     assert_redirected_to w000ts_me_url
     assert_equal 'Invalid filter', flash[:alert]
   end
 
-  test 'should get public wall of a user as anonymous user' do
+  it 'should get public wall of a user as anonymous user' do
     @w000t_public = FactoryGirl.create(
       :w000t, long_url: 'yo.com/t.gif', user: @user
     )
@@ -356,32 +362,32 @@ class W000tsControllerTest < ActionController::TestCase
     assert_select 'figure', @user.w000ts.where(status: :public).count
   end
 
-  test 'should get 404 on public wall of fake user' do
+  it 'should get 404 on public wall of fake user' do
     get :user_wall, user_pseudo: 'bazooka'
     assert_response 404
   end
 
-  test 'should get index as a non admin user' do
+  it 'should get index as a non admin user' do
     sign_in @user
     get :index
     assert_response :success
     assert_select 'li', 7
   end
 
-  test 'should get index as an admin user' do
+  it 'should get index as an admin user' do
     sign_in @admin_user
     get :index
     assert_response :success
     assert_select 'li', 8
   end
 
-  test 'should get index as anonymous user' do
+  it 'should get index as anonymous user' do
     get :index
     assert_response :success
     assert_select 'li', 4
   end
 
-  test 'should be redirected' do
+  it 'should be redirected' do
     before_redirect = @w000t.number_of_click
     get :redirect, short_url: @w000t.short_url
     # We should check the info from db because the inc method runs an update on
@@ -391,12 +397,12 @@ class W000tsControllerTest < ActionController::TestCase
     assert_redirected_to @w000t.long_url
   end
 
-  test 'should get a 404 http code for a fake link' do
+  it 'should get a 404 http code for a fake link' do
     get :redirect, short_url: 'null'
     assert_response 404
   end
 
-  test 'should be have one more click' do
+  it 'should be have one more click' do
     before_redirect = @w000t.number_of_click
     get :click, format: :js,  short_url: @w000t.short_url
     after_redirect = W000t.find(@w000t.id).number_of_click

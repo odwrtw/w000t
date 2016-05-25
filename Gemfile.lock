@@ -1,35 +1,41 @@
 GIT
   remote: git://github.com/fog/fog.git
-  revision: 446407b127342ab80b61622442d8bccfc8b5aaf1
+  revision: d57901fc2edf135b79e7b50df298d7040269786c
   specs:
-    fog (1.24.1)
+    fog (1.38.0)
+      fog-aliyun (>= 0.1.0)
+      fog-atmos
+      fog-aws (>= 0.6.0)
       fog-brightbox (~> 0.4)
-      fog-core (~> 1.24)
+      fog-cloudatcost (~> 0.1.0)
+      fog-core (~> 1.38)
+      fog-dynect (~> 0.0.2)
+      fog-ecloud (~> 0.1)
+      fog-google (<= 0.1.0)
       fog-json
+      fog-local
+      fog-openstack
+      fog-powerdns (>= 0.1.1)
       fog-profitbricks
+      fog-rackspace
       fog-radosgw (>= 0.0.2)
+      fog-riakcs
       fog-sakuracloud (>= 0.0.4)
+      fog-serverlove
       fog-softlayer
+      fog-storm_on_demand
+      fog-terremark
       fog-vmfusion
       fog-voxel
+      fog-vsphere (>= 0.4.0)
+      fog-xenserver
       fog-xml (~> 0.1.1)
       ipaddress (~> 0.5)
-      nokogiri (~> 1.5, >= 1.5.11)
-
-GIT
-  remote: git://github.com/mongoid/mongoid.git
-  revision: 5ba2e1fb4cb8189c9890e29c19cf4e16c25e4bc5
-  specs:
-    mongoid (4.0.0)
-      activemodel (~> 4.0)
-      moped (~> 2.0.0)
-      origin (~> 2.1)
-      tzinfo (>= 0.3.37)
 
 GEM
   remote: https://rubygems.org/
   specs:
-    CFPropertyList (2.2.8)
+    CFPropertyList (2.3.2)
     actionmailer (4.1.2)
       actionpack (= 4.1.2)
       actionview (= 4.1.2)
@@ -56,151 +62,229 @@ GEM
       minitest (~> 5.1)
       thread_safe (~> 0.1)
       tzinfo (~> 1.1)
+    addressable (2.4.0)
     arel (5.0.1.20140414130214)
-    bcrypt (3.1.7)
-    better_errors (2.0.0)
+    bcrypt (3.1.11)
+    better_errors (2.1.1)
       coderay (>= 1.0.0)
       erubis (>= 2.6.6)
       rack (>= 0.9.0)
     binding_of_caller (0.7.2)
       debug_inspector (>= 0.0.1)
-    bson (2.3.0)
+    bson (3.2.6)
     bson_ext (1.5.1)
     builder (3.2.2)
+    capybara (2.7.1)
+      addressable
+      mime-types (>= 1.16)
+      nokogiri (>= 1.3.3)
+      rack (>= 1.0.0)
+      rack-test (>= 0.5.4)
+      xpath (~> 2.0)
     carrierwave (0.10.0)
       activemodel (>= 3.2.0)
       activesupport (>= 3.2.0)
       json (>= 1.7)
       mime-types (>= 1.16)
-    carrierwave-mongoid (0.7.1)
+    carrierwave-mongoid (0.8.1)
       carrierwave (>= 0.8.0, < 0.11.0)
-      mongoid (>= 3.0, < 5.0)
+      mongoid (>= 3.0, < 6.0)
       mongoid-grid_fs (>= 1.3, < 3.0)
-    celluloid (0.16.0)
-      timers (~> 4.0.0)
-    chartkick (1.3.2)
+    chartkick (1.5.1)
     chronic (0.10.2)
-    coderay (1.1.0)
-    coffee-rails (4.0.1)
+    coderay (1.1.1)
+    coffee-rails (4.1.1)
       coffee-script (>= 2.2.0)
-      railties (>= 4.0.0, < 5.0)
-    coffee-script (2.3.0)
+      railties (>= 4.0.0, < 5.1.x)
+    coffee-script (2.4.1)
       coffee-script-source
       execjs
-    coffee-script-source (1.8.0)
-    connection_pool (2.0.0)
+    coffee-script-source (1.10.0)
+    concurrent-ruby (1.0.2)
+    connection_pool (2.2.0)
+    database_cleaner (1.5.3)
     debug_inspector (0.0.2)
-    devise (3.3.0)
+    devise (4.1.0)
       bcrypt (~> 3.0)
       orm_adapter (~> 0.1)
-      railties (>= 3.2.6, < 5)
-      thread_safe (~> 0.1)
+      railties (>= 4.1.0, < 5.1)
+      responders
       warden (~> 1.2.3)
-    dotenv (1.0.2)
-    dotenv-rails (1.0.2)
-      dotenv (= 1.0.2)
+    diff-lcs (1.2.5)
+    domain_name (0.5.20160310)
+      unf (>= 0.0.5, < 1.0.0)
+    dotenv (2.1.1)
+    dotenv-rails (2.1.1)
+      dotenv (= 2.1.1)
+      railties (>= 4.0, < 5.1)
     erubis (2.7.0)
-    excon (0.41.0)
-    execjs (2.2.1)
-    factory_girl (4.4.0)
+    excon (0.49.0)
+    execjs (2.6.0)
+    factory_girl (4.7.0)
       activesupport (>= 3.0.0)
-    factory_girl_rails (4.4.1)
-      factory_girl (~> 4.4.0)
+    factory_girl_rails (4.7.0)
+      factory_girl (~> 4.7.0)
       railties (>= 3.0.0)
     fakeweb (1.3.0)
-    ffi (1.9.3)
+    ffi (1.9.10)
     fission (0.5.0)
       CFPropertyList (~> 2.2)
-    flowdock (0.4.0)
-      httparty (~> 0.7)
-      multi_json
-    fog-brightbox (0.6.1)
+    fog-aliyun (0.1.0)
+      fog-core (~> 1.27)
+      fog-json (~> 1.0)
+      ipaddress (~> 0.8)
+      xml-simple (~> 1.1)
+    fog-atmos (0.1.0)
+      fog-core
+      fog-xml
+    fog-aws (0.9.2)
+      fog-core (~> 1.27)
+      fog-json (~> 1.0)
+      fog-xml (~> 0.1)
+      ipaddress (~> 0.8)
+    fog-brightbox (0.10.1)
       fog-core (~> 1.22)
       fog-json
-      inflecto
-    fog-core (1.24.0)
+      inflecto (~> 0.0.2)
+    fog-cloudatcost (0.1.2)
+      fog-core (~> 1.36)
+      fog-json (~> 1.0)
+      fog-xml (~> 0.1)
+      ipaddress (~> 0.8)
+    fog-core (1.38.0)
       builder
-      excon (~> 0.38)
+      excon (~> 0.49)
       formatador (~> 0.2)
-      mime-types
-      net-scp (~> 1.1)
-      net-ssh (>= 2.1.3)
-    fog-json (1.0.0)
-      multi_json (~> 1.0)
-    fog-profitbricks (0.0.1)
+    fog-dynect (0.0.3)
+      fog-core
+      fog-json
+      fog-xml
+    fog-ecloud (0.3.0)
+      fog-core
+      fog-xml
+    fog-google (0.1.0)
+      fog-core
+      fog-json
+      fog-xml
+    fog-json (1.0.2)
+      fog-core (~> 1.0)
+      multi_json (~> 1.10)
+    fog-local (0.3.0)
+      fog-core (~> 1.27)
+    fog-openstack (0.1.4)
+      fog-core (>= 1.38)
+      fog-json (>= 1.0)
+      fog-xml (>= 0.1)
+      ipaddress (>= 0.8)
+    fog-powerdns (0.1.1)
+      fog-core (~> 1.27)
+      fog-json (~> 1.0)
+      fog-xml (~> 0.1)
+    fog-profitbricks (0.0.5)
       fog-core
       fog-xml
       nokogiri
-    fog-radosgw (0.0.3)
+    fog-rackspace (0.1.1)
+      fog-core (>= 1.35)
+      fog-json (>= 1.0)
+      fog-xml (>= 0.1)
+      ipaddress (>= 0.8)
+    fog-radosgw (0.0.5)
       fog-core (>= 1.21.0)
       fog-json
       fog-xml (>= 0.0.1)
-    fog-sakuracloud (0.1.1)
+    fog-riakcs (0.1.0)
       fog-core
       fog-json
-    fog-softlayer (0.3.24)
+      fog-xml
+    fog-sakuracloud (1.7.5)
       fog-core
       fog-json
-    fog-vmfusion (0.0.1)
-      fission
+    fog-serverlove (0.1.2)
       fog-core
-    fog-voxel (0.0.1)
+      fog-json
+    fog-softlayer (1.1.0)
+      fog-core
+      fog-json
+    fog-storm_on_demand (0.1.1)
+      fog-core
+      fog-json
+    fog-terremark (0.1.0)
       fog-core
       fog-xml
-    fog-xml (0.1.1)
+    fog-vmfusion (0.1.0)
+      fission
+      fog-core
+    fog-voxel (0.1.0)
+      fog-core
+      fog-xml
+    fog-vsphere (0.6.4)
+      fog-core
+      rbvmomi (~> 1.8)
+    fog-xenserver (0.2.3)
+      fog-core
+      fog-xml
+    fog-xml (0.1.2)
       fog-core
       nokogiri (~> 1.5, >= 1.5.11)
     formatador (0.2.5)
-    guard (2.8.2)
+    guard (2.13.0)
       formatador (>= 0.2.4)
-      listen (~> 2.7)
+      listen (>= 2.7, <= 4.0)
       lumberjack (~> 1.0)
+      nenv (~> 0.1)
+      notiffany (~> 0.0)
       pry (>= 0.9.12)
+      shellany (~> 0.0)
       thor (>= 0.18.1)
-    guard-minitest (2.3.2)
-      guard (~> 2.0)
-      minitest (>= 3.0)
-    hike (1.2.3)
-    hitimes (1.2.2)
-    httparty (0.13.1)
-      json (~> 1.8)
-      multi_xml (>= 0.5.2)
-    i18n (0.6.11)
+    guard-compat (1.2.1)
+    guard-rspec (4.6.5)
+      guard (~> 2.1)
+      guard-compat (~> 1.1)
+      rspec (>= 2.99.0, < 4.0)
+    http-cookie (1.0.2)
+      domain_name (~> 0.5)
+    i18n (0.7.0)
     inflecto (0.0.2)
-    ipaddress (0.8.0)
-    jbuilder (2.1.3)
-      activesupport (>= 3.0.0, < 5)
+    ipaddress (0.8.3)
+    jbuilder (2.4.1)
+      activesupport (>= 3.0.0, < 5.1)
       multi_json (~> 1.2)
-    jquery-rails (3.1.1)
+    jquery-rails (3.1.4)
       railties (>= 3.0, < 5.0)
       thor (>= 0.14, < 2.0)
-    jquery-turbolinks (2.0.2)
+    jquery-turbolinks (2.1.0)
       railties (>= 3.1.0)
       turbolinks
-    json (1.8.1)
-    kaminari (0.15.1)
+    json (1.8.3)
+    kaminari (0.16.3)
       actionpack (>= 3.0.0)
       activesupport (>= 3.0.0)
-    listen (2.7.9)
-      celluloid (>= 0.15.2)
-      rb-fsevent (>= 0.9.3)
-      rb-inotify (>= 0.9)
-    lumberjack (1.0.9)
+    listen (3.1.3)
+      rb-fsevent (~> 0.9, >= 0.9.7)
+      rb-inotify (~> 0.9, >= 0.9.7)
+      ruby_dep (~> 1.2)
+    lumberjack (1.0.10)
     mail (2.5.4)
       mime-types (~> 1.16)
       treetop (~> 1.4.8)
     method_source (0.8.2)
     mime-types (1.25.1)
-    mina (0.3.0)
-      open4
+    mina (0.3.8)
+      open4 (~> 1.3.4)
       rake
-    mina-sidekiq (0.3.0)
+    mina-sidekiq (0.3.1)
       mina
-    mini_portile (0.6.1)
-    minitest (5.4.0)
-    mongoid-grid_fs (2.1.0)
+    mini_portile2 (2.0.0)
+    minitest (5.8.4)
+    mongoid (4.0.2)
+      activemodel (~> 4.0)
+      moped (~> 2.0.0)
+      origin (~> 2.1)
+      tzinfo (>= 0.3.37)
+    mongoid-grid_fs (2.2.1)
       mime-types (>= 1.0, < 3.0)
-      mongoid (>= 3.0, < 5.0)
+      mongoid (>= 3.0, < 6.0)
     mongoid_rails_migrations (1.0.1)
       activesupport (>= 3.2.0)
       bundler (>= 1.0.0)
@@ -209,32 +293,32 @@ GEM
     mongoid_taggable (1.1.1)
       mongoid (>= 3)
       rake
-    moped (2.0.0)
-      bson (~> 2.2)
+    moped (2.0.7)
+      bson (~> 3.0)
       connection_pool (~> 2.0)
       optionable (~> 0.2.0)
-    multi_json (1.10.1)
-    multi_xml (0.5.5)
-    net-scp (1.2.1)
-      net-ssh (>= 2.6.5)
-    net-ssh (2.9.1)
-    netrc (0.7.7)
-    newrelic_rpm (3.9.5.251)
-    nokogiri (1.6.4.1)
-      mini_portile (~> 0.6.0)
+    multi_json (1.12.0)
+    nenv (0.3.0)
+    netrc (0.11.0)
+    newrelic_rpm (3.15.2.317)
+    nokogiri (1.6.7.2)
+      mini_portile2 (~> 2.0.0.rc2)
+    notiffany (0.0.8)
+      nenv (~> 0.1)
+      shellany (~> 0.0)
     open4 (1.3.4)
     optionable (0.2.0)
-    origin (2.1.1)
+    origin (2.2.0)
     orm_adapter (0.5.0)
     polyglot (0.3.5)
-    pry (0.10.1)
+    pry (0.10.3)
       coderay (~> 1.1.0)
       method_source (~> 0.8.1)
       slop (~> 3.4)
-    rack (1.5.2)
+    rack (1.5.5)
     rack-protection (1.5.3)
       rack
-    rack-test (0.6.2)
+    rack-test (0.6.3)
       rack (>= 1.0)
     rails (4.1.2)
       actionmailer (= 4.1.2)
@@ -251,78 +335,109 @@ GEM
       activesupport (= 4.1.2)
       rake (>= 0.8.7)
       thor (>= 0.18.1, < 2.0)
-    rake (10.3.2)
-    rb-fsevent (0.9.4)
-    rb-inotify (0.9.5)
+    rake (11.1.2)
+    rb-fsevent (0.9.7)
+    rb-inotify (0.9.7)
       ffi (>= 0.5.0)
-    rb-readline (0.5.1)
-    rdoc (4.1.1)
+    rb-readline (0.5.3)
+    rbvmomi (1.8.2)
+      builder
+      nokogiri (>= 1.4.1)
+      trollop
+    rdoc (4.2.2)
       json (~> 1.4)
-    redis (3.1.0)
-    redis-namespace (1.5.1)
+    redis (3.3.0)
+    redis-namespace (1.5.2)
       redis (~> 3.0, >= 3.0.4)
-    rerun (0.10.0)
-      listen (~> 2.7, >= 2.7.3)
-    rest-client (1.7.2)
+    rerun (0.11.0)
+      listen (~> 3.0)
+    responders (1.1.2)
+      railties (>= 3.2, < 4.2)
+    rest-client (1.8.0)
+      http-cookie (>= 1.0.2, < 2.0)
       mime-types (>= 1.16, < 3.0)
       netrc (~> 0.7)
-    rmagick (2.13.3)
+    rmagick (2.15.4)
+    rspec (3.4.0)
+      rspec-core (~> 3.4.0)
+      rspec-expectations (~> 3.4.0)
+      rspec-mocks (~> 3.4.0)
+    rspec-core (3.4.4)
+      rspec-support (~> 3.4.0)
+    rspec-expectations (3.4.0)
+      diff-lcs (>= 1.2.0, < 2.0)
+      rspec-support (~> 3.4.0)
+    rspec-mocks (3.4.1)
+      diff-lcs (>= 1.2.0, < 2.0)
+      rspec-support (~> 3.4.0)
+    rspec-rails (3.4.2)
+      actionpack (>= 3.0, < 4.3)
+      activesupport (>= 3.0, < 4.3)
+      railties (>= 3.0, < 4.3)
+      rspec-core (~> 3.4.0)
+      rspec-expectations (~> 3.4.0)
+      rspec-mocks (~> 3.4.0)
+      rspec-support (~> 3.4.0)
+    rspec-support (3.4.1)
+    ruby_dep (1.2.0)
     rushover (0.3.0)
       json
       rest-client
-    sass (3.2.19)
-    sass-rails (4.0.3)
+    sass (3.4.22)
+    sass-rails (5.0.4)
       railties (>= 4.0.0, < 5.0)
-      sass (~> 3.2.0)
-      sprockets (~> 2.8, <= 2.11.0)
-      sprockets-rails (~> 2.0)
+      sass (~> 3.1)
+      sprockets (>= 2.8, < 4.0)
+      sprockets-rails (>= 2.0, < 4.0)
+      tilt (>= 1.1, < 3)
     sdoc (0.4.1)
       json (~> 1.7, >= 1.7.7)
       rdoc (~> 4.0)
-    sidekiq (3.2.4)
-      celluloid (>= 0.15.2)
-      connection_pool (>= 2.0.0)
-      json
-      redis (>= 3.0.6)
-      redis-namespace (>= 1.3.1)
-    sinatra (1.4.5)
-      rack (~> 1.4)
+    shellany (0.0.1)
+    sidekiq (4.1.2)
+      concurrent-ruby (~> 1.0)
+      connection_pool (~> 2.2, >= 2.2.0)
+      redis (~> 3.2, >= 3.2.1)
+    sinatra (1.4.7)
+      rack (~> 1.5)
       rack-protection (~> 1.4)
-      tilt (~> 1.3, >= 1.3.4)
-    slim (2.0.3)
-      temple (~> 0.6.6)
+      tilt (>= 1.3, < 3)
+    slim (3.0.6)
+      temple (~> 0.7.3)
       tilt (>= 1.3.3, < 2.1)
     slop (3.6.0)
-    spring (1.1.3)
-    sprockets (2.11.0)
-      hike (~> 1.2)
-      multi_json (~> 1.0)
-      rack (~> 1.0)
-      tilt (~> 1.1, != 1.3.0)
-    sprockets-rails (2.1.3)
+    spring (1.7.1)
+    sprockets (3.6.0)
+      concurrent-ruby (~> 1.0)
+      rack (> 1, < 3)
+    sprockets-rails (2.3.3)
       actionpack (>= 3.0)
       activesupport (>= 3.0)
-      sprockets (~> 2.8)
-    temple (0.6.8)
+      sprockets (>= 2.8, < 4.0)
+    temple (0.7.6)
     thor (0.19.1)
-    thread_safe (0.3.4)
-    tilt (1.4.1)
-    timers (4.0.0)
-      hitimes
+    thread_safe (0.3.5)
+    tilt (2.0.2)
     treetop (1.4.15)
       polyglot
       polyglot (>= 0.3.1)
-    turbolinks (2.3.0)
+    trollop (2.1.2)
+    turbolinks (2.5.3)
       coffee-rails
     tzinfo (1.2.2)
       thread_safe (~> 0.1)
-    uglifier (2.5.3)
-      execjs (>= 0.3.0)
-      json (>= 1.8.0)
-    warden (1.2.3)
+    uglifier (3.0.0)
+      execjs (>= 0.3.0, < 3)
+    unf (0.1.4)
+      unf_ext
+    unf_ext (0.0.7.2)
+    warden (1.2.6)
       rack (>= 1.0)
     whenever (0.9.4)
       chronic (>= 0.6.3)
+    xml-simple (1.1.5)
+    xpath (2.0.0)
+      nokogiri (~> 1.3)
 
 PLATFORMS
   ruby
@@ -331,23 +446,25 @@ DEPENDENCIES
   better_errors
   binding_of_caller
   bson_ext
+  capybara
   carrierwave-mongoid
   chartkick
-  coffee-rails (~> 4.0.0)
-  devise (~> 3.3.0)
+  coffee-rails (~> 4.1.1)
+  database_cleaner
+  devise (~> 4.1.0)
   dotenv-rails
   factory_girl_rails
   fakeweb
-  flowdock
   fog!
-  guard-minitest
-  jbuilder (~> 2.0)
+  guard
+  guard-rspec
+  jbuilder (~> 2.4.1)
   jquery-rails
   jquery-turbolinks
   kaminari
   mina
   mina-sidekiq
-  mongoid (~> 4)!
+  mongoid (~> 4)
   mongoid_rails_migrations
   mongoid_taggable
   newrelic_rpm
@@ -355,15 +472,23 @@ DEPENDENCIES
   rails (= 4.1.2)
   rb-fsevent
   rb-readline
+  redis-namespace
   rerun
   rmagick
+  rspec-rails
   rushover
-  sass-rails (~> 4.0.3)
-  sdoc (~> 0.4.0)
+  sass-rails (~> 5.0.4)
+  sdoc (~> 0.4.1)
   sidekiq
   sinatra
   slim
   spring
   turbolinks
-  uglifier (>= 1.3.0)
+  uglifier (>= 3.0.0)
   whenever
+
+RUBY VERSION
+   ruby 2.2.5p319
+
+BUNDLED WITH
+   1.12.1

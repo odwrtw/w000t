@@ -1,10 +1,10 @@
-require 'test_helper'
+require 'spec_helper'
 require 'sidekiq/testing'
 Sidekiq::Testing.fake!
 
 # UrlInfo test
-class UrlInfoTest < ActiveSupport::TestCase
-  setup do
+describe 'UrlInfos' do
+  before do
     # Clean all fakewebs
     FakeWeb.clean_registry
     initiate_fake_web
@@ -35,7 +35,7 @@ class UrlInfoTest < ActiveSupport::TestCase
     }
   }
 
-  test 'type should be found' do
+  it 'type should be found' do
     types_and_urls = {
       youtube: [
         'https://www.youtube.com/watch?v=LoJtfpDWpmY',
@@ -70,7 +70,7 @@ class UrlInfoTest < ActiveSupport::TestCase
     end
   end
 
-  test 'type should not be found' do
+  it 'type should not be found' do
     urls = [
       'https://test.com',
       'https://yomma.fr/youtube'
@@ -82,13 +82,13 @@ class UrlInfoTest < ActiveSupport::TestCase
     end
   end
 
-  test 'type should not be updated' do
+  it 'type should not be updated' do
     @w000t = FactoryGirl.create(:w000t, long_url: 'http://test.com/test.jpg')
     @w000t.url_info.type = 'test'
     assert_equal 'test', @w000t.url_info.type
   end
 
-  test 'type should be updated if forced' do
+  it 'type should be updated if forced' do
     @w000t = FactoryGirl.create(:w000t, long_url: 'http://test.com/test.jpg')
     @w000t.url_info.type = 'test'
     @w000t.url_info.find_type(true)
@@ -96,7 +96,7 @@ class UrlInfoTest < ActiveSupport::TestCase
     assert_equal 'image', @w000t.url_info.type
   end
 
-  test 'shoud update http_code and content_length when creating a new w000t' do
+  it 'should update http_code and content_length when creating a new w000t' do
     Sidekiq::Testing.inline! do
       @w000t_404 = W000t.create(long_url: FAKE_WEB_LIST[:image_404][:url])
       @w000t_404.reload
@@ -110,7 +110,7 @@ class UrlInfoTest < ActiveSupport::TestCase
     end
   end
 
-  test 'shoud download when image is valid' do
+  it 'should download when image is valid' do
     @greg = FactoryGirl.create(:user, pseudo: 'greg', email: 'greg@odwrtw.com')
     Sidekiq::Testing.inline! do
       @w000t = W000t.create(
@@ -121,10 +121,10 @@ class UrlInfoTest < ActiveSupport::TestCase
     @w000t.reload
 
     assert_equal 12_000, @w000t.url_info.content_length
-    assert_not_nil @w000t.url_info.cloud_image.thumb.url
+    expect(@w000t.url_info.cloud_image.thumb.url).not_to be_nil
   end
 
-  test 'shoud not download when image is valid but w000t is public' do
+  it 'should not download when image is valid but w000t is public' do
     Sidekiq::Testing.inline! do
       @w000t = W000t.create(
         long_url: FAKE_WEB_LIST[:image_ok][:url]
@@ -137,7 +137,7 @@ class UrlInfoTest < ActiveSupport::TestCase
     assert_equal 12_000, @w000t.url_info.content_length
   end
 
-  test 'shoud not download when not a valid image' do
+  it 'should not download when not a valid image' do
     Sidekiq::Testing.inline! do
       @w000t = W000t.create(long_url: FAKE_WEB_LIST[:not_image_ok][:url])
     end
@@ -147,7 +147,7 @@ class UrlInfoTest < ActiveSupport::TestCase
                  'Cloud image is not nil but not an image'
   end
 
-  test 'shoud not download when image too big' do
+  it 'should not download when image too big' do
     Sidekiq::Testing.inline! do
       @w000t = W000t.create(long_url: FAKE_WEB_LIST[:image_too_big][:url])
     end
@@ -157,7 +157,7 @@ class UrlInfoTest < ActiveSupport::TestCase
                  'Cloud image is not nil but too big'
   end
 
-  test 'shoud not download when image is not 200' do
+  it 'should not download when image is not 200' do
     Sidekiq::Testing.inline! do
       @w000t = W000t.create(long_url: FAKE_WEB_LIST[:image_404][:url])
     end
@@ -167,7 +167,7 @@ class UrlInfoTest < ActiveSupport::TestCase
                  'Cloud image is not nil but 301'
   end
 
-  test 'shoud get default url when cloud_image not yet set' do
+  it 'should get default url when cloud_image not yet set' do
     @w000t = W000t.create(long_url: FAKE_WEB_LIST[:image_ok][:url])
     @w000t.reload
 
@@ -175,7 +175,7 @@ class UrlInfoTest < ActiveSupport::TestCase
                  'Bad image default url'
   end
 
-  test 'shoud get good url' do
+  it 'should get good url' do
     Sidekiq::Testing.inline! do
       @w000t_cloudy = W000t.create(long_url: FAKE_WEB_LIST[:image_ok][:url])
     end
@@ -196,7 +196,7 @@ class UrlInfoTest < ActiveSupport::TestCase
                  'Bad image default url'
   end
 
-  test 'shoud have a valid internal_status' do
+  it 'should have a valid internal_status' do
     UrlInfo::INTERNAL_STATUS.each do |s|
       @url_info = FactoryGirl.build(
         :url_info, url: 'http://google.com',
@@ -207,7 +207,7 @@ class UrlInfoTest < ActiveSupport::TestCase
     end
   end
 
-  test 'shoud have a invalid internal_status' do
+  it 'should have a invalid internal_status' do
     %i( test yo mama ).each do |s|
       @url_info = FactoryGirl.build(
         :url_info, url: 'http://google.com',

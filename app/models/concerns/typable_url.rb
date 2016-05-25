@@ -9,7 +9,7 @@ module TypableUrl
   included do
     field :type, type: String
 
-    index({ type: 1 }, { name: 'url_index_on_type' })
+    index({ type: 1 }, name: 'url_index_on_type')
 
     before_save :find_type
   end
