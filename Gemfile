@@ -87,6 +87,7 @@ group :development, :test do
   gem 'rerun'
   gem 'guard'
   gem 'guard-rspec'
+  gem 'json_spec'
   gem 'rspec-rails'
 
   gem 'fakeweb'

@@ -8,6 +8,7 @@ describe W000tsController do
     AuthenticationToken.destroy_all
     FakeWeb.clean_registry
     Sidekiq::Worker.clear_all
+    Geocoder.configure(:lookup => :test)
 
     @user = FactoryGirl.create(:user)
     @admin_user = FactoryGirl.create(
@@ -20,73 +21,114 @@ describe W000tsController do
     @admin_authentication_token = FactoryGirl.create(
       :authentication_token, user: @admin_user
     )
+    freegeoip_json = <<-JSON
+{
+    "ip": "8.8.8.8",
+    "country_code": "US",
+    "country_name": "United States",
+    "region_code": "CA",
+    "region_name": "California",
+    "city": "Mountain View",
+    "zip_code": "94035",
+    "time_zone": "America/Los_Angeles",
+    "latitude": 37.386,
+    "longitude": -122.0838,
+    "metro_code": 807
+}
+JSON
+    Geocoder::Lookup::Test.set_default_stub(
+      [
+        {
+          'latitude'     => 40.7143528,
+          'longitude'    => -74.0059731,
+          'address'      => 'New York, NY, USA',
+          'state'        => 'New York',
+          'state_code'   => 'NY',
+          'country'      => 'United States',
+          'country_code' => 'US'
+        }
+      ]
+    )
+
+    FakeWeb.register_uri(:any, %r|freegeoip|, :body => freegeoip_json)
+  end
+
+  before(:each) do
+    request.env["HTTP_REFERER"] = 'where_i_came_from'
   end
 
   it 'should create a w000t as json' do
-    assert_difference('W000t.count') do
+    expect{
       post :create, w000t: { long_url: 'http://google.fr' },
                     user_id: @user.id, format: :json
-    end
+    }.to change { W000t.count }.by(1)
+
     assert_response :success
   end
 
   it 'should create a w000t as json with no http prefix' do
-    assert_difference('W000t.count') do
+    expect{
       post :create, w000t: { long_url: 'google.fr' },
                     user_id: @user.id, format: :json
-    end
+    }.to change { W000t.count }.by(1)
+
     assert_response :success
   end
 
   it 'should create a w000t as js' do
-    assert_difference('W000t.count') do
+    expect{
       post :create, w000t: { long_url: 'http://google.fr' },
                     user_id: @user.id, format: :js
-    end
+    }.to change { W000t.count }.by(1)
+
     assert_response :success
   end
 
   it 'should create a w000t with a status as json' do
     url = 'http://google.fr'
-    assert_difference('W000t.count') do
+    expect{
       post :create, w000t: { long_url: url, status: 'private' },
                     user_id: @user.id, format: :json
-    end
+    }.to change { W000t.count }.by(1)
+
     assert_response :success
     w = W000t.find_by('url_info.url' => url)
     assert_equal w.status, :private, 'w000t status should be private'
   end
 
   it 'should not create a w000t with a wrong status as json' do
-    assert_difference('W000t.count', 0) do
+    expect{
       post :create, w000t: { long_url: 'http://google.fr', status: 'yo' },
                     user_id: @user.id, format: :json
-    end
+    }.to change { W000t.count }.by(0)
+
     assert_response 422 # unprocessable entity
   end
 
   it 'should create an existing w000t as json' do
-    assert_difference('W000t.count', 0) do
+    expect{
       post :create, w000t: { long_url: @w000t.long_url },
                     user_id: @user.id, format: :json
-    end
+    }.to change { W000t.count }.by(0)
+
     assert_response :success
   end
 
   it 'should return the same w000t as given' do
-    assert_difference('W000t.count', 0) do
+    expect{
       post :create,
            w000t: { long_url: @w000t.full_shortened_url(request.base_url) },
            format: :json
-    end
+    }.to change { W000t.count }.by(0)
+
     assert_response :success
   end
 
   it 'should create an existing w000t as js' do
-    assert_difference('W000t.count', 0) do
+    expect{
       post :create, w000t: { long_url: @w000t.long_url },
                     user_id: @user.id, format: :js
-    end
+    }.to change { W000t.count }.by(0)
     assert_response :success
   end
 
@@ -106,10 +148,10 @@ describe W000tsController do
       user: @user,
       long_url: 'http://destroy_logged_in.com'
     )
-    assert_difference('W000t.count', -1) do
+    expect{
       post :destroy, short_url: @user_w000t.short_url
-    end
-    assert_redirected_to 'previous_page'
+    }.to change { W000t.count }.by(-1)
+    expect(response).to redirect_to('where_i_came_from')
     assert_equal 'W000t was successfully destroyed', flash[:notice]
   end
 
@@ -117,9 +159,9 @@ describe W000tsController do
     @w000t.user = @user
     @w000t.save
     request.headers['X-Auth-Token'] = @authentication_token.token
-    assert_difference('W000t.count', -1) do
+    expect{
       post :destroy, short_url: @w000t.short_url, format: :json
-    end
+    }.to change { W000t.count }.by(-1)
     assert_response :success
   end
 
@@ -127,9 +169,9 @@ describe W000tsController do
     @w000t.user = @user
     @w000t.save
     request.headers['X-Auth-Token'] = @admin_authentication_token.token
-    assert_difference('W000t.count', -1) do
+    expect{
       post :destroy, short_url: @w000t.short_url, format: :json
-    end
+    }.to change { W000t.count }.by(-1)
     assert_response :success
   end
 
@@ -139,17 +181,17 @@ describe W000tsController do
       user: @user,
       long_url: 'http://destroy_logged_in.com'
     )
-    assert_difference('W000t.count', -1) do
+    expect{
       post :destroy, short_url: @user_w000t.short_url
-    end
-    assert_redirected_to 'previous_page'
+    }.to change { W000t.count }.by(-1)
+    expect(response).to redirect_to('where_i_came_from')
     assert_equal 'W000t was successfully destroyed', flash[:notice]
   end
 
   it 'should not destroy as anonymous user' do
-    assert_difference('W000t.count', 0) do
+    expect{
       post :destroy, short_url: @w000t.short_url
-    end
+    }.to change { W000t.count }.by(0)
     assert_redirected_to new_user_session_url
   end
 
@@ -161,9 +203,9 @@ describe W000tsController do
       user: joe
     )
     sign_in @user
-    assert_difference('W000t.count', 0) do
+    expect{
       post :destroy, short_url: w000t_by_joe.short_url, format: :json
-    end
+    }.to change { W000t.count }.by(0)
     assert_equal 'You can not delete this w000t, only the owner can',
                  flash[:alert]
   end
@@ -203,93 +245,29 @@ describe W000tsController do
   end
 
   it 'should create a w000t with a token as param' do
-    assert_difference('W000t.count') do
+    expect{
       post :create, w000t: { long_url: 'google.fr' },
                     token: @authentication_token.token,
                     format: :json
-    end
+    }.to change { W000t.count }.by(1)
     assert_response :success
     created_w000t = W000t.find_by('url_info.url' => 'http://google.fr')
-    assert_not_nil created_w000t
+    expect(created_w000t).not_to be_nil
     assert_equal created_w000t.user_id, @user.id
   end
 
   it 'should create a w000t with a token as header as json' do
     request.headers['X-Auth-Token'] = @authentication_token.token
-    assert_difference('W000t.count') do
+    expect{
       post :create, w000t: { long_url: 'google.fr', status: 'private' },
                     format: :json
-    end
+    }.to change { W000t.count }.by(1)
     assert_response :created
     created_w000t = W000t.find_by('url_info.url' => 'http://google.fr')
-    assert_not_nil created_w000t
+    expect(created_w000t).not_to be_nil
     assert_equal created_w000t.user_id, @user.id
   end
 
-  it 'should return the user created w000t as json' do
-    request.headers['X-Auth-Token'] = @authentication_token.token
-    post :create, w000t: {
-      long_url: 'google.fr', status: 'private', tags: 'test,yo'
-    },
-                  format: :json
-    assert_response :created
-    json_expected_keys %w(
-      id w000t url type tags status number_of_click created_at
-    )
-    json_unexpected_keys %w( user url_info )
-
-    assert_equal 'http://google.fr', json_response['url']
-    assert_equal 'private', json_response['status']
-    assert_equal nil, json_response['type']
-    assert_equal 0, json_response['number_of_click']
-    assert_equal json_response['tags'], %w( test yo )
-  end
-
-  it 'should return the anonymously created w000t as json' do
-    post :create, w000t: { long_url: 'google.fr' }, format: :json
-    assert_response :created
-
-    json_expected_keys %w( id w000t url type number_of_click created_at )
-    json_unexpected_keys %w( tags status user url_info )
-
-    assert_equal 'http://google.fr', json_response['url']
-    assert_equal nil, json_response['type']
-    assert_equal 0, json_response['number_of_click']
-  end
-
-  it 'should get w000t as non admin user as json' do
-    sign_in @user
-    @w000t.user = @admin_user
-    @w000t.save
-    get :show, short_url: @w000t.short_url, format: :json
-    assert_response :success
-    json_expected_keys %w( id w000t url type )
-    json_unexpected_keys %w(
-      tags status number_of_click created_at user url_info
-    )
-  end
-
-  it 'should get w000t as an admin user as json' do
-    sign_in @admin_user
-    @w000t.user = @user
-    @w000t.save
-    get :show, short_url: @w000t.short_url, format: :json
-    assert_response :success
-    json_expected_keys %w(
-      id w000t url type tags status number_of_click created_at user url_info
-    )
-  end
-
-  it 'should get w000t with an admin token as json' do
-    @w000t.user = @user
-    @w000t.save
-    request.headers['X-Auth-Token'] = @admin_authentication_token.token
-    get :show, short_url: @w000t.short_url, format: :json
-    assert_response :success
-    json_expected_keys %w(
-      id w000t url type tags status number_of_click created_at user url_info
-    )
-  end
 
   it 'should get user w000t list' do
     sign_in @user
@@ -305,44 +283,6 @@ describe W000tsController do
     end
   end
 
-  # Create two w000t, only one tagged with 'test'
-  # Search for tag:'test', expect 1 only one result
-  it 'should filter by tags' do
-    sign_in @user
-    @w000t_no_tag = FactoryGirl.create(
-      :w000t, long_url: 'yo.com', user: @user
-    )
-    @w000t_tag_test = FactoryGirl.create(
-      :w000t, long_url: 'test.com', tags: 'test  ', user: @user
-    )
-    assert_equal 2, @user.w000ts.count
-    get :owner_list, tags: 'test'
-    assert_response :success
-    assert_tag :tbody, children: { count: 2, only: { tag: 'tr' } }
-    assert_tag :td, attributes: { class: 'w000t-tags' },
-                    children: { count: 1, only: { tag: 'span' } }
-  end
-
-  # Create two typed w000t with the same tag
-  # 1 - type: pdf - tag: test
-  # 1 - type: image - tag: test
-  # Search for type:'image' and tag:'test', expect 1 only one result
-  it 'should filter by tags and type' do
-    sign_in @user
-    @w000t_image_no_tag = FactoryGirl.create(
-      :w000t, long_url: 'yo.com/t.pdf', tags: 'test', user: @user
-    )
-    @w000t_image_tag = FactoryGirl.create(
-      :w000t, long_url: 'test.com/t.jpg', tags: 'test', user: @user
-    )
-    assert_equal 2, @user.w000ts.count
-    get :owner_list, tags: 'test', type: 'image'
-    assert_response :success
-    assert_tag :tbody, children: { count: 2, only: { tag: 'tr' } }
-    assert_tag :td, attributes: { class: 'w000t-tags' },
-                    children: { count: 1, only: { tag: 'span' } }
-  end
-
   it 'should get user w000t list with a filter error' do
     sign_in @user
     get :owner_list, type: 'some shit'
@@ -350,51 +290,31 @@ describe W000tsController do
     assert_equal 'Invalid filter', flash[:alert]
   end
 
-  it 'should get public wall of a user as anonymous user' do
-    @w000t_public = FactoryGirl.create(
-      :w000t, long_url: 'yo.com/t.gif', user: @user
-    )
-    @w000t_private = FactoryGirl.create(
-      :w000t, long_url: 'test.com/t.jpg', status: :private, user: @user
-    )
-    get :user_wall, user_pseudo: @user.pseudo
-    assert_response :success
-    assert_select 'figure', @user.w000ts.where(status: :public).count
-  end
-
   it 'should get 404 on public wall of fake user' do
     get :user_wall, user_pseudo: 'bazooka'
     assert_response 404
   end
 
-  it 'should get index as a non admin user' do
-    sign_in @user
-    get :index
-    assert_response :success
-    assert_select 'li', 7
-  end
-
-  it 'should get index as an admin user' do
-    sign_in @admin_user
-    get :index
-    assert_response :success
-    assert_select 'li', 8
-  end
-
-  it 'should get index as anonymous user' do
-    get :index
-    assert_response :success
-    assert_select 'li', 4
-  end
-
   it 'should be redirected' do
+    request.headers['REMOTE_ADDR'] = '8.8.8.8'
+
     before_redirect = @w000t.number_of_click
+    clicks_before_redirect = W000t.find(@w000t.id).clicks.count
     get :redirect, short_url: @w000t.short_url
     # We should check the info from db because the inc method runs an update on
     # the w000t directly in db
     after_redirect = W000t.find(@w000t.id).number_of_click
+    clicks_after_redirect = W000t.find(@w000t.id).clicks.count
+
     assert_equal before_redirect + 1, after_redirect, 'Wrong number of click'
     assert_redirected_to @w000t.long_url
+    # We should have created a click object embedded within the w000t
+    assert_equal clicks_before_redirect + 1, clicks_after_redirect, 'Wrong number of click objects'
+
+    click = W000t.find(@w000t.id).clicks.last
+    expect(click.ip).to eq '8.8.8.8'
+    expect(click.address).to eq 'New York, NY, USA'
+    expect(click.coordinates).to eq [-122.0838, 37.386]
   end
 
   it 'should get a 404 http code for a fake link' do
@@ -403,6 +323,7 @@ describe W000tsController do
   end
 
   it 'should be have one more click' do
+    request.headers['REMOTE_ADDR'] = '8.8.8.8'
     before_redirect = @w000t.number_of_click
     get :click, format: :js,  short_url: @w000t.short_url
     after_redirect = W000t.find(@w000t.id).number_of_click

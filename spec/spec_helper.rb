@@ -45,9 +45,21 @@ RSpec.configure do |config|
   # config.after(:each) do
   #   DatabaseCleaner.clean
   # end
+  config.include JsonSpec::Helpers
+
+  # Do not connect to the web when testing
+  FakeWeb.allow_net_connect = false
+
+  # Do not log Sidekiq when testing
+  Sidekiq::Logging.logger = nil
   config.before(:suite) do
     DatabaseCleaner.strategy = :truncation
     DatabaseCleaner.clean_with(:truncation)
+    # Clean all fakewebs
+    FakeWeb.clean_registry
+
+    # Clear sidekiq queue
+    Sidekiq::Worker.clear_all
   end
 
   config.around(:each) do |example|
@@ -55,6 +67,23 @@ RSpec.configure do |config|
       example.run
     end
   end
+
+  def json_response
+    JSON.parse @response.body
+  end
+
+  def json_expected_keys(keys)
+    keys.each do |k|
+      expect(json_response.key?(k)).to be true
+    end
+  end
+
+  def json_unexpected_keys(keys)
+    keys.each do |k|
+      expect(json_response.key?(k)).to be false
+    end
+  end
+
   config.expect_with :rspec do |expectations|
     # This option will default to `true` in RSpec 4. It makes the `description`
     # and `failure_message` of custom matchers include text for helper methods
