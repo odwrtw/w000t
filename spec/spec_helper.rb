@@ -24,27 +24,6 @@ RSpec.configure do |config|
   # rspec-expectations config goes here. You can use an alternate
   # assertion/expectation library such as wrong or the stdlib/minitest
   # assertions if you prefer.
-  # config.before(:all) do
-    # Mongoid.master.collections.select {|c| c.name !~ /system/ }.each(&:drop)
-    # puts "before all"
-    # puts "#{W000t.count}"
-    # puts "#{W000t.all.entries.inspect}"
-    # Mongoid.purge!
-    # Mongoid::Sessions.default.collections.select {|c| c.name !~ /system/}.each {|c| c.find.remove_all}
-  # end
-  # config.before(:suite) do
-  #   puts "HEY!"
-  #   DatabaseCleaner[:mongoid].strategy = :truncation
-  #   DatabaseCleaner[:mongoid].clean_with(:truncation)
-  # end
-  #
-  # config.before(:each) do
-  #   DatabaseCleaner.start
-  # end
-  #
-  # config.after(:each) do
-  #   DatabaseCleaner.clean
-  # end
   config.include JsonSpec::Helpers
 
   # Do not connect to the web when testing
