@@ -27,6 +27,9 @@ gem 'mongoid', '~> 4'
 gem 'mongoid_rails_migrations'
 gem 'bson_ext'
 
+# Geocoder
+gem 'geocoder', '~> 1.3.4'
+
 # Authentication helper
 gem 'devise', '~> 4.1.0'
 
@@ -84,6 +87,7 @@ group :development, :test do
   gem 'rerun'
   gem 'guard'
   gem 'guard-rspec'
+  gem 'json_spec'
   gem 'rspec-rails'
 
   gem 'fakeweb'

@@ -24,30 +24,21 @@ RSpec.configure do |config|
   # rspec-expectations config goes here. You can use an alternate
   # assertion/expectation library such as wrong or the stdlib/minitest
   # assertions if you prefer.
-  # config.before(:all) do
-    # Mongoid.master.collections.select {|c| c.name !~ /system/ }.each(&:drop)
-    # puts "before all"
-    # puts "#{W000t.count}"
-    # puts "#{W000t.all.entries.inspect}"
-    # Mongoid.purge!
-    # Mongoid::Sessions.default.collections.select {|c| c.name !~ /system/}.each {|c| c.find.remove_all}
-  # end
-  # config.before(:suite) do
-  #   puts "HEY!"
-  #   DatabaseCleaner[:mongoid].strategy = :truncation
-  #   DatabaseCleaner[:mongoid].clean_with(:truncation)
-  # end
-  #
-  # config.before(:each) do
-  #   DatabaseCleaner.start
-  # end
-  #
-  # config.after(:each) do
-  #   DatabaseCleaner.clean
-  # end
+  config.include JsonSpec::Helpers
+
+  # Do not connect to the web when testing
+  FakeWeb.allow_net_connect = false
+
+  # Do not log Sidekiq when testing
+  Sidekiq::Logging.logger = nil
   config.before(:suite) do
     DatabaseCleaner.strategy = :truncation
     DatabaseCleaner.clean_with(:truncation)
+    # Clean all fakewebs
+    FakeWeb.clean_registry
+
+    # Clear sidekiq queue
+    Sidekiq::Worker.clear_all
   end
 
   config.around(:each) do |example|
@@ -55,6 +46,23 @@ RSpec.configure do |config|
       example.run
     end
   end
+
+  def json_response
+    JSON.parse @response.body
+  end
+
+  def json_expected_keys(keys)
+    keys.each do |k|
+      expect(json_response.key?(k)).to be true
+    end
+  end
+
+  def json_unexpected_keys(keys)
+    keys.each do |k|
+      expect(json_response.key?(k)).to be false
+    end
+  end
+
   config.expect_with :rspec do |expectations|
     # This option will default to `true` in RSpec 4. It makes the `description`
     # and `failure_message` of custom matchers include text for helper methods

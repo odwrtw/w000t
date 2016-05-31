@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 # User controller class
-describe UserController do
+describe UsersController do
   before do
     User.delete_all
     W000t.delete_all
@@ -19,16 +19,6 @@ describe UserController do
     sign_in @user
     get :show, user_pseudo: 'bob', format: :json
     assert_response :not_found
-  end
-
-  it 'should get user infos as admin user using json format' do
-    sign_in @admin_user
-    get :show, user_pseudo: 'bob', format: :json
-    assert_response :success
-    json_expected_keys %w(
-      id email pseudo admin created_at sign_in_count last_sign_in_at
-      current_sign_in_at last_sign_in_ip current_sign_in_ip
-    )
   end
 
   it 'should not get user list as non admin user using json format' do

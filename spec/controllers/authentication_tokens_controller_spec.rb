@@ -14,10 +14,14 @@ describe AuthenticationTokensController do
     sign_in @user
   end
 
+  before(:each) do
+    request.env["HTTP_REFERER"] = 'where_i_came_from'
+  end
+
   it 'should get index' do
     get :index, user_pseudo: @user.pseudo
     assert_response :success
-    assert_not_nil assigns(:authentication_tokens)
+    expect(assigns(:authentication_tokens)).not_to be_nil
   end
 
   it 'should get new' do
@@ -31,11 +35,11 @@ describe AuthenticationTokensController do
   end
 
   it 'should create authentication_token' do
-    assert_difference('AuthenticationToken.count') do
+    expect{
       post :create,
            user_pseudo: @user.pseudo,
            authentication_token: { name: @authentication_token.name }
-    end
+    }.to change { AuthenticationToken.count }.by(1)
 
     assert_redirected_to user_authentication_tokens_path
   end
@@ -61,15 +65,15 @@ describe AuthenticationTokensController do
           id: @authentication_token.id,
           user_pseudo: @user.pseudo,
           authentication_token: { name: 'plop' }
-    assert_redirected_to 'previous_page'
+    expect(response).to redirect_to('where_i_came_from')
   end
 
   it 'should destroy authentication_token' do
-    assert_difference('AuthenticationToken.count', -1) do
+    expect{
       delete :destroy,
              user_pseudo: @user.pseudo,
              id: @authentication_token
-    end
+    }.to change { AuthenticationToken.count }.by(-1)
 
     assert_redirected_to user_authentication_tokens_path
   end
