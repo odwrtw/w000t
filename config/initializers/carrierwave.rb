@@ -16,7 +16,8 @@ CarrierWave.configure do |config|
       openstack_auth_url:     ENV['OPENSTACK_AUTH_URL'] || 'https://auth.runabove.io/v2.0/tokens',
       openstack_region:       ENV['OPENSTACK_REGION']
     }
-    config.fog_directory = 'bucket_name'
+    config.fog_directory    = ENV['FOG_DIRECTORY']
+    config.asset_host       = ENV['OPENSTACK_ASSET_HOST']
     config.fog_public       = true
     config.fog_attributes   = {
       'Cache-Control' => "max-age=#{365.days.to_i}"
