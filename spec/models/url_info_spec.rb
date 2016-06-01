@@ -110,20 +110,6 @@ describe 'UrlInfos' do
     end
   end
 
-  it 'should download when image is valid' do
-    @greg = FactoryGirl.create(:user, pseudo: 'greg', email: 'greg@odwrtw.com')
-    Sidekiq::Testing.inline! do
-      @w000t = W000t.create(
-        long_url: FAKE_WEB_LIST[:image_ok][:url],
-        user: @greg
-      )
-    end
-    @w000t.reload
-
-    assert_equal 12_000, @w000t.url_info.content_length
-    expect(@w000t.url_info.cloud_image.thumb.url).not_to be_nil
-  end
-
   it 'should not download when image is valid but w000t is public' do
     Sidekiq::Testing.inline! do
       @w000t = W000t.create(
