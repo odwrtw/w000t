@@ -63,6 +63,41 @@
           <%= @w000t.url_info.type %>
         </div>
       </div>
+      <div class="panel panel-primary">
+        <div class="panel-heading">
+          <h5>
+            Clicks
+            <span class="label label-primary pull-right"><%= @w000t.clicks.count %><span>
+            <i class="fa fa-world pull-right"></i>
+          </h5>
+        </div>
+        <div class="panel-body">
+          <table class="table table-responsive">
+            <thead>
+              <tr>
+                <th>IP</th>
+                <th>Address</th>
+                <th>Coordinates</th>
+                <th>Date</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <% @w000t.clicks.last(10).each do |click| %>
+              <tr>
+                <td><%= click.ip %></td>
+                <td><%= click.address %></td>
+                <td><%= click.coordinates %></td>
+                <td><%= click.created_at %></td>
+              </tr>
+              <% end %>
+              <% unless @w000t.clicks.count <= 10 %>
+              <tr><td colspan=4 class="text-center">...</td></tr>
+              <%end%>
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
   </div>
 </div>
