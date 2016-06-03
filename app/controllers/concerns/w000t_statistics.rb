@@ -111,6 +111,50 @@ module W000tStatistics
     result
   end
 
+  def w000t_clicks_by_day(w000t = nil)
+    query = [
+      # Flatten all the clicks
+      { '$unwind' => '$clicks' },
+      # Get year, month and day from created_at
+      {
+        '$project' => {
+          _id: 0,
+          day: { '$dayOfMonth' => '$clicks.created_at' },
+          month: { '$month' => '$clicks.created_at' },
+          year: { '$year' => '$clicks.created_at' }
+        }
+      },
+      # Concat the year, month and day
+      {
+        '$project' => {
+          date: {
+            '$concat' => [
+              { '$substr' => ['$year', 0, 4] }, '-',
+              { '$substr' => ['$month', 0, 2] }, '-',
+              { '$substr' => ['$day', 0, 2] }
+            ]
+          }
+        }
+      },
+      # Use the concateneted string to group and count
+      {
+        '$group' => {
+          _id: '$date', count: { '$sum' => 1 }
+        }
+      }
+      # Map the whole thing to satisfy chartkick
+    ]
+
+    # Filter for this w000t w000t
+    query.unshift('$match' => { _id: w000t.id }) if w000t
+
+    result = {}
+    W000t.collection.aggregate(query).map do |r|
+      result[r[:_id]] = r[:count]
+    end
+    result
+  end
+
   def w000t_count_by_user(user = nil)
     query = [
       {

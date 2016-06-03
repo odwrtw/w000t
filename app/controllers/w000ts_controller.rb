@@ -1,6 +1,7 @@
 # w000ts Controller
 class W000tsController < ApplicationController
   include W000thentication
+  include W000tStatistics
 
   # Set w000t before w000t related actions
   before_action :set_w000t, only:
@@ -28,6 +29,7 @@ class W000tsController < ApplicationController
   # GET /w000ts/1
   def show
     @w000t_url = @w000t.full_shortened_url(request.base_url)
+    @w000t_clicks_by_day = w000t_clicks_by_day(@w000t)
   end
 
   # GET /w000ts/new
@@ -41,8 +43,7 @@ class W000tsController < ApplicationController
       respond_to do |format|
         format.js { render :update_w000t, locals: { w000t: @w000t } }
         format.html do
-          redirect_to :back,
-                      notice: 'W000t was successfully updated'
+          redirect_to :back, notice: 'W000t was successfully updated'
         end
       end
     else
