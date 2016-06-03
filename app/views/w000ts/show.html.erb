@@ -8,6 +8,19 @@
   <br>
   <div class="row">
     <div class="col-md-12">
+      <% if @w000t.url_info.type.eql? "image"%>
+      <div class="panel panel-primary">
+        <div class="panel-heading">
+          <h5>
+            Image
+            <i class="fa fa-picture-o pull-right"></i>
+          </h5>
+        </div>
+        <div class="panel-body text-center">
+          <%= image_tag(@w000t.url_info.cloud_image.thumb.url ,class:"img-thumbnail img-responsive") %>
+        </div>
+      </div>
+      <% end %>
       <div class="panel panel-primary">
         <div class="panel-heading">
           <h5>
@@ -19,6 +32,7 @@
             <td><%= @w000t.url_info_url %></td>
         </div>
       </div>
+
       <div class="panel panel-primary">
         <div class="panel-heading">
           <h5>
@@ -61,6 +75,17 @@
         </div>
         <div class="panel-body">
           <%= @w000t.url_info.type %>
+        </div>
+      </div>
+      <div class="panel panel-primary">
+        <div class="panel-heading">
+          <h5>
+            History graph
+            <i class="fa fa-area-chart pull-right"></i>
+          </h5>
+        </div>
+        <div class="panel-body">
+          <%= line_chart @w000t_clicks_by_day %>
         </div>
       </div>
       <div class="panel panel-primary">

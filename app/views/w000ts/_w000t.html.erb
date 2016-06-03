@@ -27,7 +27,7 @@
   </td>
   <td>
     <%= get_w000t_link(w000t) %>
-    <%= link_to w000t, method: :delete, remote: true, data: { confirm: 'Are you sure?' }, class: 'btn btn-default' do %>
+    <%= link_to w000t, method: :delete, remote: true, data: { confirm: 'Are you sure?' }, class: 'btn btn-default', title: 'Delete the w000t' do %>
       <i class="fa fa-trash"></i>
     <% end %>
     <% if current_user && current_user.admin? %>
@@ -36,7 +36,7 @@
         <i class="fa fa-link"></i>
       <% end %>
     <% end %>
-    <div class="dropdown" style="display: inline-block">
+    <div class="dropdown" style="display: inline-block" title='Update the w000t status'>
       <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
         <%= w000t_status_icon(w000t.status) %>
         <i class="fa fa-caret-down"></i>
@@ -51,5 +51,8 @@
         <% end %>
       </ul>
     </div>
+    <%= link_to w000t, class: 'btn btn-default', title: 'Show w000t infos' do %>
+      <i class="fa fa-eye"></i>
+    <% end %>
   </td>
 </tr>
