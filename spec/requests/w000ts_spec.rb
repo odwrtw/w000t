@@ -1,7 +1,7 @@
-require "rails_helper"
-require "spec_helper"
+require 'rails_helper'
+require 'spec_helper'
 
-describe "w000t requests", :type => :request do
+describe 'w000t requests', type: :request do
   before do
     User.delete_all
     W000t.delete_all
@@ -28,15 +28,15 @@ describe "w000t requests", :type => :request do
 
   it 'should return the user created w000t as json' do
     headers = {
-      "ACCEPT"       => "application/json",     # This is what Rails 4 accepts
-      "X-Auth-Token" => @authentication_token.token,
-      "HTTP_REFERER" => 'where_i_came_from'
+      'ACCEPT'       => 'application/json',     # This is what Rails 4 accepts
+      'X-Auth-Token' => @authentication_token.token,
+      'HTTP_REFERER' => 'where_i_came_from'
     }
-    post "/w000ts", { w000t: {
+    post '/w000ts', { w000t: {
       long_url: 'google.fr', status: 'private', tags: 'test,yo'
     } }, headers
 
-    expect(response.content_type).to eq("application/json")
+    expect(response.content_type).to eq('application/json')
     expect(response).to have_http_status(:created)
 
     %w( id w000t url type tags status number_of_click created_at ).each do |key|
@@ -55,10 +55,10 @@ describe "w000t requests", :type => :request do
 
   it 'should return the anonymously created w000t as json' do
     headers = {
-      "ACCEPT"       => "application/json",     # This is what Rails 4 accepts
-      "HTTP_REFERER" => 'where_i_came_from'
+      'ACCEPT'       => 'application/json',     # This is what Rails 4 accepts
+      'HTTP_REFERER' => 'where_i_came_from'
     }
-    post "/w000ts", { w000t: {
+    post '/w000ts', { w000t: {
       long_url: 'google.fr'
     } }, headers
     assert_response :created
@@ -98,13 +98,12 @@ describe "w000t requests", :type => :request do
     @w000t.user = @user
     @w000t.save
     headers = {
-      "ACCEPT"       => "application/json",
-      "X-Auth-Token" => @admin_authentication_token.token,
-      "HTTP_REFERER" => 'where_i_came_from'
+      'ACCEPT'       => 'application/json',
+      'X-Auth-Token' => @admin_authentication_token.token,
+      'HTTP_REFERER' => 'where_i_came_from'
     }
     get "/w000ts/#{@w000t.short_url}.json", headers
     assert_response :success
-      # id w000t url type tags status number_of_click created_at user url_info
     json_expected_keys %w(
       id w000t url type
     )
@@ -121,7 +120,7 @@ describe "w000t requests", :type => :request do
       :w000t, long_url: 'test.com', tags: 'test  ', user: @user
     )
     assert_equal 2, @user.w000ts.count
-    get "/w000ts/me"
+    get '/w000ts/me'
     assert_response :success
     assert_tag :tbody, children: { count: 2, only: { tag: 'tr' } }
     assert_tag :td, attributes: { class: 'w000t-tags' },
@@ -141,8 +140,7 @@ describe "w000t requests", :type => :request do
       :w000t, long_url: 'test.com/t.jpg', tags: 'test', user: @user
     )
     assert_equal 2, @user.w000ts.count
-    get "/w000ts/me?tags=test&type=image"
-    # get :owner_list, tags: 'test', type: 'image'
+    get '/w000ts/me?tags=test&type=image'
     assert_response :success
     assert_tag :tbody, children: { count: 2, only: { tag: 'tr' } }
     assert_tag :td, attributes: { class: 'w000t-tags' },
@@ -151,20 +149,20 @@ describe "w000t requests", :type => :request do
 
   it 'should get index as a non admin user' do
     sign_in @user
-    get "/"
+    get '/'
     assert_response :success
     assert_select 'li', 7
   end
 
   it 'should get index as an admin user' do
     sign_in @admin_user
-    get "/"
+    get '/'
     assert_response :success
     assert_select 'li', 8
   end
 
   it 'should get index as anonymous user' do
-    get "/"
+    get '/'
     assert_response :success
     assert_select 'li', 4
   end
@@ -176,10 +174,8 @@ describe "w000t requests", :type => :request do
     @w000t_private = FactoryGirl.create(
       :w000t, long_url: 'test.com/t.jpg', status: :private, user: @user
     )
-    # get :user_wall, user_pseudo: @user.pseudo
     get "/users/#{@user.pseudo}/wall"
     assert_response :success
     assert_select 'figure', @user.w000ts.where(status: :public).count
   end
-
 end
