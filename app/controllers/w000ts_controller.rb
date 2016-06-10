@@ -16,6 +16,8 @@ class W000tsController < ApplicationController
   before_action :set_user, only: [:user_wall]
   # Check the rights of the user on the w000t
   before_action :check_w000t_owner, only: [:update, :destroy]
+  # Check the rights of the user on the w000t's show
+  before_action :check_w000t_privacy, only: [:show]
   # Check if the type is allowed
   before_action :check_w000t_type_params, only: [:owner_list]
 
@@ -211,11 +213,25 @@ class W000tsController < ApplicationController
   def check_w000t_owner
     action = params[:action]
     action = 'delete' if action.eql? 'destroy'
-    unless current_user.w000ts.find_by(short_url: @w000t.short_url)
-      return redirect_to :back, flash: {
+    unless current_user.id == @w000t.user_id
+      return redirect_to :root, flash: {
         alert: "You can not #{action} this w000t, only the owner can"
       } unless current_user.admin?
     end
+  end
+
+  # Check if a w000t should be shown or not
+  def check_w000t_privacy
+    # A public w000t is public
+    return if @w000t.status == :public
+    # A w000t without owner is public
+    return if @w000t.user_id.blank?
+    # If no current_user, return error
+    return redirect_to :root, flash: {
+      alert: 'This is not a public w000t'
+    } unless current_user
+    # If bad user, return error
+    check_w000t_owner
   end
 
   # Check if the given type is allowed

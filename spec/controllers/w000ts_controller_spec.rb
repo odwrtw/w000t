@@ -97,43 +97,68 @@ JSON
   end
 
   it 'should not create a w000t with a wrong status as json' do
-    expect{
+    expect do
       post :create, w000t: { long_url: 'http://google.fr', status: 'yo' },
                     user_id: @user.id, format: :json
-    }.to change { W000t.count }.by(0)
+    end.to change { W000t.count }.by(0)
 
     assert_response 422 # unprocessable entity
   end
 
   it 'should create an existing w000t as json' do
-    expect{
+    expect do
       post :create, w000t: { long_url: @w000t.long_url },
                     user_id: @user.id, format: :json
-    }.to change { W000t.count }.by(0)
+    end.to change { W000t.count }.by(0)
 
     assert_response :success
   end
 
   it 'should return the same w000t as given' do
-    expect{
+    expect do
       post :create,
            w000t: { long_url: @w000t.full_shortened_url(request.base_url) },
            format: :json
-    }.to change { W000t.count }.by(0)
+    end.to change { W000t.count }.by(0)
 
     assert_response :success
   end
 
   it 'should create an existing w000t as js' do
-    expect{
+    expect do
       post :create, w000t: { long_url: @w000t.long_url },
                     user_id: @user.id, format: :js
-    }.to change { W000t.count }.by(0)
+    end.to change { W000t.count }.by(0)
     assert_response :success
   end
 
-  it 'should get show' do
+  it 'should get show on public w000t' do
     get :show, short_url: @w000t.short_url
+    assert_response :success
+  end
+
+  it 'should not get show on private w000t' do
+    @w000t_private = FactoryGirl.create(
+      :w000t, long_url: 'test.com/t.jpg', status: :private, user: @user
+    )
+    get :show, short_url: @w000t_private.short_url
+    expect(response).to redirect_to(root_path)
+  end
+
+  it 'should get show on private w000t as owner' do
+    sign_in @user
+    @w000t_private = FactoryGirl.create(
+      :w000t, long_url: 'test.com/t.jpg', status: :private, user: @user
+    )
+    get :show, short_url: @w000t_private.short_url
+    assert_response :success
+  end
+
+  it 'should get show on public user w000t' do
+    @w000t_public = FactoryGirl.create(
+      :w000t, long_url: 'test.com/t.jpg', status: :public, user: @user
+    )
+    get :show, short_url: @w000t_public.short_url
     assert_response :success
   end
 
