@@ -180,7 +180,7 @@ class W000tsController < ApplicationController
   # If the w000t already exists, return it with a status 200 OK
   def prevent_w000tception
     # Check url format
-    match = /\A#{request.base_url}\/(\w{10})\Z/.match(w000t_params[:long_url])
+    match = %r/\A#{request.base_url}\/(\w{10})\Z/.match(w000t_params[:long_url])
     return unless match
 
     # Check if the w000t already exists

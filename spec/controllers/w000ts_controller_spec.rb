@@ -8,7 +8,7 @@ describe W000tsController do
     AuthenticationToken.destroy_all
     FakeWeb.clean_registry
     Sidekiq::Worker.clear_all
-    Geocoder.configure(:lookup => :test)
+    Geocoder.configure(lookup: :test)
 
     @user = FactoryGirl.create(:user)
     @admin_user = FactoryGirl.create(
@@ -50,46 +50,46 @@ JSON
       ]
     )
 
-    FakeWeb.register_uri(:any, %r|freegeoip|, :body => freegeoip_json)
+    FakeWeb.register_uri(:any, %r/freegeoip/, body: freegeoip_json)
   end
 
   before(:each) do
-    request.env["HTTP_REFERER"] = 'where_i_came_from'
+    request.env['HTTP_REFERER'] = 'where_i_came_from'
   end
 
   it 'should create a w000t as json' do
-    expect{
+    expect do
       post :create, w000t: { long_url: 'http://google.fr' },
                     user_id: @user.id, format: :json
-    }.to change { W000t.count }.by(1)
+    end.to change { W000t.count }.by(1)
 
     assert_response :success
   end
 
   it 'should create a w000t as json with no http prefix' do
-    expect{
+    expect do
       post :create, w000t: { long_url: 'google.fr' },
                     user_id: @user.id, format: :json
-    }.to change { W000t.count }.by(1)
+    end.to change { W000t.count }.by(1)
 
     assert_response :success
   end
 
   it 'should create a w000t as js' do
-    expect{
+    expect do
       post :create, w000t: { long_url: 'http://google.fr' },
                     user_id: @user.id, format: :js
-    }.to change { W000t.count }.by(1)
+    end.to change { W000t.count }.by(1)
 
     assert_response :success
   end
 
   it 'should create a w000t with a status as json' do
     url = 'http://google.fr'
-    expect{
+    expect do
       post :create, w000t: { long_url: url, status: 'private' },
                     user_id: @user.id, format: :json
-    }.to change { W000t.count }.by(1)
+    end.to change { W000t.count }.by(1)
 
     assert_response :success
     w = W000t.find_by('url_info.url' => url)
@@ -173,9 +173,9 @@ JSON
       user: @user,
       long_url: 'http://destroy_logged_in.com'
     )
-    expect{
+    expect do
       post :destroy, short_url: @user_w000t.short_url
-    }.to change { W000t.count }.by(-1)
+    end.to change { W000t.count }.by(-1)
     expect(response).to redirect_to('where_i_came_from')
     assert_equal 'W000t was successfully destroyed', flash[:notice]
   end
@@ -184,9 +184,9 @@ JSON
     @w000t.user = @user
     @w000t.save
     request.headers['X-Auth-Token'] = @authentication_token.token
-    expect{
+    expect do
       post :destroy, short_url: @w000t.short_url, format: :json
-    }.to change { W000t.count }.by(-1)
+    end.to change { W000t.count }.by(-1)
     assert_response :success
   end
 
@@ -194,9 +194,9 @@ JSON
     @w000t.user = @user
     @w000t.save
     request.headers['X-Auth-Token'] = @admin_authentication_token.token
-    expect{
+    expect do
       post :destroy, short_url: @w000t.short_url, format: :json
-    }.to change { W000t.count }.by(-1)
+    end.to change { W000t.count }.by(-1)
     assert_response :success
   end
 
@@ -206,17 +206,17 @@ JSON
       user: @user,
       long_url: 'http://destroy_logged_in.com'
     )
-    expect{
+    expect do
       post :destroy, short_url: @user_w000t.short_url
-    }.to change { W000t.count }.by(-1)
+    end.to change { W000t.count }.by(-1)
     expect(response).to redirect_to('where_i_came_from')
     assert_equal 'W000t was successfully destroyed', flash[:notice]
   end
 
   it 'should not destroy as anonymous user' do
-    expect{
+    expect do
       post :destroy, short_url: @w000t.short_url
-    }.to change { W000t.count }.by(0)
+    end.to change { W000t.count }.by(0)
     assert_redirected_to new_user_session_url
   end
 
@@ -228,9 +228,9 @@ JSON
       user: joe
     )
     sign_in @user
-    expect{
+    expect do
       post :destroy, short_url: w000t_by_joe.short_url, format: :json
-    }.to change { W000t.count }.by(0)
+    end.to change { W000t.count }.by(0)
     assert_equal 'You can not delete this w000t, only the owner can',
                  flash[:alert]
   end
@@ -270,11 +270,11 @@ JSON
   end
 
   it 'should create a w000t with a token as param' do
-    expect{
+    expect do
       post :create, w000t: { long_url: 'google.fr' },
                     token: @authentication_token.token,
                     format: :json
-    }.to change { W000t.count }.by(1)
+    end.to change { W000t.count }.by(1)
     assert_response :success
     created_w000t = W000t.find_by('url_info.url' => 'http://google.fr')
     expect(created_w000t).not_to be_nil
@@ -283,16 +283,15 @@ JSON
 
   it 'should create a w000t with a token as header as json' do
     request.headers['X-Auth-Token'] = @authentication_token.token
-    expect{
+    expect do
       post :create, w000t: { long_url: 'google.fr', status: 'private' },
                     format: :json
-    }.to change { W000t.count }.by(1)
+    end.to change { W000t.count }.by(1)
     assert_response :created
     created_w000t = W000t.find_by('url_info.url' => 'http://google.fr')
     expect(created_w000t).not_to be_nil
     assert_equal created_w000t.user_id, @user.id
   end
-
 
   it 'should get user w000t list' do
     sign_in @user
@@ -334,7 +333,9 @@ JSON
     assert_equal before_redirect + 1, after_redirect, 'Wrong number of click'
     assert_redirected_to @w000t.long_url
     # We should have created a click object embedded within the w000t
-    assert_equal clicks_before_redirect + 1, clicks_after_redirect, 'Wrong number of click objects'
+    assert_equal clicks_before_redirect + 1,
+                 clicks_after_redirect,
+                 'Wrong number of click objects'
 
     click = W000t.find(@w000t.id).clicks.last
     expect(click.ip).to eq '8.8.8.8'
@@ -350,7 +351,7 @@ JSON
   it 'should be have one more click' do
     request.headers['REMOTE_ADDR'] = '8.8.8.8'
     before_redirect = @w000t.number_of_click
-    get :click, format: :js,  short_url: @w000t.short_url
+    get :click, format: :js, short_url: @w000t.short_url
     after_redirect = W000t.find(@w000t.id).number_of_click
     assert_equal before_redirect + 1, after_redirect, 'Wrong number of click'
     assert_response :success
