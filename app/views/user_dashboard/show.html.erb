@@ -90,12 +90,18 @@
           <thead>
             <th class="text-center">Url</th>
             <th class="text-center">Count</th>
+            <th></th>
           </thead>
           <tbody>
             <% @w000t_top_ten.each do |u| %>
             <tr class="text-center">
-              <td><%= u['_id'] %></td>
+              <td><%= u['url'] %></td>
               <td><%= u['number_of_click']%></td>
+              <td>
+                <%= link_to w000t_path(u['_id']), class: 'btn btn-default', title: 'Show w000t infos' do %>
+                  <i class="fa fa-eye"></i>
+                <% end %>
+              </td>
             </tr>
             <% end %>
           </tbody>

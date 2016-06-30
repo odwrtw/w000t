@@ -50,7 +50,8 @@ module W000tStatistics
     query = [
       {
         '$project' => {
-          '_id' => '$url_info.url',
+          '_id' => '$_id',
+          'url' => '$url_info.url',
           'number_of_click' => '$number_of_click',
           'user_id' => '$user_id'
         }
