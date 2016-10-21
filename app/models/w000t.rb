@@ -113,9 +113,10 @@ class W000t
   # Click updates the w000t when clicked
   def click(ip_address)
     # Add the clicks
-    clicks.create(ip: ip_address)
+    clicks.new(ip: ip_address)
     # Increments the number of clicks
-    inc(number_of_click: 1)
+    self.number_of_click += 1
+    save
   end
 
   private

@@ -87,8 +87,10 @@ class W000tsController < ApplicationController
 
   # GET /:short_url
   def redirect
-    @w000t.click(request.remote_ip)
     redirect_to @w000t.url_info_url
+    Thread.new do
+      @w000t.click(request.remote_ip)
+    end
   end
 
   # GET /:short_url/click

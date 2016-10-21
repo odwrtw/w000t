@@ -325,6 +325,7 @@ JSON
     before_redirect = @w000t.number_of_click
     clicks_before_redirect = W000t.find(@w000t.id).clicks.count
     get :redirect, short_url: @w000t.short_url
+    sleep 0.5
     # We should check the info from db because the inc method runs an update on
     # the w000t directly in db
     after_redirect = W000t.find(@w000t.id).number_of_click
