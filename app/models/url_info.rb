@@ -138,10 +138,13 @@ class UrlInfo
     http = Net::HTTP.new(uri.host, uri.port)
     http.use_ssl = (uri.scheme == 'https')
     http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+    # Timeout to open the connection
+    http.open_timeout = 10
+    # Timeout to read one block
     http.read_timeout = 10
     http.start { |r| r.head(uri.path.size > 0 ? uri.path : '/') }
-  rescue
-    logger.info "ERROR when requesting url => #{$ERROR_INFO}"
+  rescue => exception
+    logger.info "ERROR when requesting url => #{exception.inspect}"
     nil
   end
 
