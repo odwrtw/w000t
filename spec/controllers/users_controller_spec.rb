@@ -17,7 +17,7 @@ describe UsersController do
 
   it 'should not get user infos as non admin user using json format' do
     sign_in @user
-    get :show, user_pseudo: 'bob', format: :json
+    get :show, params: { user_pseudo: 'bob' }, format: :json
     assert_response :not_found
   end
 

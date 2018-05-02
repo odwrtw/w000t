@@ -32,9 +32,11 @@ describe 'w000t requests', type: :request do
       'X-Auth-Token' => @authentication_token.token,
       'HTTP_REFERER' => 'where_i_came_from'
     }
-    post '/w000ts', { w000t: {
-      long_url: 'google.fr', status: 'private', tags: 'test,yo'
-    } }, headers
+    post '/w000ts', params: {
+      w000t: {
+        long_url: 'google.fr', status: 'private', tags: 'test,yo'
+      }
+    }, headers: headers
 
     expect(response.content_type).to eq('application/json')
     expect(response).to have_http_status(:created)
@@ -58,9 +60,11 @@ describe 'w000t requests', type: :request do
       'ACCEPT'       => 'application/json',     # This is what Rails 4 accepts
       'HTTP_REFERER' => 'where_i_came_from'
     }
-    post '/w000ts', { w000t: {
-      long_url: 'google.fr'
-    } }, headers
+    post '/w000ts', params: {
+      w000t: {
+        long_url: 'google.fr'
+      }
+    }, headers: headers
     assert_response :created
 
     json_expected_keys %w( id w000t url type number_of_click created_at )
@@ -75,7 +79,7 @@ describe 'w000t requests', type: :request do
     sign_in @user
     @w000t.user = @admin_user
     @w000t.save
-    get "/w000ts/#{@w000t.short_url}", format: :json
+    get "/w000ts/#{@w000t.short_url}", as: :json
     assert_response :success
     json_expected_keys %w( id w000t url type )
     json_unexpected_keys %w(
@@ -87,7 +91,7 @@ describe 'w000t requests', type: :request do
     sign_in @admin_user
     @w000t.user = @user
     @w000t.save
-    get "/w000ts/#{@w000t.short_url}", format: :json
+    get "/w000ts/#{@w000t.short_url}", as: :json
     assert_response :success
     json_expected_keys %w(
       id w000t url type tags status number_of_click created_at user url_info
@@ -102,7 +106,7 @@ describe 'w000t requests', type: :request do
       'X-Auth-Token' => @admin_authentication_token.token,
       'HTTP_REFERER' => 'where_i_came_from'
     }
-    get "/w000ts/#{@w000t.short_url}.json", headers
+    get "/w000ts/#{@w000t.short_url}.json", params: headers
     assert_response :success
     json_expected_keys %w(
       id w000t url type

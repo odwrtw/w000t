@@ -56,7 +56,7 @@ describe AdminController do
   it 'should check one url' do
     sign_in @admin_user
     expect{
-      post :check_url, admin: { short_url: @w000t.short_url }
+      post :check_url, params: { admin: { short_url: @w000t.short_url } }
     }.to change { UrlLifeChecker.jobs.size }.by(1)
     expect(response).to redirect_to('where_i_came_from')
     assert_equal 'Task created', flash[:notice]
@@ -68,7 +68,7 @@ describe AdminController do
       post :check_url
     }.to raise_error(ActionController::ParameterMissing)
     expect{
-      post :check_url, admin: { url: 'fake argument' }
+      post :check_url, params: { admin: { url: 'fake argument' } }
     }.to change { UrlLifeChecker.jobs.size }.by(0)
   end
 
@@ -76,7 +76,7 @@ describe AdminController do
     sign_in @admin_user
     allowed_params = %w( processed failed )
     allowed_params.each do |p|
-      post :reset_sidekiq_stat, sidekiq: { reset_param: p }
+      post :reset_sidekiq_stat, params: { sidekiq: { reset_param: p } }
       expect(response).to redirect_to('where_i_came_from')
       assert_equal "Sidekiq #{p} stat resetted", flash[:notice]
     end
@@ -87,7 +87,7 @@ describe AdminController do
     wrong_params = %w( yo mama plop )
     wrong_params.each do |p|
       expect {
-        post :reset_sidekiq_stat, sidekiq: { reset_param: p }
+        post :reset_sidekiq_stat, params: { sidekiq: { reset_param: p } }
       }.to raise_error(ArgumentError)
     end
   end
