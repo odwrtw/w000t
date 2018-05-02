@@ -1,7 +1,7 @@
 development:
   # Configure available database sessions. (required)
-  sessions:
-  # clients:
+  # sessions:
+  clients:
     # Defines the default session. (required)
     default:
       # Defines the name of the default database that Mongoid can connect to.
@@ -59,22 +59,21 @@ development:
 test:
   options:
     raise_not_found_error: false
-  # clients:
-  sessions:
+  clients:
+  # sessions:
     default:
       database: w000t_me_test
       hosts:
         - localhost:27017
       options:
-        read: primary
         # In the test environment we lower the retries and retry interval to
         # low amounts for fast failures.
         max_retries: 1
         retry_interval: 0
 production:
   # Configure available database sessions. (required)
-  # clients:
-  sessions:
+  clients:
+  # sessions:
     # Defines the default session. (required)
     default:
       # Defines the name of the default database that Mongoid can connect to.
@@ -131,8 +130,8 @@ production:
     # use_utc: false
 staging:
   # Configure available database sessions. (required)
-  # clients:
-  sessions:
+  clients:
+  # sessions:
     # Defines the default session. (required)
     default:
       # Defines the name of the default database that Mongoid can connect to.

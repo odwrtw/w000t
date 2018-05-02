@@ -86,8 +86,8 @@ describe 'W000ts' do
     assert_equal @w000t.url_info.internal_status,
                  :to_upload,
                  'w000t with upload_image should have an internal_status'
-    assert_equal @w000t.url_info.url,
-                 nil, 'w000t with upload_image should have a nil url'
+    assert_nil @w000t.url_info.url,
+               'w000t with upload_image should have a nil url'
 
     @w000t.url_info.cloud_image.remove!
   end

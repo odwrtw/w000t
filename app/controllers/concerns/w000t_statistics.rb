@@ -63,7 +63,7 @@ module W000tStatistics
     # Filter by user
     query.unshift('$match' => { user_id: user.id }) if user
 
-    W000t.collection.aggregate(query).map! do |r|
+    W000t.collection.aggregate(query).map do |r|
       r[:user] = 'Anonymous'
       r[:user] = User.find(r[:user_id]).pseudo if r[:user_id]
       r

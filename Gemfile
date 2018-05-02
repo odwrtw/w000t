@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 # ROR
-ruby '2.2.5'
+ruby '2.2.10'
 gem 'rails', '4.1.2'
 
 # Use SCSS for stylesheets
@@ -23,7 +23,7 @@ gem 'jbuilder', '~> 2.4.1'
 gem 'sdoc', '~> 0.4.1', group: :doc
 
 # MongoDB
-gem 'mongoid', '~> 4'
+gem 'mongoid', '~> 5'
 gem 'mongoid_rails_migrations'
 gem 'bson_ext'
 
@@ -99,6 +99,7 @@ group :development, :test do
   gem 'dotenv-rails'
 
   gem 'capybara'
+  gem 'rspec-sidekiq'
 end
 
 # Deployment

@@ -48,7 +48,7 @@ describe 'w000t requests', type: :request do
 
     assert_equal 'http://google.fr', json_response['url']
     assert_equal 'private', json_response['status']
-    assert_equal nil, json_response['type']
+    assert_nil json_response['type']
     assert_equal 0, json_response['number_of_click']
     assert_equal json_response['tags'], %w( test yo )
   end
@@ -67,7 +67,7 @@ describe 'w000t requests', type: :request do
     json_unexpected_keys %w( tags status user url_info )
 
     assert_equal 'http://google.fr', json_response['url']
-    assert_equal nil, json_response['type']
+    assert_nil json_response['type']
     assert_equal 0, json_response['number_of_click']
   end
 

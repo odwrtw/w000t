@@ -118,7 +118,7 @@ describe 'UrlInfos' do
     end
     @w000t.reload
 
-    assert_equal nil, @w000t.url_info.cloud_image_urls,
+    assert_nil @w000t.url_info.cloud_image_urls,
                  'Cloud image is not nil but not an image'
     assert_equal 12_000, @w000t.url_info.content_length
   end
@@ -129,7 +129,7 @@ describe 'UrlInfos' do
     end
     @w000t.reload
 
-    assert_equal nil, @w000t.url_info.cloud_image_urls,
+    assert_nil @w000t.url_info.cloud_image_urls,
                  'Cloud image is not nil but not an image'
   end
 
@@ -139,7 +139,7 @@ describe 'UrlInfos' do
     end
     @w000t.reload
 
-    assert_equal nil, @w000t.url_info.cloud_image_urls,
+    assert_nil @w000t.url_info.cloud_image_urls,
                  'Cloud image is not nil but too big'
   end
 
@@ -149,7 +149,7 @@ describe 'UrlInfos' do
     end
     @w000t.reload
 
-    assert_equal nil, @w000t.url_info.cloud_image_urls,
+    assert_nil @w000t.url_info.cloud_image_urls,
                  'Cloud image is not nil but 301'
   end
 
