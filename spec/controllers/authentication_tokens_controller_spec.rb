@@ -9,8 +9,8 @@ describe AuthenticationTokensController do
     FakeWeb.clean_registry
     Sidekiq::Worker.clear_all
 
-    @user = FactoryGirl.create(:user)
-    @authentication_token = FactoryGirl.create(:authentication_token)
+    @user = FactoryBot.create(:user)
+    @authentication_token = FactoryBot.create(:authentication_token)
     sign_in @user
   end
 
@@ -47,7 +47,7 @@ describe AuthenticationTokensController do
   end
 
   it 'should update authentication_token' do
-    @user_token = FactoryGirl.create(
+    @user_token = FactoryBot.create(
       :authentication_token,
       user: @user,
       name: 'test_token'

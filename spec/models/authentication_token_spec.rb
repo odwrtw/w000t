@@ -4,11 +4,11 @@ require 'spec_helper'
 describe 'AuthenticationToken' do
   before do
     # Known values
-    @user = FactoryGirl.create(:user)
+    @user = FactoryBot.create(:user)
   end
 
   def new_token(user, name)
-    FactoryGirl.build(
+    FactoryBot.build(
       :authentication_token,
       user: user,
       name: name

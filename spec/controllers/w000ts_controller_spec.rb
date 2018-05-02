@@ -10,15 +10,15 @@ describe W000tsController do
     Sidekiq::Worker.clear_all
     Geocoder.configure(lookup: :test)
 
-    @user = FactoryGirl.create(:user)
-    @admin_user = FactoryGirl.create(
+    @user = FactoryBot.create(:user)
+    @admin_user = FactoryBot.create(
       :user, pseudo: 'admin', email: 'email@admin.com', admin: true
     )
-    @w000t = FactoryGirl.create(:w000t)
-    @authentication_token = FactoryGirl.create(
+    @w000t = FactoryBot.create(:w000t)
+    @authentication_token = FactoryBot.create(
       :authentication_token, user: @user
     )
-    @admin_authentication_token = FactoryGirl.create(
+    @admin_authentication_token = FactoryBot.create(
       :authentication_token, user: @admin_user
     )
     freegeoip_json = <<-JSON
@@ -161,7 +161,7 @@ JSON
   end
 
   it 'should not get show on private w000t' do
-    @w000t_private = FactoryGirl.create(
+    @w000t_private = FactoryBot.create(
       :w000t, long_url: 'test.com/t.jpg', status: :private, user: @user
     )
     get :show, params: { short_url: @w000t_private.short_url }
@@ -170,7 +170,7 @@ JSON
 
   it 'should get show on private w000t as owner' do
     sign_in @user
-    @w000t_private = FactoryGirl.create(
+    @w000t_private = FactoryBot.create(
       :w000t, long_url: 'test.com/t.jpg', status: :private, user: @user
     )
     get :show, params: { short_url: @w000t_private.short_url }
@@ -178,7 +178,7 @@ JSON
   end
 
   it 'should get show on public user w000t' do
-    @w000t_public = FactoryGirl.create(
+    @w000t_public = FactoryBot.create(
       :w000t, long_url: 'test.com/t.jpg', status: :public, user: @user
     )
     get :show, params: { short_url: @w000t_public.short_url }
@@ -244,8 +244,8 @@ JSON
   end
 
   it 'should not destroy as the wrong user' do
-    joe = FactoryGirl.create(:user, pseudo: 'Joe', email: 'joe@plop.com')
-    w000t_by_joe = FactoryGirl.create(
+    joe = FactoryBot.create(:user, pseudo: 'Joe', email: 'joe@plop.com')
+    w000t_by_joe = FactoryBot.create(
       :w000t,
       long_url: 'http://superjoe.com',
       user: joe
@@ -260,7 +260,7 @@ JSON
 
   it 'should update as a logged in user' do
     sign_in @user
-    @user_w000t = FactoryGirl.create(
+    @user_w000t = FactoryBot.create(
       :w000t,
       user: @user,
       long_url: 'http://updated_logged_in.com'
@@ -286,8 +286,8 @@ JSON
   end
 
   it 'should not update as the wrong user' do
-    joe = FactoryGirl.create(:user, pseudo: 'Joe', email: 'joe@plop.com')
-    w000t_by_joe = FactoryGirl.create(
+    joe = FactoryBot.create(:user, pseudo: 'Joe', email: 'joe@plop.com')
+    w000t_by_joe = FactoryBot.create(
       :w000t,
       long_url: 'http://superjoe.com',
       user: joe

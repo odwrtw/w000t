@@ -77,7 +77,7 @@ group :development, :test do
   gem 'pry'
 
   # Replace fixtures
-  gem 'factory_girl_rails'
+  gem 'factory_bot_rails'
 
   # Better stack straces
   gem 'better_errors'

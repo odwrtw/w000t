@@ -9,8 +9,8 @@ describe "Users requests", :type => :request do
     FakeWeb.clean_registry
     Sidekiq::Worker.clear_all
 
-    @user = FactoryGirl.create(:user, pseudo: 'bob')
-    @admin_user = FactoryGirl.create(
+    @user = FactoryBot.create(:user, pseudo: 'bob')
+    @admin_user = FactoryBot.create(
       :user, pseudo: 'admin', email: 'email@admin.com', admin: true
     )
   end

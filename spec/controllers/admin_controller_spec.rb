@@ -11,16 +11,16 @@ describe AdminController do
     FakeWeb.clean_registry
     Sidekiq::Worker.clear_all
 
-    @user = FactoryGirl.create(:user)
-    @admin_user = FactoryGirl.create(
+    @user = FactoryBot.create(:user)
+    @admin_user = FactoryBot.create(
       :user,
       pseudo: 'admin',
       email: 'email@admin.com',
       admin: true
     )
-    @w000t = FactoryGirl.create(:w000t, long_url: 'http://google.com')
-    @w000t_es = FactoryGirl.create(:w000t, long_url: 'http://google.es')
-    @authentication_token = FactoryGirl.create(:authentication_token)
+    @w000t = FactoryBot.create(:w000t, long_url: 'http://google.com')
+    @w000t_es = FactoryBot.create(:w000t, long_url: 'http://google.es')
+    @authentication_token = FactoryBot.create(:authentication_token)
   end
 
   before(:each) do

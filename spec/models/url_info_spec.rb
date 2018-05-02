@@ -64,7 +64,7 @@ describe 'UrlInfos' do
     }
     types_and_urls.each do |type, urls|
       urls.each do |url|
-        @w000t = FactoryGirl.create(:w000t, long_url: url)
+        @w000t = FactoryBot.create(:w000t, long_url: url)
         assert_equal type.to_s, @w000t.url_info.type
       end
     end
@@ -76,20 +76,20 @@ describe 'UrlInfos' do
       'https://yomma.fr/youtube'
     ]
     urls.each do |url|
-      @w000t = FactoryGirl.build(:w000t, long_url: url)
+      @w000t = FactoryBot.build(:w000t, long_url: url)
       @w000t.save
       assert_nil @w000t.url_info.type
     end
   end
 
   it 'type should not be updated' do
-    @w000t = FactoryGirl.create(:w000t, long_url: 'http://test.com/test.jpg')
+    @w000t = FactoryBot.create(:w000t, long_url: 'http://test.com/test.jpg')
     @w000t.url_info.type = 'test'
     assert_equal 'test', @w000t.url_info.type
   end
 
   it 'type should be updated if forced' do
-    @w000t = FactoryGirl.create(:w000t, long_url: 'http://test.com/test.jpg')
+    @w000t = FactoryBot.create(:w000t, long_url: 'http://test.com/test.jpg')
     @w000t.url_info.type = 'test'
     @w000t.url_info.find_type(true)
     @w000t.url_info.save
@@ -184,7 +184,7 @@ describe 'UrlInfos' do
 
   it 'should have a valid internal_status' do
     UrlInfo::INTERNAL_STATUS.each do |s|
-      @url_info = FactoryGirl.build(
+      @url_info = FactoryBot.build(
         :url_info, url: 'http://google.com',
                    internal_status: s
       )
@@ -195,7 +195,7 @@ describe 'UrlInfos' do
 
   it 'should have a invalid internal_status' do
     %i( test yo mama ).each do |s|
-      @url_info = FactoryGirl.build(
+      @url_info = FactoryBot.build(
         :url_info, url: 'http://google.com',
                    internal_status: s
       )

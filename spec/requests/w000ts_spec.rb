@@ -9,15 +9,15 @@ describe 'w000t requests', type: :request do
     FakeWeb.clean_registry
     Sidekiq::Worker.clear_all
 
-    @user = FactoryGirl.create(:user)
-    @admin_user = FactoryGirl.create(
+    @user = FactoryBot.create(:user)
+    @admin_user = FactoryBot.create(
       :user, pseudo: 'admin', email: 'email@admin.com', admin: true
     )
-    @w000t = FactoryGirl.create(:w000t)
-    @authentication_token = FactoryGirl.create(
+    @w000t = FactoryBot.create(:w000t)
+    @authentication_token = FactoryBot.create(
       :authentication_token, user: @user
     )
-    @admin_authentication_token = FactoryGirl.create(
+    @admin_authentication_token = FactoryBot.create(
       :authentication_token, user: @admin_user
     )
   end
@@ -117,10 +117,10 @@ describe 'w000t requests', type: :request do
   # Search for tag:'test', expect 1 only one result
   it 'should filter by tags' do
     sign_in @user
-    @w000t_no_tag = FactoryGirl.create(
+    @w000t_no_tag = FactoryBot.create(
       :w000t, long_url: 'yo.com', user: @user
     )
-    @w000t_tag_test = FactoryGirl.create(
+    @w000t_tag_test = FactoryBot.create(
       :w000t, long_url: 'test.com', tags: 'test  ', user: @user
     )
     assert_equal 2, @user.w000ts.count
@@ -137,10 +137,10 @@ describe 'w000t requests', type: :request do
   # Search for type:'image' and tag:'test', expect 1 only one result
   it 'should filter by tags and type' do
     sign_in @user
-    @w000t_image_no_tag = FactoryGirl.create(
+    @w000t_image_no_tag = FactoryBot.create(
       :w000t, long_url: 'yo.com/t.pdf', tags: 'test', user: @user
     )
-    @w000t_image_tag = FactoryGirl.create(
+    @w000t_image_tag = FactoryBot.create(
       :w000t, long_url: 'test.com/t.jpg', tags: 'test', user: @user
     )
     assert_equal 2, @user.w000ts.count
@@ -172,10 +172,10 @@ describe 'w000t requests', type: :request do
   end
 
   it 'should get public wall of a user as anonymous user' do
-    @w000t_public = FactoryGirl.create(
+    @w000t_public = FactoryBot.create(
       :w000t, long_url: 'yo.com/t.gif', user: @user
     )
-    @w000t_private = FactoryGirl.create(
+    @w000t_private = FactoryBot.create(
       :w000t, long_url: 'test.com/t.jpg', status: :private, user: @user
     )
     get "/users/#{@user.pseudo}/wall"

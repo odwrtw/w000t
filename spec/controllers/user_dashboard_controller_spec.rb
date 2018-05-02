@@ -9,10 +9,10 @@ describe UserDashboardController do
     FakeWeb.clean_registry
     Sidekiq::Worker.clear_all
 
-    @user_greg = FactoryGirl.create(
+    @user_greg = FactoryBot.create(
       :user, pseudo: 'greg', email: 'greg@w000t.me'
     )
-    @user_pouulet = FactoryGirl.create(
+    @user_pouulet = FactoryBot.create(
       :user, pseudo: 'pouulet', email: 'pouulet@w000t.me'
     )
   end
