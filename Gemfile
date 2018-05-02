@@ -1,18 +1,18 @@
 source 'https://rubygems.org'
 
 # ROR
-ruby '2.2.10'
-gem 'rails', '5.0.7'
-gem 'activemodel', '5.0.7'
-gem 'actionpack', '5.0.7'
-gem 'activesupport', '5.0.7'
+ruby '2.5.1'
+gem 'rails', '5.2'
+gem 'activemodel', '5.2'
+gem 'actionpack', '5.2'
+gem 'activesupport', '5.2'
 
 # Use SCSS for stylesheets
-gem 'sass-rails', '~> 5.0.4'
+gem 'sass-rails'
 # Use Uglifier as compressor for JavaScript assets
-gem 'uglifier', '>= 3.0.0'
+gem 'uglifier'
 # Use CoffeeScript for .js.coffee assets and views
-gem 'coffee-rails', '~> 4.1.1'
+gem 'coffee-rails'
 
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
@@ -27,7 +27,7 @@ gem 'jbuilder'
 gem 'sdoc', group: :doc
 
 # MongoDB
-gem 'mongoid', '~> 6'
+gem 'mongoid', '~> 6.4'
 gem 'mongoid_rails_migrations'
 gem 'bson_ext'
 
@@ -100,7 +100,7 @@ group :development, :test do
   gem 'rspec-rails'
   gem 'json'
 
-  gem 'fakeweb'
+  gem 'webmock'
 
   # OS X specific gem to listen to file change
   gem 'rb-fsevent'

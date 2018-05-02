@@ -5,8 +5,6 @@ Sidekiq::Testing.fake!
 # UrlInfo test
 describe 'UrlInfos' do
   before do
-    # Clean all fakewebs
-    FakeWeb.clean_registry
     initiate_fake_web
   end
 
@@ -211,11 +209,14 @@ describe 'UrlInfos' do
       url = info[:url]
       content_length = info[:content_length]
       status = info[:status] || ['200', 'All ok']
-      FakeWeb.register_uri(
+      stub_request(
         :any,
-        url,
-        content_length: content_length,
-        status: status
+        url
+      ).to_return(
+        status: status,
+        headers: {
+          'Content-Length' => content_length
+        }
       )
     end
   end

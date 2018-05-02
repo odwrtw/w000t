@@ -6,7 +6,6 @@ describe AuthenticationTokensController do
     User.delete_all
     W000t.delete_all
     AuthenticationToken.destroy_all
-    FakeWeb.clean_registry
     Sidekiq::Worker.clear_all
 
     @user = FactoryBot.create(:user)

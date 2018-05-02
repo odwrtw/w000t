@@ -6,7 +6,6 @@ describe W000tsController do
     User.delete_all
     W000t.delete_all
     AuthenticationToken.destroy_all
-    FakeWeb.clean_registry
     Sidekiq::Worker.clear_all
     Geocoder.configure(lookup: :test)
 
@@ -50,7 +49,8 @@ JSON
       ]
     )
 
-    FakeWeb.register_uri(:any, %r/freegeoip/, body: freegeoip_json)
+    stub_request(:any, %r/freegeoip/)
+      .to_return(body: freegeoip_json, status: 200)
   end
 
   before(:each) do
