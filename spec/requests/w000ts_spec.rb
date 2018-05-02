@@ -122,8 +122,8 @@ describe 'w000t requests', type: :request do
     assert_equal 2, @user.w000ts.count
     get '/w000ts/me'
     assert_response :success
-    assert_tag :tbody, children: { count: 2, only: { tag: 'tr' } }
-    assert_tag :td, attributes: { class: 'w000t-tags' },
+    assert_select 'tbody', children: { count: 2, only: { tag: 'tr' } }
+    assert_select 'td', attributes: { class: 'w000t-tags' },
                     children: { count: 1, only: { tag: 'span' } }
   end
 
@@ -142,8 +142,8 @@ describe 'w000t requests', type: :request do
     assert_equal 2, @user.w000ts.count
     get '/w000ts/me?tags=test&type=image'
     assert_response :success
-    assert_tag :tbody, children: { count: 2, only: { tag: 'tr' } }
-    assert_tag :td, attributes: { class: 'w000t-tags' },
+    assert_select 'tbody', children: { count: 2, only: { tag: 'tr' } }
+    assert_select 'td', attributes: { class: 'w000t-tags' },
                     children: { count: 1, only: { tag: 'span' } }
   end
 
@@ -151,14 +151,14 @@ describe 'w000t requests', type: :request do
     sign_in @user
     get '/'
     assert_response :success
-    assert_select 'li', 7
+    assert_select '.navbar-collapse li', 9
   end
 
   it 'should get index as an admin user' do
     sign_in @admin_user
     get '/'
     assert_response :success
-    assert_select 'li', 8
+    assert_select '.navbar-collapse li', 10
   end
 
   it 'should get index as anonymous user' do

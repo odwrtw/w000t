@@ -2,7 +2,10 @@ source 'https://rubygems.org'
 
 # ROR
 ruby '2.2.10'
-gem 'rails', '4.1.2'
+gem 'rails', '5.0.7'
+gem 'activemodel', '5.0.7'
+gem 'actionpack', '5.0.7'
+gem 'activesupport', '5.0.7'
 
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 5.0.4'
@@ -16,14 +19,15 @@ gem 'jquery-rails'
 # Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
 gem 'turbolinks'
 gem 'jquery-turbolinks'
+gem 'rails-controller-testing'
 
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
-gem 'jbuilder', '~> 2.4.1'
+gem 'jbuilder'
 # bundle exec rake doc:rails generates the API under doc/api.
-gem 'sdoc', '~> 0.4.1', group: :doc
+gem 'sdoc', group: :doc
 
 # MongoDB
-gem 'mongoid', '~> 5'
+gem 'mongoid', '~> 6'
 gem 'mongoid_rails_migrations'
 gem 'bson_ext'
 
@@ -31,10 +35,11 @@ gem 'bson_ext'
 gem 'geocoder', '~> 1.4.4'
 
 # Authentication helper
-gem 'devise', '~> 4.1.0'
+gem 'devise'
 
 # Pagination helper
 gem 'kaminari'
+gem 'kaminari-mongoid'
 
 # Tags
 gem 'mongoid_taggable'
@@ -59,6 +64,10 @@ gem 'chartkick'
 gem 'carrierwave-mongoid', require: 'carrierwave/mongoid'
 gem 'rmagick'
 gem 'fog', git: 'git://github.com/fog/fog.git'
+
+group :test do
+  gem 'rspec-sidekiq'
+end
 
 group :development, :test do
   # Spring speeds up development by keeping your application running in the
@@ -89,6 +98,7 @@ group :development, :test do
   gem 'guard-rspec'
   gem 'json_spec'
   gem 'rspec-rails'
+  gem 'json'
 
   gem 'fakeweb'
 
@@ -99,7 +109,6 @@ group :development, :test do
   gem 'dotenv-rails'
 
   gem 'capybara'
-  gem 'rspec-sidekiq'
 end
 
 # Deployment
