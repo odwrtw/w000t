@@ -21,7 +21,7 @@ describe "Users requests", :type => :request do
 
   it 'should get user infos as admin user using json format' do
     sign_in @admin_user
-    get "/users/bob", format: :json
+    get "/users/bob", as: :json
     assert_response :success
     json_expected_keys %w(
       id email pseudo admin created_at sign_in_count last_sign_in_at

@@ -24,23 +24,23 @@ class AdminController < ApplicationController
 
   def check_all_w000ts
     W000t.all.each(&:create_task)
-    redirect_to :back, notice: 'All w000t will be checked soon'
+    redirect_back fallback_location: '/', notice: 'All w000t will be checked soon'
   end
 
   def check_url
     short_url = admin_params[:short_url]
-    return redirect_to :back,
+    return redirect_back fallback_location: '/',
                        flash: { alert: 'Missing short url' } unless short_url
     w000t = W000t.find(short_url)
-    return redirect_to :back,
+    return redirect_back fallback_location: '/',
                        flash: { alert: 'Unknown w000t' } unless w000t
     w000t.create_task
-    redirect_to :back, notice: 'Task created'
+    redirect_back fallback_location: '/', notice: 'Task created'
   end
 
   def reset_sidekiq_stat
     Sidekiq.redis { |c| c.del("stat:#{@reset_param}") }
-    redirect_to :back, notice: "Sidekiq #{@reset_param} stat resetted"
+    redirect_back fallback_location: '/', notice: "Sidekiq #{@reset_param} stat resetted"
   end
 
   private
