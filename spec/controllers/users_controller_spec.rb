@@ -6,18 +6,17 @@ describe UsersController do
     User.delete_all
     W000t.delete_all
     AuthenticationToken.destroy_all
-    FakeWeb.clean_registry
     Sidekiq::Worker.clear_all
 
-    @user = FactoryGirl.create(:user, pseudo: 'bob')
-    @admin_user = FactoryGirl.create(
+    @user = FactoryBot.create(:user, pseudo: 'bob')
+    @admin_user = FactoryBot.create(
       :user, pseudo: 'admin', email: 'email@admin.com', admin: true
     )
   end
 
   it 'should not get user infos as non admin user using json format' do
     sign_in @user
-    get :show, user_pseudo: 'bob', format: :json
+    get :show, params: { user_pseudo: 'bob' }, format: :json
     assert_response :not_found
   end
 

@@ -5,8 +5,6 @@ Sidekiq::Testing.fake!
 # UrlInfo test
 describe 'UrlInfos' do
   before do
-    # Clean all fakewebs
-    FakeWeb.clean_registry
     initiate_fake_web
   end
 
@@ -64,7 +62,7 @@ describe 'UrlInfos' do
     }
     types_and_urls.each do |type, urls|
       urls.each do |url|
-        @w000t = FactoryGirl.create(:w000t, long_url: url)
+        @w000t = FactoryBot.create(:w000t, long_url: url)
         assert_equal type.to_s, @w000t.url_info.type
       end
     end
@@ -76,20 +74,20 @@ describe 'UrlInfos' do
       'https://yomma.fr/youtube'
     ]
     urls.each do |url|
-      @w000t = FactoryGirl.build(:w000t, long_url: url)
+      @w000t = FactoryBot.build(:w000t, long_url: url)
       @w000t.save
       assert_nil @w000t.url_info.type
     end
   end
 
   it 'type should not be updated' do
-    @w000t = FactoryGirl.create(:w000t, long_url: 'http://test.com/test.jpg')
+    @w000t = FactoryBot.create(:w000t, long_url: 'http://test.com/test.jpg')
     @w000t.url_info.type = 'test'
     assert_equal 'test', @w000t.url_info.type
   end
 
   it 'type should be updated if forced' do
-    @w000t = FactoryGirl.create(:w000t, long_url: 'http://test.com/test.jpg')
+    @w000t = FactoryBot.create(:w000t, long_url: 'http://test.com/test.jpg')
     @w000t.url_info.type = 'test'
     @w000t.url_info.find_type(true)
     @w000t.url_info.save
@@ -118,7 +116,7 @@ describe 'UrlInfos' do
     end
     @w000t.reload
 
-    assert_equal nil, @w000t.url_info.cloud_image_urls,
+    assert_nil @w000t.url_info.cloud_image_urls,
                  'Cloud image is not nil but not an image'
     assert_equal 12_000, @w000t.url_info.content_length
   end
@@ -129,7 +127,7 @@ describe 'UrlInfos' do
     end
     @w000t.reload
 
-    assert_equal nil, @w000t.url_info.cloud_image_urls,
+    assert_nil @w000t.url_info.cloud_image_urls,
                  'Cloud image is not nil but not an image'
   end
 
@@ -139,7 +137,7 @@ describe 'UrlInfos' do
     end
     @w000t.reload
 
-    assert_equal nil, @w000t.url_info.cloud_image_urls,
+    assert_nil @w000t.url_info.cloud_image_urls,
                  'Cloud image is not nil but too big'
   end
 
@@ -149,7 +147,7 @@ describe 'UrlInfos' do
     end
     @w000t.reload
 
-    assert_equal nil, @w000t.url_info.cloud_image_urls,
+    assert_nil @w000t.url_info.cloud_image_urls,
                  'Cloud image is not nil but 301'
   end
 
@@ -184,7 +182,7 @@ describe 'UrlInfos' do
 
   it 'should have a valid internal_status' do
     UrlInfo::INTERNAL_STATUS.each do |s|
-      @url_info = FactoryGirl.build(
+      @url_info = FactoryBot.build(
         :url_info, url: 'http://google.com',
                    internal_status: s
       )
@@ -195,7 +193,7 @@ describe 'UrlInfos' do
 
   it 'should have a invalid internal_status' do
     %i( test yo mama ).each do |s|
-      @url_info = FactoryGirl.build(
+      @url_info = FactoryBot.build(
         :url_info, url: 'http://google.com',
                    internal_status: s
       )
@@ -211,11 +209,14 @@ describe 'UrlInfos' do
       url = info[:url]
       content_length = info[:content_length]
       status = info[:status] || ['200', 'All ok']
-      FakeWeb.register_uri(
+      stub_request(
         :any,
-        url,
-        content_length: content_length,
-        status: status
+        url
+      ).to_return(
+        status: status,
+        headers: {
+          'Content-Length' => content_length
+        }
       )
     end
   end

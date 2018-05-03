@@ -44,7 +44,7 @@ class W000t
   # Model validation
   validates :status, presence: true, inclusion: { in: STATUS }
 
-  belongs_to :user
+  belongs_to :user, optional: true
   delegate :pseudo, :email, to: :user, prefix: true
   delegate :url, :http_code, :number_of_checks, :type,
            :last_check, to: :url_info, prefix: true

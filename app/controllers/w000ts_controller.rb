@@ -45,7 +45,7 @@ class W000tsController < ApplicationController
       respond_to do |format|
         format.js { render :update_w000t, locals: { w000t: @w000t } }
         format.html do
-          redirect_to :back, notice: 'W000t was successfully updated'
+          redirect_back fallback_location: '/', notice: 'W000t was successfully updated'
         end
       end
     else
@@ -74,7 +74,7 @@ class W000tsController < ApplicationController
     if @w000t.destroy
       respond_to do |format|
         format.html do
-          redirect_to :back,
+          redirect_back fallback_location: '/',
                       notice: 'W000t was successfully destroyed'
         end
         format.js { render :delete_w000t, locals: { w000t: @w000t } }
@@ -258,7 +258,7 @@ class W000tsController < ApplicationController
     respond_to do |format|
       format.json { render :create, locals: { w000t: @w000t }, status: status }
       format.js   { render :create, locals: { w000t: @w000t } }
-      format.html { redirect_to :back, notice: "W000t created #{w000t_url}" }
+      format.html { redirect_back fallback_location: '/', notice: "W000t created #{w000t_url}" }
       format.text { render text: w000t_url }
     end
   end

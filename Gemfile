@@ -1,29 +1,33 @@
 source 'https://rubygems.org'
 
 # ROR
-ruby '2.2.5'
-gem 'rails', '4.1.2'
+ruby '2.5.1'
+gem 'rails', '5.2'
+gem 'activemodel', '5.2'
+gem 'actionpack', '5.2'
+gem 'activesupport', '5.2'
 
 # Use SCSS for stylesheets
-gem 'sass-rails', '~> 5.0.4'
+gem 'sass-rails'
 # Use Uglifier as compressor for JavaScript assets
-gem 'uglifier', '>= 3.0.0'
+gem 'uglifier'
 # Use CoffeeScript for .js.coffee assets and views
-gem 'coffee-rails', '~> 4.1.1'
+gem 'coffee-rails'
 
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
 # Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
 gem 'turbolinks'
 gem 'jquery-turbolinks'
+gem 'rails-controller-testing'
 
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
-gem 'jbuilder', '~> 2.4.1'
+gem 'jbuilder'
 # bundle exec rake doc:rails generates the API under doc/api.
-gem 'sdoc', '~> 0.4.1', group: :doc
+gem 'sdoc', group: :doc
 
 # MongoDB
-gem 'mongoid', '~> 4'
+gem 'mongoid', '~> 6.4'
 gem 'mongoid_rails_migrations'
 gem 'bson_ext'
 
@@ -31,10 +35,11 @@ gem 'bson_ext'
 gem 'geocoder', '~> 1.4.4'
 
 # Authentication helper
-gem 'devise', '~> 4.1.0'
+gem 'devise'
 
 # Pagination helper
 gem 'kaminari'
+gem 'kaminari-mongoid'
 
 # Tags
 gem 'mongoid_taggable'
@@ -60,6 +65,10 @@ gem 'carrierwave-mongoid', require: 'carrierwave/mongoid'
 gem 'rmagick'
 gem 'fog', git: 'git://github.com/fog/fog.git'
 
+group :test do
+  gem 'rspec-sidekiq'
+end
+
 group :development, :test do
   # Spring speeds up development by keeping your application running in the
   # background. Read more: https://github.com/rails/spring
@@ -68,7 +77,7 @@ group :development, :test do
   gem 'pry'
 
   # Replace fixtures
-  gem 'factory_girl_rails'
+  gem 'factory_bot_rails'
 
   # Better stack straces
   gem 'better_errors'
@@ -89,8 +98,9 @@ group :development, :test do
   gem 'guard-rspec'
   gem 'json_spec'
   gem 'rspec-rails'
+  gem 'json'
 
-  gem 'fakeweb'
+  gem 'webmock'
 
   # OS X specific gem to listen to file change
   gem 'rb-fsevent'

@@ -6,11 +6,10 @@ describe "Users requests", :type => :request do
     User.delete_all
     W000t.delete_all
     AuthenticationToken.destroy_all
-    FakeWeb.clean_registry
     Sidekiq::Worker.clear_all
 
-    @user = FactoryGirl.create(:user, pseudo: 'bob')
-    @admin_user = FactoryGirl.create(
+    @user = FactoryBot.create(:user, pseudo: 'bob')
+    @admin_user = FactoryBot.create(
       :user, pseudo: 'admin', email: 'email@admin.com', admin: true
     )
   end
@@ -21,7 +20,7 @@ describe "Users requests", :type => :request do
 
   it 'should get user infos as admin user using json format' do
     sign_in @admin_user
-    get "/users/bob", format: :json
+    get "/users/bob", as: :json
     assert_response :success
     json_expected_keys %w(
       id email pseudo admin created_at sign_in_count last_sign_in_at

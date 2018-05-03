@@ -14,13 +14,13 @@ describe 'W000ts' do
   end
 
   it 'should hash a long url with no user' do
-    @w000t = FactoryGirl.create(:w000t, long_url: @long_url)
+    @w000t = FactoryBot.create(:w000t, long_url: @long_url)
     assert_equal @short_url_without_user, @w000t.short_url
   end
 
   it 'should hash a long url with user greg' do
-    @greg = FactoryGirl.create(:user, pseudo: 'greg', email: 'greg@odwrtw.com')
-    @w000t = FactoryGirl.build(:w000t, long_url: @long_url)
+    @greg = FactoryBot.create(:user, pseudo: 'greg', email: 'greg@odwrtw.com')
+    @w000t = FactoryBot.build(:w000t, long_url: @long_url)
     @w000t.user = @greg
     @w000t.save
     assert_equal @short_url_with_user, @w000t.short_url
@@ -65,14 +65,14 @@ describe 'W000ts' do
 
   it 'shoud have a valid status' do
     W000t::STATUS.each do |s|
-      @w000t = FactoryGirl.build(:w000t, long_url: @long_url, status: s)
+      @w000t = FactoryBot.build(:w000t, long_url: @long_url, status: s)
       assert @w000t.valid?, "w000t should be valid with this staus : #{s}"
     end
   end
 
   it 'shoud not be valid with a wrong status' do
     %i( test yo mama ).each do |s|
-      @w000t = FactoryGirl.build(:w000t, long_url: @long_url, status: s)
+      @w000t = FactoryBot.build(:w000t, long_url: @long_url, status: s)
       assert @w000t.invalid?, "invalid w000t status #{s}"
     end
   end
@@ -86,8 +86,8 @@ describe 'W000ts' do
     assert_equal @w000t.url_info.internal_status,
                  :to_upload,
                  'w000t with upload_image should have an internal_status'
-    assert_equal @w000t.url_info.url,
-                 nil, 'w000t with upload_image should have a nil url'
+    assert_nil @w000t.url_info.url,
+               'w000t with upload_image should have a nil url'
 
     @w000t.url_info.cloud_image.remove!
   end

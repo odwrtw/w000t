@@ -13,8 +13,10 @@ class Click
   # Fetch the address from the coordinates
   reverse_geocoded_by :coordinates
 
-  after_validation :geocode          # auto-fetch coordinates
-  after_validation :reverse_geocode  # auto-fetch address
+  after_validation :geocode,
+                   if: ->(obj) { obj.ip.present? && obj.ip_changed? } # auto-fetch coordinates
+  after_validation :reverse_geocode,
+                   if: ->(obj) { obj.ip.present? && obj.ip_changed? } # auto-fetch address
 
   # Association
   embedded_in :w000t

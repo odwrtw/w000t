@@ -26,7 +26,7 @@ class AuthenticationTokensController < ApplicationController
 
   def update
     unless current_user.authentication_tokens.find(params[:id])
-      return redirect_to :back, flash: {
+      return redirect_back fallback_location: '/', flash: {
         alert: 'You can not update this token, only the owner can'
       }
     end

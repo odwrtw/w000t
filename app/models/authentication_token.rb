@@ -9,7 +9,7 @@ class AuthenticationToken
   index({ id: 1 }, name: 'authentication_token_index_on_id')
 
   # Association
-  belongs_to :user
+  belongs_to :user, optional: true
   delegate :pseudo, :email, to: :user, prefix: true
 
   # Model validation

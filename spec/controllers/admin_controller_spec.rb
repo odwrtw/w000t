@@ -8,19 +8,18 @@ describe AdminController do
     User.delete_all
     W000t.delete_all
     AuthenticationToken.destroy_all
-    FakeWeb.clean_registry
     Sidekiq::Worker.clear_all
 
-    @user = FactoryGirl.create(:user)
-    @admin_user = FactoryGirl.create(
+    @user = FactoryBot.create(:user)
+    @admin_user = FactoryBot.create(
       :user,
       pseudo: 'admin',
       email: 'email@admin.com',
       admin: true
     )
-    @w000t = FactoryGirl.create(:w000t, long_url: 'http://google.com')
-    @w000t_es = FactoryGirl.create(:w000t, long_url: 'http://google.es')
-    @authentication_token = FactoryGirl.create(:authentication_token)
+    @w000t = FactoryBot.create(:w000t, long_url: 'http://google.com')
+    @w000t_es = FactoryBot.create(:w000t, long_url: 'http://google.es')
+    @authentication_token = FactoryBot.create(:authentication_token)
   end
 
   before(:each) do
@@ -56,7 +55,7 @@ describe AdminController do
   it 'should check one url' do
     sign_in @admin_user
     expect{
-      post :check_url, admin: { short_url: @w000t.short_url }
+      post :check_url, params: { admin: { short_url: @w000t.short_url } }
     }.to change { UrlLifeChecker.jobs.size }.by(1)
     expect(response).to redirect_to('where_i_came_from')
     assert_equal 'Task created', flash[:notice]
@@ -68,7 +67,7 @@ describe AdminController do
       post :check_url
     }.to raise_error(ActionController::ParameterMissing)
     expect{
-      post :check_url, admin: { url: 'fake argument' }
+      post :check_url, params: { admin: { url: 'fake argument' } }
     }.to change { UrlLifeChecker.jobs.size }.by(0)
   end
 
@@ -76,7 +75,7 @@ describe AdminController do
     sign_in @admin_user
     allowed_params = %w( processed failed )
     allowed_params.each do |p|
-      post :reset_sidekiq_stat, sidekiq: { reset_param: p }
+      post :reset_sidekiq_stat, params: { sidekiq: { reset_param: p } }
       expect(response).to redirect_to('where_i_came_from')
       assert_equal "Sidekiq #{p} stat resetted", flash[:notice]
     end
@@ -87,7 +86,7 @@ describe AdminController do
     wrong_params = %w( yo mama plop )
     wrong_params.each do |p|
       expect {
-        post :reset_sidekiq_stat, sidekiq: { reset_param: p }
+        post :reset_sidekiq_stat, params: { sidekiq: { reset_param: p } }
       }.to raise_error(ArgumentError)
     end
   end

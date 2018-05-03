@@ -24,7 +24,7 @@ require 'rspec/rails'
 
 RSpec.configure do |config|
   # Need to manually add device helper for tests
-  config.include Devise::TestHelpers, type: :controller
+  config.include Devise::Test::ControllerHelpers, type: :controller
   config.include Warden::Test::Helpers, type: :request
 
   # RSpec Rails can automatically mix in different behaviours to your tests
