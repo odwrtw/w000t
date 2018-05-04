@@ -1,4 +1,16 @@
 GIT
+  remote: git://github.com/adacosta/mongoid_rails_migrations.git
+  revision: dd3f9c6d52cf11f666903aa24a07a1c01549f007
+  branch: master
+  specs:
+    mongoid_rails_migrations (1.1.0)
+      activesupport (>= 4.2.0)
+      bundler (>= 1.0.0)
+      mongoid (>= 4.0.0)
+      rails (>= 4.2.0)
+      railties (>= 4.2.0)
+
+GIT
   remote: git://github.com/fog/fog.git
   revision: 33d438e440adeb3893f81fbf98af34e3aecfe064
   specs:
@@ -383,12 +395,6 @@ GEM
     mongoid-grid_fs (2.3.0)
       mime-types (>= 1.0, < 4.0)
       mongoid (>= 3.0, < 7.0)
-    mongoid_rails_migrations (1.1.0)
-      activesupport (>= 4.2.0)
-      bundler (>= 1.0.0)
-      mongoid (>= 4.0.0)
-      rails (>= 4.2.0)
-      railties (>= 4.2.0)
     mongoid_taggable (1.1.1)
       mongoid (>= 3)
       rake
@@ -558,6 +564,8 @@ GEM
     turbolinks-source (5.1.0)
     tzinfo (1.2.5)
       thread_safe (~> 0.1)
+    tzinfo-data (1.2018.5)
+      tzinfo (>= 1.0.0)
     uber (0.1.0)
     uglifier (4.1.10)
       execjs (>= 0.3.0, < 3)
@@ -611,7 +619,7 @@ DEPENDENCIES
   mina
   mina-sidekiq
   mongoid (~> 6.4)
-  mongoid_rails_migrations
+  mongoid_rails_migrations!
   mongoid_taggable
   newrelic_rpm
   pry
@@ -632,6 +640,7 @@ DEPENDENCIES
   slim
   spring
   turbolinks
+  tzinfo-data
   uglifier
   webmock
   whenever

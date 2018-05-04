@@ -28,8 +28,10 @@ gem 'sdoc', group: :doc
 
 # MongoDB
 gem 'mongoid', '~> 6.4'
-gem 'mongoid_rails_migrations'
+gem 'mongoid_rails_migrations', :github => 'adacosta/mongoid_rails_migrations', :branch => 'master'
 gem 'bson_ext'
+
+gem 'tzinfo-data'
 
 # Geocoder
 gem 'geocoder', '~> 1.4.4'
