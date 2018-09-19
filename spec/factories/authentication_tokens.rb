@@ -2,6 +2,6 @@
 
 FactoryBot.define do
   factory :authentication_token do
-    name 'Test token'
+    name { 'Test token' }
   end
 end
