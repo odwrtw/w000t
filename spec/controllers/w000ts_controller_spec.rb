@@ -22,17 +22,13 @@ describe W000tsController do
     )
     freegeoip_json = <<-JSON
 {
-    "ip": "8.8.8.8",
-    "country_code": "US",
-    "country_name": "United States",
-    "region_code": "CA",
-    "region_name": "California",
-    "city": "Mountain View",
-    "zip_code": "94035",
-    "time_zone": "America/Los_Angeles",
-    "latitude": 37.386,
-    "longitude": -122.0838,
-    "metro_code": 807
+  "ip": "8.8.8.8",
+  "city": "Mountain View",
+  "region": "California",
+  "country": "US",
+  "loc": "37.3860,-122.0840",
+  "postal": "94035",
+  "phone": "650"
 }
 JSON
     Geocoder::Lookup::Test.set_default_stub(
@@ -49,7 +45,7 @@ JSON
       ]
     )
 
-    stub_request(:any, %r/freegeoip/)
+    stub_request(:any, %r/ipinfo/)
       .to_return(body: freegeoip_json, status: 200)
   end
 
@@ -378,7 +374,7 @@ JSON
     click = W000t.find(@w000t.id).clicks.last
     expect(click.ip).to eq '8.8.8.8'
     expect(click.address).to eq 'New York, NY, USA'
-    expect(click.coordinates).to eq [-122.0838, 37.386]
+    expect(click.coordinates).to eq [-122.084, 37.386]
   end
 
   it 'should get a 404 http code for a fake link' do
