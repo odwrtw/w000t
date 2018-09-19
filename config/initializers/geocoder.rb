@@ -1,4 +1,4 @@
 Geocoder.configure(
-  lookup: :freegeoip,
+  lookup: :ipinfo_io,
   timeout: 10
 )
