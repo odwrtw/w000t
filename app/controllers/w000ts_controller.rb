@@ -259,7 +259,7 @@ class W000tsController < ApplicationController
       format.json { render :create, locals: { w000t: @w000t }, status: status }
       format.js   { render :create, locals: { w000t: @w000t } }
       format.html { redirect_back fallback_location: '/', notice: "W000t created #{w000t_url}" }
-      format.text { render text: w000t_url }
+      format.text { render plain: w000t_url }
     end
   end
 

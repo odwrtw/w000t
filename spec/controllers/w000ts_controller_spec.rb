@@ -151,6 +151,20 @@ JSON
     assert_response :success
   end
 
+  it 'should create a w000t as text' do
+    url = 'http://google.fr/text'
+    expect do
+      post :create, params: {
+                      w000t: { long_url: url },
+                      user_id: @user.id
+                    },
+                    format: :text
+    end.to change { W000t.count }.by(1)
+    assert_response :success
+    w = W000t.find_by('url_info.url' => url)
+    expect(response.body).to match(w.short_url)
+  end
+
   it 'should get show on public w000t' do
     get :show, params: { short_url: @w000t.short_url }
     assert_response :success
