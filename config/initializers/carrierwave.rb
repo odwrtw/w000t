@@ -2,7 +2,7 @@
 require 'carrierwave/storage/fog'
 
 CarrierWave.configure do |config|
-  if Rails.env.test?
+  if not Rails.env.production?
     config.storage = :file
     config.fog_credentials[:provider] = 'OpenStack'
   else
