@@ -1,11 +1,11 @@
 source 'https://rubygems.org'
 
 # ROR
-ruby '2.5.1'
-gem 'rails', '5.2'
-gem 'activemodel', '5.2'
-gem 'actionpack', '5.2'
-gem 'activesupport', '5.2'
+ruby '2.6.4'
+gem 'rails', '5.2.3'
+gem 'activemodel'
+gem 'actionpack'
+gem 'activesupport'
 
 # Use SCSS for stylesheets
 gem 'sass-rails'
