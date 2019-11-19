@@ -26,15 +26,6 @@ Rails.application.configure do
   config.public_file_server.enabled = false
   config.assets.enabled = true
 
-  # Explicitly register the extensions we are interested in compiling
-  config.assets.precompile.push(proc do |path|
-    File.extname(path).in? [
-      '.html', '.erb', '.haml',                 # Templates
-      '.png',  '.gif', '.jpg', '.jpeg', '.svg', # Images
-      '.eot',  '.otf', '.svc', '.woff', '.ttf', # Fonts
-    ]
-  end)
-
   # Compress JavaScripts and CSS.
   config.assets.js_compressor = :uglifier
   # config.assets.css_compressor = :sass
