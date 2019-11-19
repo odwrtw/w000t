@@ -28,8 +28,7 @@ RSpec.configure do |config|
   # assertions if you prefer.
   config.include JsonSpec::Helpers
 
-  # Do not log Sidekiq when testing
-  Sidekiq::Logging.logger = nil
+  Sidekiq.logger = nil
   config.before(:suite) do
     DatabaseCleaner.strategy = :truncation
     DatabaseCleaner.clean_with(:truncation)
