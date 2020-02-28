@@ -27,7 +27,7 @@ gem 'sdoc', group: :doc
 
 # MongoDB
 gem 'mongoid', '~> 6.4'
-gem 'mongoid_rails_migrations', :github => 'adacosta/mongoid_rails_migrations', :branch => 'master'
+gem 'mongoid_rails_migrations', git: 'https://github.com/adacosta/mongoid_rails_migrations.git'
 gem 'bson_ext'
 
 gem 'tzinfo-data'
@@ -64,7 +64,7 @@ gem 'chartkick'
 # Image
 gem 'carrierwave-mongoid', require: 'carrierwave/mongoid'
 gem 'rmagick'
-gem 'fog', git: 'git://github.com/fog/fog.git'
+gem 'fog', git: 'https://github.com/fog/fog.git'
 
 group :test do
   gem 'rspec-sidekiq'
