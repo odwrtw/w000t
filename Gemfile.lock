@@ -1,7 +1,6 @@
 GIT
-  remote: git://github.com/adacosta/mongoid_rails_migrations.git
+  remote: https://github.com/adacosta/mongoid_rails_migrations.git
   revision: 8a5c5f8f552a0e784f7e3ac62d5343fc4b34c068
-  branch: master
   specs:
     mongoid_rails_migrations (1.2.1)
       activesupport (>= 4.2.0)
@@ -11,7 +10,7 @@ GIT
       railties (>= 4.2.0)
 
 GIT
-  remote: git://github.com/fog/fog.git
+  remote: https://github.com/fog/fog.git
   revision: 574246aee1671176cbe0ab32f95c01e300c113d0
   specs:
     fog (2.2.0)
@@ -161,7 +160,7 @@ GEM
       railties (>= 3.2, < 6.1)
     dry-inflector (0.2.0)
     erubi (1.9.0)
-    excon (0.71.1)
+    excon (0.72.0)
     execjs (2.7.0)
     factory_bot (5.1.1)
       activesupport (>= 4.2.0)
@@ -285,7 +284,7 @@ GEM
     fog-voxel (0.1.0)
       fog-core
       fog-xml
-    fog-vsphere (3.2.1)
+    fog-vsphere (3.2.3)
       fog-core
       rbvmomi (>= 1.9, < 3)
     fog-xenserver (1.0.0)
@@ -541,9 +540,9 @@ GEM
       rack (>= 2.0.0)
       rack-protection (>= 2.0.0)
       redis (>= 4.1.0)
-    signet (0.12.0)
+    signet (0.13.0)
       addressable (~> 2.3)
-      faraday (~> 0.9)
+      faraday (>= 0.17.3, < 2.0)
       jwt (>= 1.5, < 3.0)
       multi_json (~> 1.10)
     sinatra (2.0.8.1)
