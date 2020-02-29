@@ -64,7 +64,8 @@ gem 'chartkick'
 # Image
 gem 'carrierwave-mongoid', require: 'carrierwave/mongoid'
 gem 'rmagick'
-gem 'fog', git: 'https://github.com/fog/fog.git'
+gem 'fog-openstack'
+gem 'fog', git: 'https://github.com/fog/fog.git', require: "fog/openstack/storage"
 
 group :test do
   gem 'rspec-sidekiq'

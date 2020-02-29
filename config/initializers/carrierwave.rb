@@ -6,6 +6,7 @@ CarrierWave.configure do |config|
     config.storage = :file
   else
     config.storage = :fog
+    config.fog_provider = 'fog/openstack'
     config.fog_credentials = {
       provider: 'OpenStack',
       openstack_tenant:       ENV['OPENSTACK_TENANT'],
@@ -13,7 +14,7 @@ CarrierWave.configure do |config|
       openstack_username:     ENV['OPENSTACK_USERNAME'],
       # Your OpenStack Password
       openstack_api_key:      ENV['OPENSTACK_API_KEY'],
-      openstack_auth_url:     ENV['OPENSTACK_AUTH_URL'] || 'https://auth.runabove.io/v2.0/tokens',
+      openstack_auth_url:     ENV['OPENSTACK_AUTH_URL'],
       openstack_region:       ENV['OPENSTACK_REGION']
     }
     config.fog_directory    = ENV['FOG_DIRECTORY']
