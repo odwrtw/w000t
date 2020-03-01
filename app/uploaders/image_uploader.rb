@@ -35,6 +35,10 @@ class ImageUploader < CarrierWave::Uploader::Base
     %w(jpg jpeg gif png)
   end
 
+  def content_type_whitelist
+    [/image\//]
+  end
+
   version :thumb do
     process resize_to_limit: [400, 0]
   end
