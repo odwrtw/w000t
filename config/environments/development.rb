@@ -36,4 +36,9 @@ Rails.application.configure do
 
   # Devise conf
   config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
+  # Enable stdout logger
+  config.logger = Logger.new(STDOUT)
+
+  # Set log level
+  config.log_level = :DEBUG
 end
