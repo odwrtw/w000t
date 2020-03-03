@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 # ROR
 ruby '2.6.4'
-gem 'rails', '5.2.3'
+gem 'rails', '6.0'
 gem 'activemodel'
 gem 'actionpack'
 gem 'activesupport'
@@ -26,14 +26,14 @@ gem 'jbuilder'
 gem 'sdoc', group: :doc
 
 # MongoDB
-gem 'mongoid', '~> 6.4'
+gem 'mongoid'
 gem 'mongoid_rails_migrations', git: 'https://github.com/adacosta/mongoid_rails_migrations.git'
 gem 'bson_ext'
 
 gem 'tzinfo-data'
 
 # Geocoder
-gem 'geocoder', '~> 1.4.4'
+gem 'geocoder'
 
 # Authentication helper
 gem 'devise'
@@ -64,8 +64,7 @@ gem 'chartkick'
 # Image
 gem 'carrierwave-mongoid', require: 'carrierwave/mongoid'
 gem 'rmagick'
-gem 'fog-openstack', git: 'https://github.com/fog/fog-openstack.git', ref: '6971268'
-gem 'fog', git: 'https://github.com/fog/fog.git', require: "fog/openstack/storage"
+gem 'fog-openstack'
 
 group :test do
   gem 'rspec-sidekiq'
@@ -99,7 +98,8 @@ group :development, :test do
   gem 'guard'
   gem 'guard-rspec'
   gem 'json_spec'
-  gem 'rspec-rails'
+  # rspec doesn't support rails 6 properly yet, only in v4
+  gem 'rspec-rails', '4.0.0.beta3'
   gem 'json'
 
   gem 'webmock'
