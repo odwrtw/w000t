@@ -37,7 +37,7 @@ describe 'w000t requests', type: :request do
       }
     }, headers: headers
 
-    expect(response.content_type).to eq('application/json')
+    expect(response.media_type).to eq('application/json')
     expect(response).to have_http_status(:created)
 
     %w( id w000t url type tags status number_of_click created_at ).each do |key|
