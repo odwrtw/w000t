@@ -5,7 +5,7 @@ module W000tHelper
     type = w000t.url_info_type
     if type.eql? 'youtube'
       link_to w000t_click_path(w000t.short_url),
-              remote: :true,
+              remote: true,
               class: "btn btn-default #{type_class(type)}" do
         url_type_link(w000t.url_info)
       end
