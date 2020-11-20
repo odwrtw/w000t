@@ -132,17 +132,17 @@ class W000tsController < ApplicationController
 
   # GET /w000ts/meme
   def owner_wall
-    @w000ts = random_paginated_w000ts(current_user.w000ts.of_owner_wall)
+    @w000ts = random_paginated_w000ts(current_user.w000ts.of_owner_wall, "#{current_user.pseudo}-owner")
   end
 
   # GET /users/:user_pseudo/wall
   def user_wall
-    @w000ts = random_paginated_w000ts(@user.w000ts.of_public_wall)
+    @w000ts = random_paginated_w000ts(@user.w000ts.of_public_wall, "#{@user.pseudo}")
   end
 
   # GET /public/wall
   def public_wall
-    @w000ts = random_paginated_w000ts(W000t.of_public_wall.limit(200))
+    @w000ts = random_paginated_w000ts(W000t.of_public_wall, "public")
   end
 
   private
@@ -245,10 +245,14 @@ class W000tsController < ApplicationController
   end
 
   # Return an awesome random set of w000ts
-  def random_paginated_w000ts(query)
+  def random_paginated_w000ts(query, query_name)
     params[:seed] ||= Random.new_seed
     srand params[:seed].to_i
-    Kaminari.paginate_array(query.shuffle).page(params[:page]).per(20)
+
+    all_w000ts = Rails.cache.fetch("#{query_name}-w000ts", expires_in: 6.hour) do
+      query.to_a
+    end
+    Kaminari.paginate_array(all_w000ts.shuffle).page(params[:page]).per(40)
   end
 
   # Render the w000t creation in any format
