@@ -7,17 +7,11 @@ gem 'activemodel'
 gem 'actionpack'
 gem 'activesupport'
 
-gem 'sprockets', '~> 3.7.2'
-
 # Use SCSS for stylesheets
 gem 'sass-rails'
-# Use Uglifier as compressor for JavaScript assets
-gem 'uglifier'
-# Use CoffeeScript for .js.coffee assets and views
-gem 'coffee-rails'
+# Use webpacker
+gem 'webpacker', '~> 5.x'
 
-# Use jquery as the JavaScript library
-gem 'jquery-rails'
 # Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
 gem 'turbolinks'
 gem 'rails-controller-testing'

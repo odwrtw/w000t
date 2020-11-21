@@ -1,0 +1,22 @@
+{
+  "dependencies": {
+    "@rails/webpacker": "5.2.1",
+    "bootstrap": "^4.5.3",
+    "bootstrap-tokenfield": "^0.12.0",
+    "chart.js": "^2.9.4",
+    "chartkick": "^3.2.1",
+    "coffee-loader": "^1.0.1",
+    "coffeescript": "1.12.7",
+    "highcharts": "^8.2.2",
+    "imagesloaded": "^4.1.4",
+    "infinite-scroll": "^3.0.6",
+    "jquery": "^3.5.1",
+    "jquery-ujs": "^1.2.2",
+    "masonry-layout": "^4.2.2",
+    "popper.js": "^1.16.1",
+    "turbolinks": "^5.2.0"
+  },
+  "devDependencies": {
+    "webpack-dev-server": "^3.11.0"
+  }
+}
