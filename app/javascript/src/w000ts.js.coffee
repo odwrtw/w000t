@@ -1,5 +1,5 @@
 # Define a jQuery sub that will select the text of a div
-$ = jQuery
+# $ = jQuery
 $.fn.selectText = ->
   doc = document
   element = this[0]
@@ -64,45 +64,83 @@ $(document).on 'turbolinks:load', ->
 
     # Image container
     $container = $("div#w000t-wall-container")
-    $container.masonry(masonry_options)
+    $container.imagesLoaded ->
+      $container.masonry(masonry_options)
 
-    imgLoad = imagesLoaded($container)
+    # $yo = $container.masonry(masonry_options)
+    msnry = $container.data('masonry')
+
+    # imgLoad = imagesLoaded($container)
+    # imgLoad = imagesLoaded($container)
+    # $container.imagesLoaded().progress ->
+    #   console.log("always")
+    #   $container.masonry masonry_options
+
+      # .always( onAlways );
+      #
+    # $('#container').imagesLoaded().always( function( instance ) {
+    #   console.log('ALWAYS - all images have been loaded');
+    # });
 
     # Update layout on each image load
     count = 0
-    imgLoad.on 'progress', ->
-      count++
-      if ((count % 4) == 0)
-        $container.masonry masonry_options
+    # $container.imagesLoaded().on 'progress', ->
 
     # Update layout when all the images are loaded
-    imgLoad.on 'always', ->
-      $container.masonry masonry_options
+    # $container.imagesLoaded().on 'always', ->
+    #   $container.masonry masonry_options
 
     $container.infinitescroll(
       # selector for the paged navigation (it will be hidden)
-      navSelector  : "ul.pagination"
+      hideNav: "ul.pagination"
       # selector for the NEXT link (to page 2)
-      nextSelector : "ul.pagination li a[rel='next']"
+      path : "ul.pagination li a[rel='next']"
 
+      loadOnScroll: true
+      scrollThreshold: 400
+      outlayer: msnry
+      debug: true
       # selector for all items you'll retrieve
-      itemSelector : "#w000t-wall-container .item"
-      extraScrollPx:10
-      loading:
-        finished: undefined
-        finishedMsg: "<em>Congratulations, you've reached the end of the internet.</em>", img: null
-        msg: null
-        msgText: "<em>Loading the next set of posts...</em>"
-        selector: null
-        speed: 'fast'
-        start: undefined
-      , (newElements) ->
-        $newElems = $( newElements ).css({ opacity: 0 })
-        $newElems.imagesLoaded ->
-          $newElems.animate({ opacity: 1 })
-          $container.masonry "appended", $newElems
-          return
+      append: "#w000t-wall-container .item"
+
+      # extraScrollPx:10
+      # loading:
+      #   finished: undefined
+      #   finishedMsg: "<em>Congratulations, you've reached the end of the internet.</em>", img: null
+      #   msg: null
+      #   msgText: "<em>Loading the next set of posts...</em>"
+      #   selector: null
+      #   speed: 'fast'
+      #   start: undefined
+      # , (newElements) ->
+      #   $newElems = $( newElements ).css({ opacity: 0 })
+      #   $newElems.imagesLoaded ->
+      #     $newElems.animate({ opacity: 1 })
+      #     $container.masonry "appended", $newElems
+      #     return
     )
+
+    # $container.imagesLoaded().on 'progress', ->
+    $container.imagesLoaded().progress ->
+      console.log("progress")
+      count++
+      if ((count % 4) == 0)
+        # $container.masonry masonry_options
+        $container.masonry('layout')
+
+    # $yo.masonry 'on' , 'layoutComplete', ->
+    #   console.log("layout complete")
+    #   count++
+    #   if ((count % 4) == 0)
+    #     # $container.masonry masonry_options
+    #     $container.masonry('layout')
+
+    # $yo.on 'layoutComplete', ->
+    #   console.log("layout complete yo")
+    #   count++
+    #   if ((count % 4) == 0)
+    #     # $container.masonry masonry_options
+    #     $container.masonry('layout')
 
 $(document).on 'page:fetch', ->
   $container = $("div#w000t-wall-container")

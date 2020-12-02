@@ -15,28 +15,17 @@
 // const images = require.context('../images', true)
 // const imagePath = (name) => images(name, true)
 
-console.log('Hello World from Webpacker')
-
-import '../src/admin.js.coffee';
-import '../src/authentication_tokens.js.coffee';
-import '../src/user_dashboard.js.coffee';
-import '../src/w000ts.js.coffee';
 import 'bootstrap/dist/js/bootstrap';
 import 'bootstrap-tokenfield/dist/bootstrap-tokenfield';
-// import 'masonry-layout/dist/masonry.pkgd';
-// import 'imagesloaded/imagesloaded.pkgd';
-// import 'highcharts/highcharts';
-// import 'masonry/index';
 
 require("jquery")
 require("jquery-ujs")
 require("turbolinks").start()
-require("infinite-scroll")
-require("masonry-layout")
 require("chartkick")
 require("chart.js")
 require("highcharts")
-require("imagesloaded")
-require("masonry-layout")
 
-console.log('Bye from Webpacker')
+import '../src/admin.js.coffee';
+import '../src/authentication_tokens.js.coffee';
+import '../src/user_dashboard.js.coffee';
+import '../src/w000ts.js';

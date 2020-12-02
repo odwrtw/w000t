@@ -6,7 +6,7 @@ development:
     default:
       # Defines the name of the default database that Mongoid can connect to.
       # (required).
-      database: w000t_me_development
+      database: w000t_me_production
       # Provides the hosts the default session can connect to. Must be an array
       # of host:port pairs. (required)
       hosts:

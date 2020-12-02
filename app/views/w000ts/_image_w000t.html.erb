@@ -1,8 +1,8 @@
 <figure class="item col-lg-3 col-md-4 col-xs-6" id="w000t-<%= w000t.short_url %>">
   <%= link_to( image_tag(
-    w000t.url_info.cloud_image.thumb.url,
+    w000t.url_info.url,
     onerror: "this.style.display='none'",
-    class:"center-block img-thumbnail img-responsive"
+    class:"center-block img-thumbnail img-responsive hidden"
   ), w000t_redirect_path(w000t.short_url) ) %>
   <div class="menu">
     <%= render partial: 'w000ts/image_w000t_menu', locals: { w000t: w000t } %>
