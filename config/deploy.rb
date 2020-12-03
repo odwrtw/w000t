@@ -41,7 +41,7 @@ set :repository, 'https://github.com/odwrtw/w000t.git'
 # Manually create these paths in shared/ (eg: shared/config/database.yml) in
 # your server.
 # They will be linked in the 'deploy:link_shared_paths' step.
-set :shared_paths, %w( log pids )
+set :shared_dirs, fetch(:shared_dirs, []).push('log','pids')
 
 # Optional settings:
 set :port, '2277' # SSH port number.
@@ -50,39 +50,40 @@ set :ssh_options, '-A -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/nul
 
 # This task is the environment that is loaded for most commands, such as
 # `mina deploy` or `mina rake`.
-task :environment do
+task :remote_environment do
   # If you're using rbenv, use this to load the rbenv environment.
   # Be sure to commit your .rbenv-version to your repository.
   invoke :'rbenv:load'
   # Load env variables
-  queue '. ~/.profile'
+  command '. ~/.profile'
 end
 
 task :bower do
-  queue %( echo "-----> Running bower install..." )
-  queue 'bower install'
+  command %( echo "-----> Running bower install..." )
+  command 'bower install'
 end
 
 # Put any custom mkdir's in here for when `mina setup` is ran.
 # For Rails apps, we'll make some of the shared paths that are shared between
 # all releases.
-task setup: :environment do
-  queue! %(mkdir -p "#{deploy_to}/shared/log")
-  queue! %(chmod g+rx,u+rwx "#{deploy_to}/shared/log")
+task :setup do
+  command %(mkdir -p "#{fetch(:deploy_to)}/shared/log")
+  command %(ln -nfs "/tmp" "#{fetch(:deploy_to)}/current")
+  command %(chmod g+rx,u+rwx "#{fetch(:deploy_to)}/shared/log")
 
   # sidekiq needs a place to store its pid file and log file
-  queue! %(mkdir -p "#{deploy_to}/shared/pids/")
-  queue! %(mkdir -p "#{deploy_to}/shared/log/")
+  command %(mkdir -p "#{fetch(:deploy_to)}/shared/pids/")
+  command %(mkdir -p "#{fetch(:deploy_to)}/shared/log/")
 end
 
 desc 'Notify after installation'
 task :notify do
-  queue %(echo "-----> Notifying the awesome devs")
-  queue "bundle exec rake pushover:notify['Deployed to #{server}']"
+  command %(echo "-----> Notifying the awesome devs")
+  command "bundle exec rake pushover:notify['Deployed to #{server}']"
 end
 
 desc 'Deploys the current version to the server.'
-task deploy: :environment do
+task :deploy do
   deploy do
     # stop accepting new workers
     invoke :'sidekiq:quiet'
@@ -95,32 +96,33 @@ task deploy: :environment do
     invoke :'bower'
     invoke :'rails:db_migrate'
     invoke :'rails:assets_precompile'
-    if server == 'production'
-      invoke :notify
-    end
 
-    to :launch do
-      queue %(echo "-----> Restarting the server and the sidekiq workers")
-      queue "mkdir -p #{deploy_to}/#{current_path}/tmp/images"
-      queue "touch #{deploy_to}/#{current_path}/tmp/restart.txt"
+    on launch: :remote_environment do
+      command %(echo "-----> Restarting the server and the sidekiq workers")
+      command "mkdir -p #{fetch(:current_path)}/tmp/images"
+      command "touch #{fetch(:current_path)}/tmp/restart.txt"
       invoke :'sidekiq:restart'
       invoke :'whenever:clear'
       invoke :'whenever:write'
+      if server == 'production'
+        invoke :notify
+      end
     end
+
   end
 end
 
 desc 'Shows application logs.'
 task :logs do
-  queue %(cd #{deploy_to!} && tail -n 50 -f shared/log/#{server}.log)
+  command %(cd #{fetch(:deploy_to!)} && tail -n 50 -f shared/log/#{server}.log)
 end
 
 desc 'Shows sidekiq logs.'
 task :sidekiq_logs do
-  queue %(cd #{deploy_to!} && tail -n 50 -f shared/log/sidekiq.log)
+  command %(cd #{fetch(:deploy_to!)} && tail -n 50 -f shared/log/sidekiq.log)
 end
 
 desc 'Shows nginx logs.'
 task :nginx_logs do
-  queue %(tail -n 50 -f /var/log/nginx/access.log)
+  command %(tail -n 50 -f /var/log/nginx/access.log)
 end
