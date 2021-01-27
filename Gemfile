@@ -1,11 +1,14 @@
 source 'https://rubygems.org'
 
 # ROR
-ruby '2.6.7'
+ruby '2.7.2'
 gem 'rails', '~> 6.0'
 gem 'activemodel'
 gem 'actionpack'
 gem 'activesupport'
+
+# Use Puma as the app server
+gem 'puma', '~> 4.1'
 
 # Use SCSS for stylesheets
 gem 'sass-rails'
