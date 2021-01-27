@@ -246,6 +246,8 @@ GEM
       coderay (~> 1.1)
       method_source (~> 1.0)
     public_suffix (4.0.6)
+    puma (4.3.7)
+      nio4r (~> 2.0)
     rack (2.2.3)
     rack-protection (2.0.8.1)
       rack
@@ -436,6 +438,7 @@ DEPENDENCIES
   mongoid_taggable
   newrelic_rpm
   pry
+  puma (~> 4.1)
   rails (~> 6.0)
   rails-controller-testing
   rb-fsevent
@@ -459,7 +462,7 @@ DEPENDENCIES
   whenever
 
 RUBY VERSION
-   ruby 2.6.7p197
+   ruby 2.7.2p137
 
 BUNDLED WITH
-   1.17.2
+   2.2.7
