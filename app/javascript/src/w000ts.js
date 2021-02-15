@@ -1,7 +1,6 @@
 import Tokenfield from 'bootstrap-tokenfield'
 import Masonry from 'masonry-layout'
 import imagesloaded from 'imagesloaded'
-import InfiniteScroll from 'infinite-scroll'
 
 // Define a jQuery sub that will select the text of a div
 $.fn.selectText = function() {
@@ -80,9 +79,7 @@ $(document).on('turbolinks:load', function() {
       stamp: '.stamp',
     };
 
-    var $container = $("div#w000t-wall-container");
-
-    imagesLoaded.makeJQueryPlugin( $ );
+    var msnry = new Masonry( 'div#w000t-wall-container', masonry_options);
 
     let count = 0;
     var onProgress = function( instance, image ) {
@@ -94,30 +91,37 @@ $(document).on('turbolinks:load', function() {
       }
       // Every 4 images loaded, trigger the redraw of Masonry
       if ((count % 4) === 0) {
-        var msnry = Masonry.data('div#w000t-wall-container')
         msnry && msnry.layout();
         return msnry;
       }
     }
 
-    InfiniteScroll.imagesLoaded = imagesLoaded;
-    InfiniteScroll.prototype.appendOutlayerItems = function( fragment, appendReady ) {
-      appendReady();
-      // append once images loaded
-      $container.imagesLoaded().progress(onProgress);
-    };
+    var $container = $("div#w000t-wall-container");
 
-    var msnry = new Masonry( 'div#w000t-wall-container', masonry_options);
-
+    imagesLoaded.makeJQueryPlugin( $ );
     $container.imagesLoaded().progress(onProgress);
 
-    var infScroll = new InfiniteScroll( 'div#w000t-wall-container', {
-      path : "ul.pagination li a[rel='next']",
-      loadOnScroll: true,
-      scrollThreshold: 600,
-      append: "#w000t-wall-container .item",
-      outlayer: msnry,
-      history: false,
+    var onGoing = false;
+    $(window).on('scroll', function() {
+      var more_posts_url = $("ul.pagination li a[rel='next']").attr('href');
+      if (more_posts_url && ($(window).scrollTop() > $(document).height() - $(window).height() - 600)) {
+        if (onGoing) {
+          return;
+        }
+        onGoing = true;
+        $.ajax({url: more_posts_url, success: function(result){
+          // Replace new pagination
+          var $newPagination = $(result).find("ul.pagination li");
+          $("ul.pagination").html($newPagination);
+          // Append new w000ts
+          var $items = $(result).find('#w000t-wall-container .item');
+          $container.append($items);
+          msnry.appended( $items );
+          $container.imagesLoaded().progress(onProgress);
+
+          onGoing = false;
+        }});
+      }
     });
   }
 });
