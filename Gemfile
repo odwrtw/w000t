@@ -14,6 +14,7 @@ gem 'puma', '~> 4.1'
 gem 'sass-rails'
 # Use webpacker
 gem 'webpacker', '~> 5.x'
+gem 'uglifier'
 
 # Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
 gem 'turbolinks'
