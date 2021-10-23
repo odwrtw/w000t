@@ -133,6 +133,7 @@ GEM
       railties (>= 3.2)
     erubi (1.10.0)
     excon (0.87.0)
+    execjs (2.8.1)
     factory_bot (6.2.0)
       activesupport (>= 5.0.0)
     factory_bot_rails (6.2.0)
@@ -391,6 +392,8 @@ GEM
       concurrent-ruby (~> 1.0)
     tzinfo-data (1.2021.5)
       tzinfo (>= 1.0.0)
+    uglifier (4.2.0)
+      execjs (>= 0.3.0, < 3)
     unf (0.1.4)
       unf_ext
     unf_ext (0.0.8)
@@ -466,6 +469,7 @@ DEPENDENCIES
   spring
   turbolinks
   tzinfo-data
+  uglifier
   webmock
   webpacker (~> 5.x)
   whenever
