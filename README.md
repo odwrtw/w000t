@@ -11,7 +11,7 @@
 
 ## Running server locally
 
-1. Clone repository `git clone git@github.com:odwrtw/w000t.git && cd odwrtw`
+1. Clone repository `git clone git@github.com:odwrtw/w000t.git && cd w000t`
 2. Install [mongodb](https://docs.mongodb.com/manual/administration/install-community/), [redis](https://redis.io/topics/quickstart), [nodejs](https://nodejs.org/en/download/)
 3. Install `bower` and components
 ```
