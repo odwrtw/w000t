@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 # ROR
-ruby '2.6.4'
+ruby '2.6.7'
 gem 'rails', '~> 6.0'
 gem 'activemodel'
 gem 'actionpack'
