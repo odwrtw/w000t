@@ -1,23 +1,21 @@
 source 'https://rubygems.org'
 
 # ROR
-ruby '2.6.7'
+ruby '2.7.2'
 gem 'rails', '~> 6.0'
 gem 'activemodel'
 gem 'actionpack'
 gem 'activesupport'
 
-gem 'sprockets', '~> 3.7.2'
+# Use Puma as the app server
+gem 'puma', '~> 4.1'
 
 # Use SCSS for stylesheets
 gem 'sass-rails'
-# Use Uglifier as compressor for JavaScript assets
+# Use webpacker
+gem 'webpacker', '~> 5.x'
 gem 'uglifier'
-# Use CoffeeScript for .js.coffee assets and views
-gem 'coffee-rails'
 
-# Use jquery as the JavaScript library
-gem 'jquery-rails'
 # Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
 gem 'turbolinks'
 gem 'rails-controller-testing'
