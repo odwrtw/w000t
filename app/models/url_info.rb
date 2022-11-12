@@ -28,7 +28,7 @@ class UrlInfo
   embedded_in :w000t
 
   def validates_url_or_upload_is_present
-    errors.add(:url, 'Should not be nil') if cloud_image.blank? && url.blank?
+    errors.add(:url, 'Should not be nil') if !cloud_image.file && url.blank?
   end
 
   def validates_url_format_is_good
@@ -50,8 +50,17 @@ class UrlInfo
   end
 
   def update_http_code
+    logger.info "update http code"
+    if url.blank?
+      logger.info "update http code - It's an image!"
+      return unless cloud_image.file
+      self.http_code = 200
+      self.content_length = cloud_image.size
+      return
+    end
+
     uri = parse_uri
-    logger.info "URI #{uri}"
+    logger.info "update http code - URI #{uri}"
     head = head_request(uri) if uri
     logger.info "head #{head.inspect}"
     if head
@@ -118,11 +127,19 @@ class UrlInfo
 
   # Add http prefix if needed
   def self.prefixed_url(url)
-    return unless url
+    return if url.blank?
     return url if /\Ahttp/ =~ url
 
     # Add prefix
     'http://' + url
+  end
+
+  def img_path
+    if cloud_image.url.blank?
+      url
+    else
+      cloud_image.url
+    end
   end
 
   private
@@ -150,13 +167,13 @@ class UrlInfo
 
   # Add http prefix if needed
   def check_http_prefix
+    logger.info "checking http_prefix #{self.inspect}"
     return if /\Ahttp/ =~ url
 
-    if cloud_image.file
-      self.internal_status = :to_upload
-      self.url = nil
-      return
-    end
+    return if cloud_image.file
+
+    self.internal_status = :to_upload
+    logger.info "check http prefix"
 
     # Add prefix
     self.url = UrlInfo.prefixed_url(url)

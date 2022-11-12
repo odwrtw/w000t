@@ -33,22 +33,13 @@ class User
   field :current_sign_in_ip, type: String
   field :last_sign_in_ip,    type: String
 
-  ## Confirmable
-  # field :confirmation_token,   type: String
-  # field :confirmed_at,         type: Time
-  # field :confirmation_sent_at, type: Time
-  # field :unconfirmed_email,    type: String # Only if using reconfirmable
-
-  ## Lockable
-  # field :failed_attempts, type: Integer, default: 0 # Only if lock strategy
-  # is :failed_attempts
-  # field :unlock_token,    type: String # Only if unlock strategy is :email or
-  # :both
-  # field :locked_at,       type: Time
-
   index({ id: 1 }, name: 'user_index_on_id')
   index({ email: 1 }, name: 'user_index_on_email')
   index({ pseudo: 1 }, name: 'user_index_on_pseudo')
+
+  def will_save_change_to_email?
+    false
+  end
 
   def to_param
     pseudo

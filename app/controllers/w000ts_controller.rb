@@ -87,7 +87,8 @@ class W000tsController < ApplicationController
 
   # GET /:short_url
   def redirect
-    redirect_to @w000t.url_info_url
+    logger.warn "url_info: #{@w000t.url_info.inspect}"
+    redirect_to @w000t.url
     Thread.new do
       @w000t.click(request.remote_ip)
     end
@@ -196,7 +197,7 @@ class W000tsController < ApplicationController
   # If there is already an existing w000t, return it
   def check_w000t
     # Don't need to check w000t if user is uploading an image
-    return if w000t_params[:url_info_attributes]
+    return if w000t_params[:upload_image]
 
     user_id = current_user ? current_user.id : nil
     user_id = @token_user.id if @token_user
@@ -206,6 +207,7 @@ class W000tsController < ApplicationController
       'url_info.url' => url
     )
     return unless @w000t
+    logger.warn "redirecting to : #{@w000t.inspect}"
 
     # w000t already created, return status ok
     render_create_w000t(:ok)

@@ -119,6 +119,15 @@ class W000t
     save
   end
 
+  def img_path
+    url_info.img_path
+  end
+
+  def url
+    return url if url_info.url
+    url_info.img_path
+  end
+
   private
 
   # Create short url on save if not yet defined

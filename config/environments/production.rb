@@ -83,6 +83,7 @@ Rails.application.configure do
 
   # Use default logging formatter so that PID and timestamp are not suppressed.
   config.log_formatter = ::Logger::Formatter.new
+  config.logger = Logger.new(STDOUT)
 
   # Mail configurations
   config.action_mailer.default_url_options = { host: 'w000t.me', port: 80 }

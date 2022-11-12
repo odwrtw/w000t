@@ -1,6 +1,6 @@
 # General infos
 json.id w000t.id
-json.url w000t.url_info.url
+json.url w000t.img_path
 json.w000t w000t.full_shortened_url(request.base_url)
 json.type w000t.url_info.type
 

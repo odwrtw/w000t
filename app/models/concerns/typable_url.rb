@@ -27,7 +27,7 @@ module TypableUrl
   # TODO : find a better solution to handle all the cases
   def youtube_id
     return unless type.eql? 'youtube'
-    match = /watch\?v=(?<id>[^&]+)/.match(url)
+    match = /watch\?v=(?<id>[^&]+)/.match(img_path)
     return unless match
     match[:id]
   end
@@ -35,31 +35,31 @@ module TypableUrl
   protected
 
   def image
-    /.+\.(gif|png|jpg|jpeg)\Z/i =~ url
+    /.+\.(gif|png|jpg|jpeg)\Z/i =~ img_path
   end
 
   def pdf
-    /.+\.pdf\Z/ =~ url
+    /.+\.pdf\Z/ =~ img_path
   end
 
   def github
-    %r{\Ahttps?://github\.com} =~ url
+    %r{\Ahttps?://github\.com} =~ img_path
   end
 
   def soundcloud
-    %r{\Ahttps?://soundcloud\.com} =~ url
+    %r{\Ahttps?://soundcloud\.com} =~ img_path
   end
 
   def youtube
-    %r{\Ahttps?://www\.youtube\.com} =~ url ||
-      %r{\Ahttps?://youtu\.be} =~ url
+    %r{\Ahttps?://www\.youtube\.com} =~ img_path ||
+      %r{\Ahttps?://youtu\.be} =~ img_path
   end
 
   def stack_overflow
-    %r{\Ahttps?://stackoverflow\.com} =~ url
+    %r{\Ahttps?://stackoverflow\.com} =~ img_path
   end
 
   def hackernews
-    %r{\Ahttps?://news\.ycombinator\.com} =~ url
+    %r{\Ahttps?://news\.ycombinator\.com} =~ img_path
   end
 end

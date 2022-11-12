@@ -4,9 +4,14 @@
 class ImageUploader < CarrierWave::Uploader::Base
   # Include RMagick or MiniMagick support:
   include CarrierWave::RMagick
+  # include CarrierWave::MiniMagick
 
   def cache_dir
-    "#{Rails.root}/tmp/images"
+    "tmp/images"
+  end
+
+  def store_dir
+    "images"
   end
 
   def default_url
