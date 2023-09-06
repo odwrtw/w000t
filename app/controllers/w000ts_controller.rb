@@ -37,6 +37,9 @@ class W000tsController < ApplicationController
   # GET /w000ts/new
   def new
     @w000t = W000t.new
+    @w000t.build_url_info
+    logger.warn "in new: url_info: #{@w000t.url_info.inspect}"
+    # @w000t.url_info.build
   end
 
   # GET /w000ts/new
@@ -56,6 +59,9 @@ class W000tsController < ApplicationController
   # POST /w000ts
   def create
     @w000t = W000t.new(w000t_params)
+    @w000t.build_url_info
+    logger.warn "in create: url_info: #{@w000t.url_info.inspect}"
+    logger.warn "in create: params: #{w000t_params}"
     @w000t.user = current_user if user_signed_in?
 
     if @w000t.save
@@ -87,7 +93,7 @@ class W000tsController < ApplicationController
 
   # GET /:short_url
   def redirect
-    logger.warn "url_info: #{@w000t.url_info.inspect}"
+    logger.warn "in redirect: url_info: #{@w000t.url_info.inspect}"
     redirect_to @w000t.url
     Thread.new do
       @w000t.click(request.remote_ip)
@@ -207,7 +213,7 @@ class W000tsController < ApplicationController
       'url_info.url' => url
     )
     return unless @w000t
-    logger.warn "redirecting to : #{@w000t.inspect}"
+    logger.warn "in check_w000t : #{@w000t.inspect}"
 
     # w000t already created, return status ok
     render_create_w000t(:ok)

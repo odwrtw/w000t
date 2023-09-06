@@ -25,10 +25,22 @@ class UrlInfo
   validates :internal_status, presence: true, inclusion: { in: INTERNAL_STATUS }
 
   # Association
-  embedded_in :w000t
+  embedded_in :w000t, :inverse_of => :url_info
+
+  def new(params = {})
+    super
+    logger.info "after new in url_info: #{self.inspect} with params #{params.inspect}"
+  end
+
+  def before_initialize
+    logger.info "kikoo: #{self.inspect}"
+    logger.info "kikoo: #{params.inspect}"
+  end
 
   def validates_url_or_upload_is_present
-    errors.add(:url, 'Should not be nil') if !cloud_image.file && url.blank?
+    logger.info "in validated_url_or_upload_is_present with: #{self.inspect} and #{cloud_image.inspect} and #{cloud_image.file}"
+
+    errors.add(:url, 'Should not be nil') if cloud_image.nil? && url.blank?
   end
 
   def validates_url_format_is_good
@@ -62,7 +74,7 @@ class UrlInfo
     uri = parse_uri
     logger.info "update http code - URI #{uri}"
     head = head_request(uri) if uri
-    logger.info "head #{head.inspect}"
+    logger.info "update http code - head #{head.inspect}"
     if head
       self.http_code = head.code ? head.code : 500
       self.content_length = head.content_length ? head.content_length : 0
@@ -95,17 +107,17 @@ class UrlInfo
 
   def store_in_cloud?
     unless w000t.user
-      logger.info "Don't store, it's a public w000t"
+      logger.info "store_in_cloud? Don't store, it's a public w000t"
       return false
     end
 
     unless http_code == 200
-      logger.info "Don't store, not an http_code 200 OK (#{http_code})"
+      logger.info "store_in_cloud? Don't store, not an http_code 200 OK (#{http_code})"
       return false
     end
 
     if !content_length || content_length > MAX_UPLOAD_SIZE
-      logger.info "Don't store, not valid content_length  #{content_length}"
+      logger.info "store_in_cloud? Don't store, not valid content_length  #{content_length}"
       return false
     end
 
@@ -113,10 +125,10 @@ class UrlInfo
     return false if w000t.status.eql? :hidden
 
     if type == 'image'
-      logger.info "----- In url_info #{id} with w000t :  #{w000t.id}"
+      logger.info "store_in_cloud? ----- In url_info #{id} with w000t :  #{w000t.id}"
       return true
     else
-      logger.info "Don't upload because of type #{type}"
+      logger.info "store_in_cloud? Don't upload because of type #{type}"
       return false
     end
   end
@@ -166,14 +178,16 @@ class UrlInfo
   end
 
   # Add http prefix if needed
-  def check_http_prefix
+  def check_http_prefix(attributes = {})
     logger.info "checking http_prefix #{self.inspect}"
+    logger.info "checking http_prefix #{attributes.inspect}"
     return if /\Ahttp/ =~ url
 
-    return if cloud_image.file
-
-    self.internal_status = :to_upload
-    logger.info "check http prefix"
+    if cloud_image.file
+      logger.info "cloud_image present"
+      # self.internal_status = :to_upload
+      return
+    end
 
     # Add prefix
     self.url = UrlInfo.prefixed_url(url)

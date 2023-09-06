@@ -100,15 +100,27 @@ class W000t
     self.archive = 0
   end
 
-  def initialize(attributes = {})
-    super
-
-    params = {
-      url: long_url,
-      cloud_image: upload_image
-    }
-    build_url_info(params)
-  end
+  # def initialize(attributes = {})
+  #   super
+  #
+  #   params = {
+  #     url: long_url,
+  #     cloud_image: upload_image
+  #   }
+  #   logger.info "in initialize : params #{params.inspect} self : #{attributes}"
+  #   # self.build_url_info(params)
+  #   # build_url_info(params)
+  #   logger.info "BEFORE in initialize : after #{self.url_info.inspect}"
+  #   build_url_info(
+  #     url: long_url,
+  #     cloud_image: upload_image
+  #   )
+  #   logger.info "in initialize : after #{self.url_info.inspect}"
+  #   self.url_info.cloud_image = upload_image
+  #   self.url_info.url = long_url
+  #   logger.info "AGAIN in initialize : after #{self.url_info.inspect}"
+  #   logger.info "in initialize : after, errors: #{self.url_info.errors.inspect}"
+  # end
 
   # Click updates the w000t when clicked
   def click(ip_address)
@@ -124,7 +136,7 @@ class W000t
   end
 
   def url
-    return url if url_info.url
+    return url_info.url if url_info.url
     url_info.img_path
   end
 
@@ -135,7 +147,7 @@ class W000t
     return if short_url
     # Check if the required parameters are present
     unless upload_image || long_url
-      logger.info "url : #{url_info.inspect} self : #{inspect}"
+      logger.info "in create_short_url url : #{url_info.inspect} self : #{inspect}"
       raise 'Missing long_url or upload_image'
     end
 
