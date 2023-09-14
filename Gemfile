@@ -1,19 +1,19 @@
 source 'https://rubygems.org'
 
 # ROR
-ruby '2.7.2'
-gem 'rails', '~> 6.0'
+ruby '3.2.2'
+gem 'rails', '~> 7.0'
 gem 'activemodel'
 gem 'actionpack'
 gem 'activesupport'
 
 # Use Puma as the app server
-gem 'puma', '~> 4.1'
+gem 'puma'#, '~> 4.1'
 
 # Use SCSS for stylesheets
 gem 'sass-rails'
 # Use webpacker
-gem 'webpacker', '~> 5.x'
+gem 'webpacker'#, '~> 5.x'
 gem 'uglifier'
 
 # Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
